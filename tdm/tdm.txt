@@ -10,11 +10,6 @@
 	{
 		1
 		{
-			"name"		"tdm_test"
-			"text"		"Test"
-			"help"		"Testing schnizzle"
-			"type"		"numeric"
-			"default"	"1"
 		}
 	}
 }
