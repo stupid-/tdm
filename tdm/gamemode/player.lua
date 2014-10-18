@@ -1,7 +1,7 @@
---Setting colors for playermodels. Kind of obsolete, will probably phase out of using this
-
 local ply = FindMetaTable("Player")
 
+
+-- I will be changing how this is done
 local teams = {}
 
 teams[0] = {name = "Red", color = Vector( 1.0, .2, .2), weapons = {} }
@@ -34,13 +34,11 @@ util.AddNetworkString("PlayerKilledSelf")
 util.AddNetworkString("PlayerKilledByPlayer")
 util.AddNetworkString("PlayerKilled")
 
---[[---------------------------------------------------------
-   Name: gamemode:PlayerDeath( )
-   Desc: Called when a player dies.
------------------------------------------------------------]]
+------------------------------------------
+--	When the player dies		--
+------------------------------------------
 function GM:PlayerDeath( ply, inflictor, attacker )
 
-	-- Don't spawn for at least 2 seconds
 	ply.NextSpawnTime = CurTime() + 4
 	ply.DeathTime = CurTime()
 	
@@ -54,9 +52,6 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 		inflictor = attacker
 	end
 
-	-- Convert the inflictor to the weapon that they're holding if we can.
-	-- This can be right or wrong with NPCs since combine can be holding a 
-	-- pistol but kill you by hitting you with their arm.
 	if ( IsValid( inflictor ) && inflictor == attacker && ( inflictor:IsPlayer() || inflictor:IsNPC() ) ) then
 	
 		inflictor = inflictor:GetActiveWeapon()
