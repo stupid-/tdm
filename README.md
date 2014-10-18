@@ -5,4 +5,5 @@ I was looking for a more competetive gamemode for my community, so I decided to 
 
 ## Special Thanks / Credits
 Wiox - Map Voting Addon - https://github.com/wiox/gmod-mapvote
+
 Mr-Gash - Inspiration on rounds system - https://github.com/Mr-Gash/GMod-Deathrun
