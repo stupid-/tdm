@@ -49,8 +49,8 @@ function GM:PlayerConnect ( name, ip )
 end
 
 
-function GM:PlayerAuthed ( ply, steamID, uniqueID )
-	print ("Player: " .. ply:Nick() .. " ( " .. ply:SteamID() .. " ) has authenticated.")
+function GM:PlayerAuthed ( ply, steamid, uniqueid )
+	print ("Player: " .. ply:Nick() .. " ( " .. steamid .. " ) has authenticated.")
 end
 
 function GM:PlayerDisconnected( ply )
@@ -174,13 +174,10 @@ end
 function GM:PlayerLoadout( ply )
 	if ply:Team() == TEAM_SPEC then return false end
 
-	if ply:Team() == TEAM_RED then
-		player_manager.RunClass( ply, "Loadout" )
-		return true
-	elseif ply:Team() == TEAM_BLUE then
-		player_manager.RunClass( ply, "Loadout" )
-		return true
-	end
+	player_manager.RunClass( ply, "Loadout" )
+	
+	return true
+
 end
 
 ------------------------------------------
