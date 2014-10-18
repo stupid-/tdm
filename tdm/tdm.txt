@@ -1,0 +1,20 @@
+"Gamemode"
+{
+	"base"		"base"
+	"title"		"Team Deathmatch"
+	"maps"		"^tdm_"
+	"menusystem"	"1"
+	"workshopid"	""
+	
+	"settings"
+	{
+		1
+		{
+			"name"		"tdm_test"
+			"text"		"Test"
+			"help"		"Testing schnizzle"
+			"type"		"numeric"
+			"default"	"1"
+		}
+	}
+}
