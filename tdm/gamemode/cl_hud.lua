@@ -182,12 +182,6 @@ Heads up display.
                     blursize = 2,
                     shadow = false
     })
---[[
-ROUND_WAITING = 1
-ROUND_PREPARING = 1
-ROUND_IN_PROGRESS = 2 
-ROUND_OVER = 3
-]]--
 
 function GM:HUDPaint()
 
@@ -276,52 +270,10 @@ function GM:HUDPaint()
 	--surface.DrawTexturedRect(  x - x/8 + 24, y/6 - 30 + 2, 77, 46)
 
 	if team.GetName( LocalPlayer():Team() ) == "Spectator" then 
-		-- TEAM SCORING AND ROUNDS, NOT CODED YET
-		--[[
-	    draw.RoundedBox( 0 , ScrW()-260, ScrH() - 90, 49, 30, Color(20,20,175,250) )
-		draw.RoundedBox( 0 , ScrW()-260, ScrH()-125, 79, 30, Color(175,20,20,250) )
-
-		self.Gradient = surface.GetTextureID("gui/gradient_down")
-		surface.SetDrawColor( 0, 0, 0, 90 );
-		surface.SetTexture( self.Gradient );
-		surface.DrawTexturedRect( ScrW()-260, ScrH() - 90, 200, 30 );
-
-		self.Gradient = surface.GetTextureID("gui/gradient_down")
-		surface.SetDrawColor( 0, 0, 0, 90 );
-		surface.SetTexture( self.Gradient );
-		surface.DrawTexturedRect( ScrW()-260, ScrH() - 125, 200, 30 );	
-
-		self.Gradient = surface.GetTextureID("gui/gradient_up")
-		surface.SetDrawColor(  255, 255, 255, 1  );
-		surface.SetTexture( self.Gradient );
-		surface.DrawTexturedRect( ScrW()-260, ScrH() - 75, 200, 15 );
-
-		self.Gradient = surface.GetTextureID("gui/gradient_up")
-		surface.SetDrawColor(  255, 255, 255, 1  );
-		surface.SetTexture( self.Gradient );
-		surface.DrawTexturedRect( ScrW()-260, ScrH() - 110, 200, 15 );	
-
-		draw.DrawText( "10:00", "TimeLeftShadow", ScrW()-260 + 1, ScrH() - 155 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
-		draw.DrawText( "10:00", "TimeLeft", ScrW()-260, ScrH() - 155 , Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
-
-		draw.DrawText( "500", "ScoreShadow", ScrW()-65 + 1, ScrH() - 87 + 1 , Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
-		draw.DrawText( "750", "ScoreShadow", ScrW()-65 + 1, ScrH() - 122 + 1 , Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
-		draw.DrawText( "500", "Score", ScrW()-65, ScrH() - 87 , Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
-		draw.DrawText( "750", "Score", ScrW()-65, ScrH() - 122 , Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
-		]]--
-
-
-
-		--draw.RoundedBox( 0 , 60, ScrH() - 125, 300, 65, Color(0,0,0,180) )
-
-		--draw.DrawText( "160", "AmmoSmallShadow", 326 + 1, ScrH() - 121 + 1, Color(0, 0, 0, 250), TEXT_ALIGN_CENTER ) 
-		--draw.DrawText( "160", "AmmoSmall", 326, ScrH() - 121, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
-
-		--draw.DrawText( "30", "AmmoLargeShadow", 260 + 1, ScrH() - 126 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
-		--draw.DrawText( "30", "AmmoLarge", 260, ScrH() - 126, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+        -- Was testing the hud here.
 
 	else
-		--[[
+		--[[ Debug display for admins.
 		if (ply:Alive() && team.GetName( LocalPlayer():Team() ) != "Spectator"  && ply:IsAdmin()) then
 			local playerClass = player_manager.GetPlayerClass( ply )
 			local playerTeam = team.GetName( LocalPlayer():Team() )
@@ -398,8 +350,6 @@ function GM:HUDPaint()
 end
 
 function GM:HUDShouldDraw( name )
-	--or name == "CHudAmmo" or name == "CHudSecondaryAmmo"
-	-- or name == "CHudBattery"
     if ( name == "CHudHealth" or name == "CHudAmmo" or name == "CHudSecondaryAmmo") then
         return false
     end

@@ -1,5 +1,4 @@
 include( "shared.lua" )
---include( "database/cl_database.lua" )
 
 --Vgui elements
 include( "cl_menus.lua" )

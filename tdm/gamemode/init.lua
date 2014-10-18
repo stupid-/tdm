@@ -7,7 +7,7 @@ include("player_class/noclass.lua")
 include("player_class/assault.lua")
 include("player_class/infantry.lua")
 
---Map Voting (Not My Code)
+--Map Voting (Not My Code), By https://github.com/wiox/gmod-mapvote
 include("mapvote/mapvote.lua")
 include("mapvote/sv_mapvote.lua")
 

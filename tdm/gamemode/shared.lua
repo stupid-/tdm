@@ -16,15 +16,6 @@ TEAM_RED = 0
 TEAM_BLUE = 1
 TEAM_SPEC = 2
 
---Future Convars
---[[
-GM.RoundLimit = 
-GM.RoundLength = 
-GM.RoundPostEndTime =
-GM.RoundPrepStartTime =
-GM.RoundWarmupTime =
-]]--
-
 function GM:CreateTeams()
 	team.SetUp(TEAM_RED, "Red", Color(255, 0, 0, 255), true)
 	team.SetUp(TEAM_BLUE, "Blue", Color(0, 0, 255, 255), true)
@@ -33,7 +24,7 @@ function GM:CreateTeams()
 	--Set Spawn Points
 	team.SetSpawnPoint( TEAM_RED, {"info_player_terrorist"} )
 	team.SetSpawnPoint( TEAM_BLUE, {"info_player_counterterrorist"} )
-	--team.SetSpawnPoint( TEAM_SPEC, {"info_player_start"} )
+	team.SetSpawnPoint( TEAM_SPEC, {"info_player_start"} )
 
 	--Precaching Playermodels
 	util.PrecacheModel( 'models/player/leet.mdl' )
@@ -80,6 +71,7 @@ function GM:GetBlueKills()
 
 end
 
+--Not my code, temp hitmarker.
 if CLIENT then
 	hit = false
 	W = ScrW()/2

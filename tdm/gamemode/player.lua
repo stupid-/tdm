@@ -18,13 +18,13 @@ function ply:SetGamemodeTeam ( n )
 	return true
 end
 
-function GM:PlayerDeathThink( pl )
+function GM:PlayerDeathThink( ply )
 
-	if (  pl.NextSpawnTime && pl.NextSpawnTime > CurTime() ) then return end
+	if (  ply.NextSpawnTime && ply.NextSpawnTime > CurTime() ) then return end
 
-	if ( pl:KeyPressed( IN_ATTACK ) || pl:KeyPressed( IN_ATTACK2 ) || pl:KeyPressed( IN_JUMP ) ) then
+	if ( ply:KeyPressed( IN_ATTACK ) || ply:KeyPressed( IN_ATTACK2 ) || ply:KeyPressed( IN_JUMP ) ) then
 	
-		pl:Spawn()
+		ply:Spawn()
 		
 	end
 	
@@ -40,6 +40,7 @@ util.AddNetworkString("PlayerKilled")
 function GM:PlayerDeath( ply, inflictor, attacker )
 
 	ply.NextSpawnTime = CurTime() + 4
+	
 	ply.DeathTime = CurTime()
 	
 	if ( IsValid( attacker ) && attacker:GetClass() == "trigger_hurt" ) then attacker = ply end
