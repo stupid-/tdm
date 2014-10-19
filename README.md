@@ -3,7 +3,7 @@
 I was looking for a more competetive gamemode for my community, so I decided to start coding a public Team Deathmatch Gamemode. This is my first project, and I have only just begun learning GLua, and don't have any prior programming experience. If you have any suggestions or issues, just let me know.
 
 ## Current Version
-Alpha 0.00.1
+Alpha 0.02
 
 ## Installation
 Drop the /tdm/ folder into the garrysmod\gamemodes and you are done. 

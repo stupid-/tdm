@@ -9,6 +9,7 @@ teams[1] = {name = "Blue", color = Vector( .2, .2, 1.0), weapons = {} }
 teams[2] = {name = "Spectator", color = Vector ( 0, 0 , 0 ), weapons = {} }
 
 function ply:SetGamemodeTeam ( n )
+
 	if not teams[n] then return false end
 
 	self:SetTeam( n )
@@ -16,8 +17,46 @@ function ply:SetGamemodeTeam ( n )
 	self:SetPlayerColor( teams[n].color )
 
 	return true
+
 end
 
+------------------------------------------
+--	How much DMG is Taken		--
+------------------------------------------
+function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
+
+	-- Headshot Damage multiplyer
+	if ( hitgroup == HITGROUP_HEAD ) then
+	 
+		dmginfo:ScaleDamage( 2.5 )
+	 
+	end
+	 
+	-- Damage Taken To Centre of Mass
+	if ( hitgroup == HITGROUP_CHEST ||
+		hitgroup == HITGROUP_STOMACH ) then
+
+		dmginfo:ScaleDamage( 1.25 )
+
+	end
+
+	-- Tamage taken if hit in limbs
+	if ( hitgroup == HITGROUP_LEFTARM ||
+		hitgroup == HITGROUP_RIGHTARM || 
+		hitgroup == HITGROUP_LEFTLEG ||
+		hitgroup == HITGROUP_RIGHTLEG ||
+		hitgroup == HITGROUP_GEAR ) then
+	 
+		dmginfo:ScaleDamage( 0.75 )
+	 
+	end
+
+end
+
+
+------------------------------------------
+--	When the player dies		--
+------------------------------------------
 function GM:PlayerDeathThink( ply )
 
 	if (  ply.NextSpawnTime && ply.NextSpawnTime > CurTime() ) then return end
@@ -34,12 +73,9 @@ util.AddNetworkString("PlayerKilledSelf")
 util.AddNetworkString("PlayerKilledByPlayer")
 util.AddNetworkString("PlayerKilled")
 
-------------------------------------------
---	When the player dies		--
-------------------------------------------
 function GM:PlayerDeath( ply, inflictor, attacker )
 
-	ply.NextSpawnTime = CurTime() + 4
+	ply.NextSpawnTime = CurTime() + 3 -- 3 Seconds to respawn
 	
 	ply.DeathTime = CurTime()
 	

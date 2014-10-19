@@ -26,7 +26,7 @@ Heads up display.
     surface.CreateFont( "AlphaFont",
     {
                     font    = "Triomphe",
-                    size    = 44,
+                    size    = 34,
                     weight  = 400,
                     antialias = true,
                     blursize = 0.2,
@@ -36,7 +36,7 @@ Heads up display.
     surface.CreateFont( "AlphaFontShadow",
     {
                     font    = "Triomphe", 
-                    size    = 44,
+                    size    = 34,
                     weight  = 400,
                     antialias = true,
                     blursize = 2,
@@ -46,7 +46,7 @@ Heads up display.
     surface.CreateFont( "AlphaFontSmall",
     {
                     font    = "Triomphe", 
-                    size    = 24,
+                    size    = 18,
                     weight  = 400,
                     antialias = true,
                     blursize = 0.2,
@@ -56,7 +56,7 @@ Heads up display.
     surface.CreateFont( "AlphaFontShadowSmall",
     {
                     font    = "Triomphe", 
-                    size    = 24,
+                    size    = 18,
                     weight  = 400,
                     antialias = true,
                     blursize = 2,
@@ -205,6 +205,7 @@ function GM:HUDPaint()
 	local bk = self:GetBlueKills()
 	local sl = self:GetScoreLimit()
 	local left = self:GetRoundsLeft()
+    local version = GAMEMODE.Version
 
 	local team1_deaths = bk * 10
 
@@ -256,14 +257,14 @@ function GM:HUDPaint()
 	draw.DrawText( round, "TimeLeftShadow", ScrW()-60 + 1, ScrH() - 155 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
 	draw.DrawText( round, "TimeLeft", ScrW()-60, ScrH() - 155 , Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
 
-	draw.DrawText( "Alpha 0.00.1", "AlphaFontShadow", x - x/8 + 1, y/6 - 40 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
-	draw.DrawText( "Alpha 0.00.1", "AlphaFont", x - x/8, y/6 - 40, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
+	draw.DrawText( "Alpha " .. version, "AlphaFontShadow", x - 65 + 1, y/6 - 40 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
+	draw.DrawText( "Alpha " .. version, "AlphaFont", x - 65, y/6 - 40, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
 
-	draw.DrawText( "Team Deathmatch", "AlphaFontShadowSmall", x - x/8 + 1, y/6 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
-	draw.DrawText( "Team Deathmatch", "AlphaFontSmall", x - x/8, y/6, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
+	draw.DrawText( "Team Deathmatch", "AlphaFontShadowSmall", x - 65 + 1, y/6 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
+	draw.DrawText( "Team Deathmatch", "AlphaFontSmall", x - 65, y/6, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
 
-	draw.RoundedBox( 0 , x - x/8 + 10 + 1, y/6 - 40+2 + 1, x/500, y/14, Color(10,10,10,160) )
-	draw.RoundedBox( 0 , x - x/8 + 10, y/6 - 40+2, x/500, y/14, Color(255,255,255,180) )
+	--draw.RoundedBox( 0 , x - 65 + 10 + 1, y/6 - 40+2 + 1, x/500, y/14, Color(10,10,10,160) )
+	--draw.RoundedBox( 0 , x - 65 + 10, y/6 - 40+2, x/500, y/14, Color(255,255,255,180) )
 
 	--local material2 = Material ("materials/tdm/DM.png", "noclamp")
 	--surface.SetMaterial( material2 )

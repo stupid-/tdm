@@ -233,3 +233,99 @@ function chooseTeam( ply )
 	end
 end
 concommand.Add("chooseTeam", chooseTeam)
+
+function redWins( ply )
+
+	local RedWinsFrame = vgui.Create( "DFrame" )
+	RedWinsFrame:SetSize(ScrW(), ScrH()*0.3)
+	RedWinsFrame:SetTitle("")
+	RedWinsFrame:SetPos( 0, ScrH()/4)
+	RedWinsFrame:SetVisible( true )
+	RedWinsFrame:SetDraggable( false )
+	RedWinsFrame:ShowCloseButton( false )
+	RedWinsFrame:MakePopup()
+	function RedWinsFrame:Paint( w, h, ply )
+		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,5))
+		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(0,0,0,165))
+		draw.DrawText( "Red Team Wins!", "TeamMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 16 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
+		draw.DrawText( "Red Team Wins!", "TeamMSG", 0 + w/2, 0 + (h/1.5)/3 + 16, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
+	end
+
+	local tabHover = false
+	local RedButton = vgui.Create('DButton')
+	RedButton:SetParent(RedWinsFrame)
+	RedButton:SetSize(ScrW()/10, ScrH()/20)
+	RedButton:SetPos(ScrW()/2 - (ScrW()/10)/2, 0 + (ScrH()/4)/1.5 + ScrH()/20 + (ScrH()/20)/6)
+	RedButton:SetText("Close")
+	RedButton:SetTextColor( Color(255,255,255,255) )
+	RedButton:SetFont("Button")
+	RedButton:SetDrawBackground(true)
+	function RedButton:OnCursorEntered()
+		tabHover = true
+	end
+	function RedButton:OnCursorExited()
+		tabHover = false
+	end
+	function RedButton:Paint(w, h)
+		if tabHover then
+			draw.RoundedBox( 2, 0, 0, w, h, Color(220,220,220,255))
+			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(180,40,40,250))
+		else
+			draw.RoundedBox( 2, 0, 0, w, h, Color(40,40,40,0))
+			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(180,30,30,250))
+		end
+	end
+	function RedButton:DoClick()
+		RedWinsFrame:Close()
+	end
+
+end
+concommand.Add("redWins", redWins)
+
+function blueWins( ply )
+
+	local BlueWinsFrame = vgui.Create( "DFrame" )
+	BlueWinsFrame:SetSize(ScrW(), ScrH()*0.3)
+	BlueWinsFrame:SetTitle("")
+	BlueWinsFrame:SetPos( 0, ScrH()/4)
+	BlueWinsFrame:SetVisible( true )
+	BlueWinsFrame:SetDraggable( false )
+	BlueWinsFrame:ShowCloseButton( false )
+	BlueWinsFrame:MakePopup()
+	function BlueWinsFrame:Paint( w, h, ply )
+		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,5))
+		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(0,0,0,165))
+		draw.DrawText( "Blue Team Wins!", "TeamMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 16 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
+		draw.DrawText( "Blue Team Wins!", "TeamMSG", 0 + w/2, 0 + (h/1.5)/3 + 16, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
+	end
+
+	local tabHover = false
+	local BlueButton = vgui.Create('DButton')
+	BlueButton:SetParent(BlueWinsFrame)
+	BlueButton:SetSize(ScrW()/10, ScrH()/20)
+	BlueButton:SetPos(ScrW()/2 - (ScrW()/10)/2, 0 + (ScrH()/4)/1.5 + ScrH()/20 + (ScrH()/20)/6)
+	BlueButton:SetText("Close")
+	BlueButton:SetTextColor( Color(255,255,255,255) )
+	BlueButton:SetFont("Button")
+	BlueButton:SetDrawBackground(true)
+	function BlueButton:OnCursorEntered()
+		tabHover = true
+	end
+	function BlueButton:OnCursorExited()
+		tabHover = false
+	end
+	function BlueButton:Paint(w, h)
+		if tabHover then
+			draw.RoundedBox( 2, 0, 0, w, h, Color(220,220,220,255))
+			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(40,40,180,250))
+		else
+			draw.RoundedBox( 2, 0, 0, w, h, Color(40,40,40,0))
+			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(30,30,180,250))
+		end
+	end
+	function BlueButton:DoClick()
+		BlueWinsFrame:Close()
+	end
+
+end
+concommand.Add("blueWins", blueWins)

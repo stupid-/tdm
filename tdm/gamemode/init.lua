@@ -64,7 +64,9 @@ end
 function GM:PlayerInitialSpawn ( ply )
 	print("Player: " .. ply:Nick() .. " has joined.")
 
+	-- IsBot() Is for testing gamemode features.
 	if (ply:IsBot()) then
+		-- Randomly Set Bot Team
 		ply:SetGamemodeTeam( math.random(0, 1) )
 
 		player_manager.OnPlayerSpawn( ply )
@@ -92,14 +94,8 @@ end
 function GM:PlayerSpawn ( ply )
 	if ply:Team() == TEAM_SPEC then 
 		ply:Spectate( OBS_MODE_ROAMING )
-	elseif ply:Team() == TEAM_RED then
-		ply:SetupHands()
-		player_manager.OnPlayerSpawn( ply )
-        player_manager.RunClass( ply, "Spawn" )
-        hook.Call( "PlayerLoadout", GAMEMODE, ply )
-        hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
-	elseif ply:Team() == TEAM_BLUE then
+	elseif (ply:Team() == TEAM_RED || ply:Team() == TEAM_BLUE ) then
 		ply:SetupHands()
 		player_manager.OnPlayerSpawn( ply )
         player_manager.RunClass( ply, "Spawn" )
@@ -108,7 +104,7 @@ function GM:PlayerSpawn ( ply )
 
 	end
 
-	--not my code, displaying hand models
+	--Not my code, displaying hand models
 	if ply:Team() != TEAM_SPEC then
 		local oldhands = ply:GetHands()
 		if ( IsValid( oldhands ) ) then oldhands:Remove() end
@@ -139,11 +135,14 @@ function GM:PlayerSpawn ( ply )
 	end
 end
 
+--For rounds in sv_rounds.lua 
 function GM:Think()
+
 	self:RoundThink()
+
 end
 
---Doing this just in case, team.SetSpawnPoint wasn't working. Works now.
+--Doing this just in case, team.SetSpawnPoint wasn't working. Works now. Leaving both in.
 function GM:PlayerSelectSpawn( ply ) 
  
     local spawns = ents.FindByClass( "info_player_terrorist" ) 
@@ -172,6 +171,7 @@ end
 ------------------------------------------
 
 function GM:PlayerLoadout( ply )
+
 	if ply:Team() == TEAM_SPEC then return false end
 
 	player_manager.RunClass( ply, "Loadout" )
@@ -185,13 +185,16 @@ end
 ------------------------------------------
 
 function GM:CanPlayerSuicide( ply )
+
 	if ply:Team() == TEAM_SPEC then return false end
+
 	return true
+
 end
 
 function GM:GetFallDamage( ply, flFallSpeed )
 	
-	return flFallSpeed / 8
+	return flFallSpeed / 12
 	
 end
 

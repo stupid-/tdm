@@ -5,6 +5,7 @@ GM.Author = "Stupid"
 GM.Email = "stupid@stupids-servers.com"
 GM.Website = "www.stupids-servers.com"
 GM.TeamBased = true
+GM.Version = "0.02"
 
 --Classes
 include("mapvote/mapvote.lua")
@@ -72,6 +73,7 @@ function GM:GetBlueKills()
 end
 
 --Not my code, temp hitmarker.
+--Game sucks without hitmarkers.
 if CLIENT then
 	hit = false
 	W = ScrW()/2

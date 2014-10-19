@@ -1,6 +1,8 @@
 --[[
 
-This is an extremely bad example of what I want it to look like. To prevent redesigning the gui multiple times, it will look like this until classes have been more-so finalized. 
+This is an extremely bad example of what I want it to look like. To prevent redesigning the gui multiple times, it will look like this until classes have been finalized. 
+
+Feel free to modify this yourself.
 
 ]]--
 

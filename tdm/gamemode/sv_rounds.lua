@@ -5,7 +5,7 @@ ROUND_PREPARING = 1
 ROUND_IN_PROGRESS = 2 
 ROUND_OVER = 3
 
-SetGlobalInt( "TDM_RoundsLeft", 5)
+SetGlobalInt( "TDM_RoundsLeft", 3)
 SetGlobalInt( "TDM_RoundState", ROUND_WAITING)
 SetGlobalInt( "TDM_RoundTime", 0 )
 SetGlobalInt( "TDM_ScoreLimit", 75 )
@@ -15,16 +15,18 @@ SetGlobalInt( "TDM_BlueKills", 0 )
 --[[  Map Vote Code is by https://github.com/wiox/gmod-mapvote  ]]--
 
 local mapSettings = {
-	Length = 20, -- Vote lasts 24 seconds
-	AllowCurrent = true, -- Don't allow current map to be re-voted
-	Limit = 12, -- Only allow the choice of 8 maps
-	Prefix = {"tdm_", "cs_", "dm_"}, -- Only allow maps beginning with ttt_ and cs_italy
+	Length = 20, -- How long does the vote last?
+	AllowCurrent = true, -- Allow voting for map that was just played
+	Limit = 12, -- Limit of maps able to vote between
+	Prefix = {"tdm_", "cs_", "de_"}, -- Map Prefix, chooses all maps with set presets
 }
 
 --[[  The way rounds were setup is inspired by Mr-Gash's Deathrun https://github.com/Mr-Gash/GMod-Deathrun  ]]--
 
 function GM:SetRoundTime( time )
+
 	return SetGlobalInt( "TDM_RoundTime", CurTime() + (tonumber(time or 5) or 5) )
+
 end
 
 GM.RoundFunctions = {
@@ -51,13 +53,17 @@ GM.RoundFunctions = {
 
 		local rounds_left = math.max(GetGlobalInt( "TDM_RoundsLeft", 1), 0)
 		if rounds_left > 1 then
+
 			for k,v in pairs(player.GetAll()) do
 				v:ChatPrint( "The map will change in "..rounds_left.." rounds." )
 			end
+
 		elseif rounds_left == 1 then
+
 			for k,v in pairs(player.GetAll()) do
 				v:ChatPrint( "The map will change after this round." )
 			end
+
 		end
 
 	end,
@@ -84,7 +90,7 @@ GM.RoundFunctions = {
 
 	[ROUND_OVER] = function( gm, winner) 
 
-		gm:SetRoundTime( 30 ) 
+		gm:SetRoundTime( 20 ) 
 
 		local sound = "surface.PlaySound( \"ttt/thump02e.mp3\" )"
 
@@ -92,6 +98,20 @@ GM.RoundFunctions = {
 
 		for k,v in pairs(player.GetAll()) do
 			v:ChatPrint( team.GetName(winner).." Team wins." )
+		end
+
+		if winner == 0 then
+
+			for k,v in pairs(player.GetAll()) do
+				v:ConCommand("redWins")
+			end
+
+		else
+
+			for k,v in pairs(player.GetAll()) do
+				v:ConCommand("blueWins")
+			end
+
 		end
 
 		local rounds_left = math.max(GetGlobalInt( "TDM_RoundsLeft", 1) - 1, 0)
@@ -174,15 +194,25 @@ GM.ThinkRoundFunctions = {
 	[ROUND_IN_PROGRESS] = function( gm )
 
 		if gm:GetScoreLimit() <= gm.GetRedKills() then
+
 			gm:SetRound( ROUND_OVER, 0 )
+
 		elseif gm:GetScoreLimit() <= gm.GetBlueKills() then
+
 			gm:SetRound( ROUND_OVER, 1 )
+
 		elseif gm:GetRoundTime() <= 0 then
+
 			if gm.GetRedKills() > gm.GetBlueKills() then
+
 				gm:SetRound( ROUND_OVER, 0 )
+
 			else
+
 				gm:SetRound( ROUND_OVER, 1 )
+
 			end
+
 		end
 
 	end,
