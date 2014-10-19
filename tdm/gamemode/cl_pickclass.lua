@@ -15,9 +15,9 @@ function pickClass( ply )
 	ChooseClassFrame:SetDraggable( false )
 	ChooseClassFrame:ShowCloseButton( true )
 	ChooseClassFrame:MakePopup()
-	ChooseClassFrame.startTime = SysTime()
+	--ChooseClassFrame.startTime = SysTime()
 	ChooseClassFrame.Paint = function()
-		Derma_DrawBackgroundBlur(ChooseClassFrame, ChooseClassFrame.startTime)
+		--Derma_DrawBackgroundBlur(ChooseClassFrame, ChooseClassFrame.startTime)
 	end
 
 	local ChooseTeamSheet = vgui.Create( "DPropertySheet", ChooseClassFrame)
@@ -34,8 +34,12 @@ function pickClass( ply )
 	SpectatorButton:SetText('Assault')
 	SpectatorButton:SetDrawBackground(true)
 	SpectatorButton.DoClick = function() 
-		RunConsoleCommand( "assaultClass" )
-		ChooseClassFrame:Close()
+		if player_manager.GetPlayerClass( ply ) == "assault" then
+			ply:ChatPrint( "You are already Assault." )
+		else
+			RunConsoleCommand( "assaultClass" )
+			ChooseClassFrame:Close()
+		end
 	end
 
 	local SpectatorButton = vgui.Create('DButton')
@@ -45,8 +49,12 @@ function pickClass( ply )
 	SpectatorButton:SetText('Infantry')
 	SpectatorButton:SetDrawBackground(true)
 	SpectatorButton.DoClick = function() 
-		RunConsoleCommand( "infantryClass" )
-		ChooseClassFrame:Close()
+		if player_manager.GetPlayerClass( ply ) == "infantry" then
+			ply:ChatPrint( "You are already Infantry." )
+		else
+			RunConsoleCommand( "infantryClass" )
+			ChooseClassFrame:Close()
+		end
 	end
 end
 concommand.Add("pickClass", pickClass)

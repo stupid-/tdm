@@ -2,14 +2,56 @@
 {
 	"base"		"base"
 	"title"		"Team Deathmatch"
-	"maps"		"^tdm_"
+	"maps"		"^tdm_|^dm_|^cs_|^de_"
 	"menusystem"	"1"
-	"workshopid"	""
+
+	"author"	"Stupid"
 	
 	"settings"
 	{
 		1
 		{
+			"name"		"tdm_preparetime"
+			"text"		"Preparing Round Time (in seconds)"
+			"help"		"The length of the preparing round in seconds."
+			"type"		"Numeric"
+			"default"	"30"
+		}
+
+		2
+		{
+			"name"		"tdm_roundtime"
+			"text"		"Round Time (in seconds)"
+			"help"		"The length of the round in seconds."
+			"type"		"Numeric"
+			"default"	"600"
+		}
+
+		3
+		{
+			"name"		"tdm_endtime"
+			"text"		"Ending Time (in seconds)"
+			"help"		"The length of the ending round in seconds."
+			"type"		"Numeric"
+			"default"	"20"
+		}
+
+		4
+		{
+			"name"		"tdm_roundlimit"
+			"text"		"Rounds to Win (Before map change)"
+			"help"		"Amount of rounds that will be played before map change begins."
+			"type"		"Numeric"
+			"default"	"2"
+		}
+
+		5
+		{
+			"name"		"tdm_scorelimit"
+			"text"		"Kills required (For win)"
+			"help"		"Amount of kills required for a team to win."
+			"type"		"Numeric"
+			"default"	"75"
 		}
 	}
 }

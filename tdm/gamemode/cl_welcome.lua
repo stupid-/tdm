@@ -156,10 +156,10 @@ function welcomePlayer( ply )
 	function SpectatorButton:Paint(w, h)
 		if tabHover then
 			draw.RoundedBox( 2, 0, 0, w, h, Color(220,220,220,255))
-			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(50,50,50,255))
+			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(75,75,75,255))
 		else
-			draw.RoundedBox( 2, 0, 0, w, h, Color(40,40,40,0))
-			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(40,40,40,255))
+			draw.RoundedBox( 2, 0, 0, w, h, Color(65,65,65,0))
+			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(65,65,65,255))
 		end
 	end
 	function SpectatorButton:DoClick()

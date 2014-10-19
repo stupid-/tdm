@@ -11,6 +11,7 @@ include("player_class/infantry.lua")
 include("mapvote/mapvote.lua")
 include("mapvote/sv_mapvote.lua")
 
+--Includes for Client
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 AddCSLuaFile("cl_menus.lua")
@@ -25,6 +26,16 @@ AddCSLuaFile("player_class/assault.lua")
 AddCSLuaFile("player_class/infantry.lua")
 
 ------------------------------------------
+--				ConVars					--
+------------------------------------------
+
+local round_preparetime = CreateConVar( "tdm_preparetime", "30", FCVAR_ARCHIVE )
+local round_time = CreateConVar( "tdm_roundtime", "600", FCVAR_ARCHIVE )
+local round_endtime = CreateConVar( "tdm_endtime", "20", FCVAR_ARCHIVE )
+local round_limit = CreateConVar( "tdm_roundlimit", "2", FCVAR_ARCHIVE )
+local round_scorelimit = CreateConVar( "tdm_scorelimit", "75", FCVAR_ARCHIVE )
+
+------------------------------------------
 --			Opening VGUI				--
 ------------------------------------------
 
@@ -37,7 +48,7 @@ function GM:ShowTeam( ply ) -- F2
 end
 
 function GM:ShowSpare2( ply ) -- F4
-	-- Coming soon -- cL_help.lua
+	-- Coming soon
 end
 
 ------------------------------------------
@@ -45,16 +56,33 @@ end
 ------------------------------------------
 
 function GM:PlayerConnect ( name, ip )
+
 	print("Player: " .. name .. " has connected.")
+
 end
 
 
 function GM:PlayerAuthed ( ply, steamid, uniqueid )
+
 	print ("Player: " .. ply:Nick() .. " ( " .. steamid .. " ) has authenticated.")
+
 end
 
 function GM:PlayerDisconnected( ply )
+
 	print("Player: " .. ply:Nick() .. " has disconnected.")
+
+end
+
+------------------------------------------
+--			Initializing Convars		--
+------------------------------------------
+
+function GM:Initialize()
+
+	SetGlobalInt( "TDM_RoundsLeft", round_limit:GetInt() )
+	SetGlobalInt( "TDM_ScoreLimit", round_scorelimit:GetInt() )
+
 end
 
 ------------------------------------------
@@ -64,10 +92,10 @@ end
 function GM:PlayerInitialSpawn ( ply )
 	print("Player: " .. ply:Nick() .. " has joined.")
 
-	-- IsBot() Is for testing gamemode features.
+	-- IsBot() Is for testing gamemode features in private.
 	if (ply:IsBot()) then
 		-- Randomly Set Bot Team
-		ply:SetGamemodeTeam( math.random(0, 1) )
+		ply:SetTeam( math.random(0, 1) )
 
 		player_manager.OnPlayerSpawn( ply )
 		player_manager.SetPlayerClass( ply, "infantry" )
@@ -96,6 +124,11 @@ function GM:PlayerSpawn ( ply )
 		ply:Spectate( OBS_MODE_ROAMING )
 
 	elseif (ply:Team() == TEAM_RED || ply:Team() == TEAM_BLUE ) then
+
+		local color = team.GetColor( ply:Team() )
+
+		ply:SetPlayerColor( Vector( color.r/255, color.g/255, color.b/255 ) )
+
 		ply:SetupHands()
 		player_manager.OnPlayerSpawn( ply )
         player_manager.RunClass( ply, "Spawn" )
@@ -194,17 +227,20 @@ end
 
 function GM:GetFallDamage( ply, flFallSpeed )
 	
-	return flFallSpeed / 12
+	return flFallSpeed / 13
 	
 end
 
 function GM:PlayerShouldTakeDamage( ply, attacker )
 
 	if ( IsValid( attacker ) ) then
+
 		if ( attacker.Team && ply:Team() == attacker:Team() && ply != attacker ) then return false end
+
 	end
 	
 	return true
+
 end
 
 function GM:DoPlayerDeath( victim, attacker, dmginfo )
@@ -246,7 +282,7 @@ function stTeamSpec( ply )
 	ply:KillSilent()
 	player_manager.SetPlayerClass( ply, "noclass" )
 	ply:UnSpectate()
-	ply:SetGamemodeTeam( TEAM_SPEC )
+	ply:SetTeam( TEAM_SPEC )
 	ply:StripWeapons()
 	ply:Spectate( OBS_MODE_ROAMING )
 	for k,v in pairs(player.GetAll()) do
@@ -258,7 +294,7 @@ concommand.Add( "stTeamSpec", stTeamSpec )
 function stTeamT( ply )
 	ply:UnSpectate()
 	ply:StripWeapons()
-	ply:SetGamemodeTeam( TEAM_RED )
+	ply:SetTeam( TEAM_RED )
 	ply:KillSilent()
 	ply:ConCommand("pickClass")
 	for k,v in pairs(player.GetAll()) do
@@ -270,7 +306,7 @@ concommand.Add( "stTeamT", stTeamT )
 function stTeamCT( ply )
 	ply:UnSpectate()
 	ply:StripWeapons()
-	ply:SetGamemodeTeam( TEAM_BLUE )
+	ply:SetTeam( TEAM_BLUE )
 	ply:KillSilent()
 	ply:ConCommand("pickClass")
 	for k,v in pairs(player.GetAll()) do
@@ -285,17 +321,27 @@ concommand.Add( "stTeamCT", stTeamCT )
 --Class system will be overhauled. Two classes to test if system works. It does.
 
 function assaultClass( ply )
-	if ply:Alive() then ply:KillSilent() end
-	ply:StripWeapons()
 	player_manager.SetPlayerClass( ply, "assault" )
+
+	if ply:Alive() then 
+		ply:Kill() 
+	end
+
+	ply:StripWeapons()
 	ply:Spawn()
+
 end
 concommand.Add( "assaultClass", assaultClass )
 
 function infantryClass( ply )
-	if ply:Alive() then ply:KillSilent() end
-	ply:StripWeapons()
 	player_manager.SetPlayerClass( ply, "infantry" )
+
+	if ply:Alive() then
+		ply:Kill() 
+	end
+
+	ply:StripWeapons()
 	ply:Spawn()
+
 end
 concommand.Add( "infantryClass", infantryClass )

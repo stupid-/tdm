@@ -5,17 +5,15 @@ ROUND_PREPARING = 1
 ROUND_IN_PROGRESS = 2 
 ROUND_OVER = 3
 
-SetGlobalInt( "TDM_RoundsLeft", 3)
 SetGlobalInt( "TDM_RoundState", ROUND_WAITING)
 SetGlobalInt( "TDM_RoundTime", 0 )
-SetGlobalInt( "TDM_ScoreLimit", 75 )
 SetGlobalInt( "TDM_RedKills", 0)
 SetGlobalInt( "TDM_BlueKills", 0 )
 
 --[[  Map Vote Code is by https://github.com/wiox/gmod-mapvote  ]]--
 
 local mapSettings = {
-	Length = 20, -- How long does the vote last?
+	Length = 15, -- How long does the vote last?
 	AllowCurrent = true, -- Allow voting for map that was just played
 	Limit = 12, -- Limit of maps able to vote between
 	Prefix = {"tdm_", "cs_", "de_"}, -- Map Prefix, chooses all maps with set presets
@@ -41,7 +39,7 @@ GM.RoundFunctions = {
 
 		game.CleanUpMap()
 
-		gm:SetRoundTime( 30 )
+		gm:SetRoundTime( GetConVarNumber( "tdm_preparetime" ) or 15 )
 
 		for k,v in pairs(player.GetAll()) do
 			v:KillSilent()
@@ -70,7 +68,7 @@ GM.RoundFunctions = {
 
 	[ROUND_IN_PROGRESS] = function( gm ) 
 
-		gm:SetRoundTime( 600 ) -- 10 minutes
+		gm:SetRoundTime( GetConVarNumber( "tdm_roundtime" ) or 600 ) -- 10 minutes default
 
 		game.CleanUpMap()
 
@@ -90,7 +88,7 @@ GM.RoundFunctions = {
 
 	[ROUND_OVER] = function( gm, winner) 
 
-		gm:SetRoundTime( 20 ) 
+		gm:SetRoundTime( GetConVarNumber( "tdm_endtime" ) or 20 ) 
 
 		local sound = "surface.PlaySound( \"ttt/thump02e.mp3\" )"
 

@@ -151,10 +151,10 @@ function chooseTeam( ply )
 	function SpectatorButton:Paint(w, h)
 		if tabHover then
 			draw.RoundedBox( 2, 0, 0, w, h, Color(220,220,220,255))
-			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(50,50,50,255))
+			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(75,75,75,255))
 		else
-			draw.RoundedBox( 2, 0, 0, w, h, Color(40,40,40,0))
-			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(40,40,40,255))
+			draw.RoundedBox( 2, 0, 0, w, h, Color(65,65,65,0))
+			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(65,65,65,255))
 		end
 	end
 	function SpectatorButton:DoClick()
@@ -246,9 +246,9 @@ function redWins( ply )
 	RedWinsFrame:MakePopup()
 	function RedWinsFrame:Paint( w, h, ply )
 		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,5))
-		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(0,0,0,165))
-		draw.DrawText( "Red Team Wins!", "TeamMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 16 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
-		draw.DrawText( "Red Team Wins!", "TeamMSG", 0 + w/2, 0 + (h/1.5)/3 + 16, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
+		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(180,30,30,205))
+		draw.DrawText( "Red Team Wins!", "WelcomeMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 31 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
+		draw.DrawText( "Red Team Wins!", "WelcomeMSG", 0 + w/2, 0 + (h/1.5)/3 + 31, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
 	end
 
 	local tabHover = false
@@ -294,9 +294,9 @@ function blueWins( ply )
 	BlueWinsFrame:MakePopup()
 	function BlueWinsFrame:Paint( w, h, ply )
 		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,5))
-		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(0,0,0,165))
-		draw.DrawText( "Blue Team Wins!", "TeamMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 16 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
-		draw.DrawText( "Blue Team Wins!", "TeamMSG", 0 + w/2, 0 + (h/1.5)/3 + 16, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
+		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(30,30,180,205))
+		draw.DrawText( "Blue Team Wins!", "WelcomeMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 31 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
+		draw.DrawText( "Blue Team Wins!", "WelcomeMSG", 0 + w/2, 0 + (h/1.5)/3 + 31, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
 	end
 
 	local tabHover = false

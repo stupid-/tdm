@@ -1,7 +1,7 @@
 local ply = FindMetaTable("Player")
 
-
 -- I will be changing how this is done
+-- Already Changed how it was done, depreciating soon.
 local teams = {}
 
 teams[0] = {name = "Red", color = Vector( 1.0, .2, .2), weapons = {} }
@@ -14,7 +14,7 @@ function ply:SetGamemodeTeam ( n )
 
 	self:SetTeam( n )
 
-	self:SetPlayerColor( teams[n].color )
+	--self:SetPlayerColor( teams[n].color )
 
 	return true
 
@@ -23,12 +23,13 @@ end
 ------------------------------------------
 --	How much DMG is Taken		--
 ------------------------------------------
+-- Feel Free to Modify based on gameplay needs
 function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 
 	-- Headshot Damage multiplyer
 	if ( hitgroup == HITGROUP_HEAD ) then
 	 
-		dmginfo:ScaleDamage( 2.5 )
+		dmginfo:ScaleDamage( 2.75 )
 	 
 	end
 	 
@@ -36,7 +37,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	if ( hitgroup == HITGROUP_CHEST ||
 		hitgroup == HITGROUP_STOMACH ) then
 
-		dmginfo:ScaleDamage( 1.25 )
+		dmginfo:ScaleDamage( 1.5 )
 
 	end
 
@@ -47,12 +48,11 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 		hitgroup == HITGROUP_RIGHTLEG ||
 		hitgroup == HITGROUP_GEAR ) then
 	 
-		dmginfo:ScaleDamage( 0.75 )
+		dmginfo:ScaleDamage( 1 )
 	 
 	end
 
 end
-
 
 ------------------------------------------
 --	When the player dies		--

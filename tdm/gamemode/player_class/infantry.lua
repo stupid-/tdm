@@ -3,12 +3,10 @@ AddCSLuaFile()
 DEFINE_BASECLASS( "player_default" )
 
 local PLAYER = {} 
---
--- See gamemodes/base/player_class/player_default.lua for all overridable variables
---
+
 PLAYER.DisplayName			= "Infantry"
 PLAYER.WalkSpeed 			= 210
-PLAYER.RunSpeed				= 340
+PLAYER.RunSpeed				= 315
 PLAYER.CrouchedWalkSpeed 	= 0.32		-- Multiply move speed by this when crouching
 PLAYER.DuckSpeed			= 0.3		-- How fast to go from not ducking, to ducking
 PLAYER.UnDuckSpeed			= 0.3		-- How fast to go from ducking, to not ducking
@@ -24,8 +22,6 @@ PLAYER.UseVMHands			= true		-- Uses viewmodel hands
 
 function PLAYER:Loadout()
 
-	--self.Player:Give( "gdcw_mp5" )
-	--self.Player:Give( "gdcw_m1911" )
 	self.Player:GiveAmmo( 256,	"Pistol", 		true )
 	self.Player:GiveAmmo( 256,	"SMG1", 		true )
 	self.Player:Give( "weapon_smg1" )
@@ -35,7 +31,9 @@ function PLAYER:Loadout()
 end
 
 function PLAYER:SetModel()
+
 	self.Player:SetModel( "models/player/leet.mdl" )
+
 end
 
 player_manager.RegisterClass( "infantry", PLAYER, "player_default" )
