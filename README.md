@@ -24,7 +24,7 @@ Drop the /tdm/ folder into the garrysmod/gamemodes folder and you are done. On y
 
 ## Author
 
-** Stupid **
+**Stupid**
 * [http://stupids-servers.com/](http://stupids-servers.com/)
 * [http://steamcommunity.com/profiles/76561198064742900](http://steamcommunity.com/profiles/76561198064742900)
 
