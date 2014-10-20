@@ -15,7 +15,7 @@
 			"text"		"Preparing Round Time (in seconds)"
 			"help"		"The length of the preparing round in seconds."
 			"type"		"Numeric"
-			"default"	"30"
+			"default"	"20"
 		}
 
 		2
@@ -51,7 +51,7 @@
 			"text"		"Kills required (For win)"
 			"help"		"Amount of kills required for a team to win."
 			"type"		"Numeric"
-			"default"	"75"
+			"default"	"50"
 		}
 	}
 }

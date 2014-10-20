@@ -33,26 +33,32 @@ AddCSLuaFile("player_class/sniper.lua")
 --				ConVars					--
 ------------------------------------------
 
-local round_preparetime = CreateConVar( "tdm_preparetime", "30", FCVAR_ARCHIVE )
+local round_preparetime = CreateConVar( "tdm_preparetime", "20", FCVAR_ARCHIVE )
 local round_time = CreateConVar( "tdm_roundtime", "600", FCVAR_ARCHIVE )
 local round_endtime = CreateConVar( "tdm_endtime", "20", FCVAR_ARCHIVE )
 local round_limit = CreateConVar( "tdm_roundlimit", "2", FCVAR_ARCHIVE )
-local round_scorelimit = CreateConVar( "tdm_scorelimit", "75", FCVAR_ARCHIVE )
+local round_scorelimit = CreateConVar( "tdm_scorelimit", "50", FCVAR_ARCHIVE )
 
 ------------------------------------------
 --			Opening VGUI				--
 ------------------------------------------
 
 function GM:ShowHelp( ply ) -- F1
+
 	ply:ConCommand("chooseTeam") --cl_menus.lua
+
 end
 
 function GM:ShowTeam( ply ) -- F2 
+
 	ply:ConCommand("pickClass") --cl_picklass.lua
+
 end
 
 function GM:ShowSpare2( ply ) -- F4
+
 	-- Coming soon
+
 end
 
 ------------------------------------------
@@ -85,6 +91,7 @@ end
 function GM:Initialize()
 
 	SetGlobalInt( "TDM_RoundsLeft", round_limit:GetInt() )
+
 	SetGlobalInt( "TDM_ScoreLimit", round_scorelimit:GetInt() )
 
 end
@@ -95,6 +102,8 @@ end
 
 function GM:PlayerInitialSpawn ( ply )
 	print("Player: " .. ply:Nick() .. " has joined.")
+
+	ply.NextSwitchTime = 0
 
 	-- IsBot() Is for testing gamemode features in private.
 	if (ply:IsBot()) then
@@ -185,7 +194,7 @@ function GM:PlayerSelectSpawn( ply )
     local spawns = ents.FindByClass( "info_player_terrorist" ) 
     local truespawn = table.Random(spawns)
 
-    if (ply:Team() == TEAM_RED) then
+    if (ply:Team() == TEAM_RED || ply:Team() == TEAM_SPEC) then
 
         return truespawn
 
@@ -223,7 +232,7 @@ end
 
 function GM:CanPlayerSuicide( ply )
 
-	if ply:Team() == TEAM_SPEC then return false end
+	--if ply:Team() == TEAM_SPEC then return false end
 
 	return false
 
@@ -283,7 +292,7 @@ end
 -- Need to add a team switching restriction system
 
 function stTeamSpec( ply )
-	if ( ply:Team() == TEAM_SPEC || ply.NextSwitchTime > CurTime() ) then return end
+	if ( ply:Team() == 2 || ply.NextSwitchTime > CurTime() ) then return end
 
 	ply.NextSwitchTime = CurTime() + 30
 
@@ -300,7 +309,7 @@ end
 concommand.Add( "stTeamSpec", stTeamSpec )
 
 function stTeamT( ply )
-	if ( ply:Team() == TEAM_RED || ply.NextSwitchTime > CurTime() ) then return end
+	if ( ply:Team() == 0 || ply.NextSwitchTime > CurTime() ) then return end
 
 	ply.NextSwitchTime = CurTime() + 30
 
@@ -317,7 +326,7 @@ end
 concommand.Add( "stTeamT", stTeamT )
 
 function stTeamCT( ply )
-	if ( ply:Team() == TEAM_BLUE || ply.NextSwitchTime > CurTime() ) then return end
+	if ( ply:Team() == 1 || ply.NextSwitchTime > CurTime() ) then return end
 
 	ply.NextSwitchTime = CurTime() + 30
 
@@ -340,11 +349,11 @@ concommand.Add( "stTeamCT", stTeamCT )
 
 function assaultClass( ply )
 
-	if (player_manager.GetPlayerClass( ply ) = "assault" ) then return end
+	if (player_manager.GetPlayerClass( ply ) == "assault" || (ply:Team() == 2) ) then return end
 
 	player_manager.SetPlayerClass( ply, "assault" )
 
-	if (player_manager.GetPlayerClass( ply ) = "noclass" ) then
+	if (player_manager.GetPlayerClass( ply ) == "noclass" ) then
 		if ply:Alive() then 
 			ply:Kill() 
 		end
@@ -358,11 +367,11 @@ concommand.Add( "assaultClass", assaultClass )
 
 function infantryClass( ply )
 
-	if (player_manager.GetPlayerClass( ply ) = "infantry" ) then return end
+	if (player_manager.GetPlayerClass( ply ) == "infantry" || (ply:Team() == 2) ) then return end
 
 	player_manager.SetPlayerClass( ply, "infantry" )
 
-	if (player_manager.GetPlayerClass( ply ) = "noclass") then
+	if (player_manager.GetPlayerClass( ply ) == "noclass") then
 		if ply:Alive() then 
 			ply:Kill() 
 		end
@@ -376,11 +385,11 @@ concommand.Add( "infantryClass", infantryClass )
 
 function heavyClass( ply )
 
-	if (player_manager.GetPlayerClass( ply ) = "heavy" ) then return end
+	if (player_manager.GetPlayerClass( ply ) == "heavy" || (ply:Team() == 2) ) then return end
 
 	player_manager.SetPlayerClass( ply, "heavy" )
 
-	if (player_manager.GetPlayerClass( ply ) = "noclass") then
+	if (player_manager.GetPlayerClass( ply ) == "noclass") then
 		if ply:Alive() then 
 			ply:Kill() 
 		end
@@ -394,11 +403,11 @@ concommand.Add( "heavyClass", heavyClass )
 
 function sniperClass( ply )
 
-	if (player_manager.GetPlayerClass( ply ) = "sniper" ) then return end
+	if (player_manager.GetPlayerClass( ply ) == "sniper" || (ply:Team() == 2) ) then return end
 
 	player_manager.SetPlayerClass( ply, "sniper" )
 
-	if (player_manager.GetPlayerClass( ply ) = "noclass") then
+	if (player_manager.GetPlayerClass( ply ) == "noclass") then
 		if ply:Alive() then 
 			ply:Kill() 
 		end

@@ -12,10 +12,10 @@ SetGlobalInt( "TDM_BlueKills", 0 )
 
 --[[  Map Vote Code is by https://github.com/wiox/gmod-mapvote  ]]--
 
-local mapSettings = {
+mapSettings = {
 	Length = 15, -- How long does the vote last?
 	AllowCurrent = true, -- Allow voting for map that was just played
-	Limit = 12, -- Limit of maps able to vote between
+	Limit = 18, -- Limit of maps able to vote between
 	Prefix = {"tdm_", "cs_", "de_"}, -- Map Prefix, chooses all maps with set presets
 }
 
