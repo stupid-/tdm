@@ -12,7 +12,7 @@
 		1
 		{
 			"name"		"tdm_preparetime"
-			"text"		"Preparing Round Time (in seconds)"
+			"text"		"Preparing Round Time"
 			"help"		"The length of the preparing round in seconds."
 			"type"		"Numeric"
 			"default"	"20"
@@ -21,7 +21,7 @@
 		2
 		{
 			"name"		"tdm_roundtime"
-			"text"		"Round Time (in seconds)"
+			"text"		"Round Time"
 			"help"		"The length of the round in seconds."
 			"type"		"Numeric"
 			"default"	"600"
@@ -30,7 +30,7 @@
 		3
 		{
 			"name"		"tdm_endtime"
-			"text"		"Ending Time (in seconds)"
+			"text"		"Ending Round Time"
 			"help"		"The length of the ending round in seconds."
 			"type"		"Numeric"
 			"default"	"20"
@@ -39,7 +39,7 @@
 		4
 		{
 			"name"		"tdm_roundlimit"
-			"text"		"Rounds to Win (Before map change)"
+			"text"		"Round Limit"
 			"help"		"Amount of rounds that will be played before map change begins."
 			"type"		"Numeric"
 			"default"	"2"
@@ -48,7 +48,7 @@
 		5
 		{
 			"name"		"tdm_scorelimit"
-			"text"		"Kills required (For win)"
+			"text"		"Winning Kills"
 			"help"		"Amount of kills required for a team to win."
 			"type"		"Numeric"
 			"default"	"50"

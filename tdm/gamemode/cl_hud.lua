@@ -46,7 +46,7 @@ Heads up display.
     surface.CreateFont( "AlphaFontSmall",
     {
                     font    = "Triomphe", 
-                    size    = 18,
+                    size    = 24,
                     weight  = 400,
                     antialias = true,
                     blursize = 0.2,
@@ -56,7 +56,7 @@ Heads up display.
     surface.CreateFont( "AlphaFontShadowSmall",
     {
                     font    = "Triomphe", 
-                    size    = 18,
+                    size    = 24,
                     weight  = 400,
                     antialias = true,
                     blursize = 2,

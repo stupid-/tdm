@@ -186,6 +186,12 @@ function GM:Think()
 
 	self:RoundThink()
 
+	SetGlobalInt( "TDM_SpecTeamNum", team.NumPlayers( TEAM_SPEC ) )
+
+	SetGlobalInt( "TDM_RedTeamNum", team.NumPlayers( TEAM_RED ) )
+
+	SetGlobalInt( "TDM_BlueTeamNum", team.NumPlayers( TEAM_BLUE ) )
+
 end
 
 --Doing this just in case, team.SetSpawnPoint wasn't working. Works now. Leaving both in.

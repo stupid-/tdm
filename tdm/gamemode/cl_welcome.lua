@@ -68,6 +68,9 @@ Choose a team.
 function welcomePlayer( ply )
 	local PlayerName = ply:Name()
 	local MapName = game.GetMap()
+	local SpecPlayers = GetGlobalInt( "TDM_SpecTeamNum" )
+	local RedPlayers = GetGlobalInt( "TDM_RedTeamNum" )
+	local BluePlayers = GetGlobalInt( "TDM_BlueTeamNum" )
 
 	local ChooseTeamFrame = vgui.Create( "DFrame" )
 	ChooseTeamFrame:SetSize(ScrW(), ScrH()*0.3)
@@ -142,7 +145,7 @@ function welcomePlayer( ply )
 	SpectatorButton:SetParent(ChooseTeamFrame)
 	SpectatorButton:SetSize(ScrW()/10, ScrH()/20)
 	SpectatorButton:SetPos(ScrW()/2 - (ScrW()/10)/2, 0 + (ScrH()/4)/1.5 + ScrH()/20 + (ScrH()/20)/6)
-	SpectatorButton:SetText("SPECTATE")
+	SpectatorButton:SetText("SPECTATE ("..SpecPlayers..")")
 	SpectatorButton:SetTextColor( Color(255,255,255,255) )
 	SpectatorButton:SetFont("Button")
 	SpectatorButton:SetDrawBackground(true)
@@ -170,7 +173,7 @@ function welcomePlayer( ply )
 	RedButton:SetParent(ChooseTeamFrame)
 	RedButton:SetSize(ScrW()/10, ScrH()/20)
 	RedButton:SetPos(ScrW()/3 - (ScrW()/10)/2, 0 + (ScrH()/4)/1.5 + ScrH()/20 + (ScrH()/20)/6 )
-	RedButton:SetText("TEAM RED")
+	RedButton:SetText("TEAM RED ("..RedPlayers..")")
 	RedButton:SetTextColor( Color(255,255,255,255) )
 	RedButton:SetFont("Button")
 	RedButton:SetDrawBackground(true)
@@ -191,10 +194,14 @@ function welcomePlayer( ply )
 	end
 	function RedButton:DoClick()
 		if ply:Team() == 0 then
-		ply:ChatPrint( "You are already on Team Red." )
+		ply:ChatPrint( "You are already on the Red Team." )
 		else
-		RunConsoleCommand( "stTeamT" )
-		ChooseTeamFrame:Close()
+			if RedPlayers > BluePlayers then
+				ply:ChatPrint( "There are too many players on the Red Team." )
+			else 
+				RunConsoleCommand( "stTeamT" )
+				ChooseTeamFrame:Close()
+			end
 		end
 	end
 
@@ -203,7 +210,7 @@ function welcomePlayer( ply )
 	BlueButton:SetParent(ChooseTeamFrame)
 	BlueButton:SetSize(ScrW()/10, ScrH()/20)
 	BlueButton:SetPos(ScrW()/2 + ScrW()/6 - (ScrW()/10)/2, 0 + (ScrH()/4)/1.5 + ScrH()/20 + (ScrH()/20)/6)
-	BlueButton:SetText("TEAM BLUE")
+	BlueButton:SetText("TEAM BLUE ("..BluePlayers..")")
 	BlueButton:SetTextColor( Color(255,255,255,255) )
 	BlueButton:SetFont("Button")
 	BlueButton:SetDrawBackground(true)
@@ -226,8 +233,12 @@ function welcomePlayer( ply )
 		if ply:Team() == 1 then
 		ply:ChatPrint( "You are already on Team Blue." )
 		else
-		RunConsoleCommand( "stTeamCT" )
-		ChooseTeamFrame:Close()
+			if BluePlayers > RedPlayers then
+				ply:ChatPrint( "There are too many players on the Blue Team." )
+			else
+				RunConsoleCommand( "stTeamCT" )
+				ChooseTeamFrame:Close()
+			end
 		end
 	end
 end
