@@ -5,14 +5,16 @@ GM.Author = "Stupid"
 GM.Email = "stupid@stupids-servers.com"
 GM.Website = "www.stupids-servers.com"
 GM.TeamBased = true
-GM.Version = "0.03"
+GM.Version = "0.04"
 
-include("mapvote/mapvote.lua")
+include( "mapvote/mapvote.lua" )
 
 --Classes
-include("player_class/noclass.lua")
-include("player_class/assault.lua")
-include("player_class/infantry.lua")
+include( "player_class/noclass.lua" )
+include( "player_class/assault.lua" )
+include( "player_class/infantry.lua" )
+include( "player_class/heavy.lua" )
+include( "player_class/sniper.lua" )
 
 TEAM_RED = 0
 TEAM_BLUE = 1
@@ -26,10 +28,11 @@ function GM:CreateTeams()
 	--Set Spawn Points
 	team.SetSpawnPoint( TEAM_RED, {"info_player_terrorist"} )
 	team.SetSpawnPoint( TEAM_BLUE, {"info_player_counterterrorist"} )
-	team.SetSpawnPoint( TEAM_SPEC, {"info_player_start"} )
+	team.SetSpawnPoint( TEAM_SPEC, {"info_player_terrorist"} )
 
 	--Precaching Playermodels
 	util.PrecacheModel( 'models/player/leet.mdl' )
+	util.PrecacheModel( 'models/player/phoenix.mdl' )
 	util.PrecacheModel( 'models/player/barney.mdl' )
 end
 

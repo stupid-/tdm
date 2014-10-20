@@ -56,5 +56,35 @@ function pickClass( ply )
 			ChooseClassFrame:Close()
 		end
 	end
+
+	local SpectatorButton = vgui.Create('DButton')
+	SpectatorButton:SetParent(ChooseTeamSheet)
+	SpectatorButton:SetSize(100, 30)
+	SpectatorButton:SetPos(0, 90)
+	SpectatorButton:SetText('Heavy')
+	SpectatorButton:SetDrawBackground(true)
+	SpectatorButton.DoClick = function() 
+		if player_manager.GetPlayerClass( ply ) == "heavy" then
+			ply:ChatPrint( "You are already Heavy." )
+		else
+			RunConsoleCommand( "heavyClass" )
+			ChooseClassFrame:Close()
+		end
+	end
+
+	local SpectatorButton = vgui.Create('DButton')
+	SpectatorButton:SetParent(ChooseTeamSheet)
+	SpectatorButton:SetSize(100, 30)
+	SpectatorButton:SetPos(0, 120)
+	SpectatorButton:SetText('Sniper')
+	SpectatorButton:SetDrawBackground(true)
+	SpectatorButton.DoClick = function() 
+		if player_manager.GetPlayerClass( ply ) == "sniper" then
+			ply:ChatPrint( "You are already Sniper." )
+		else
+			RunConsoleCommand( "sniperClass" )
+			ChooseClassFrame:Close()
+		end
+	end
 end
 concommand.Add("pickClass", pickClass)

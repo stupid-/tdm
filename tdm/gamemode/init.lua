@@ -6,6 +6,8 @@ include("sv_rounds.lua")
 include("player_class/noclass.lua")
 include("player_class/assault.lua")
 include("player_class/infantry.lua")
+include("player_class/heavy.lua")
+include("player_class/sniper.lua")
 
 --Map Voting (Not My Code), By https://github.com/wiox/gmod-mapvote
 include("mapvote/mapvote.lua")
@@ -24,6 +26,8 @@ AddCSLuaFile("mapvote/cl_mapvote.lua")
 AddCSLuaFile("player_class/noclass.lua")
 AddCSLuaFile("player_class/assault.lua")
 AddCSLuaFile("player_class/infantry.lua")
+AddCSLuaFile("player_class/heavy.lua")
+AddCSLuaFile("player_class/sniper.lua")
 
 ------------------------------------------
 --				ConVars					--
@@ -221,7 +225,7 @@ function GM:CanPlayerSuicide( ply )
 
 	if ply:Team() == TEAM_SPEC then return false end
 
-	return true
+	return false
 
 end
 
@@ -279,6 +283,10 @@ end
 -- Need to add a team switching restriction system
 
 function stTeamSpec( ply )
+	if ( ply:Team() == TEAM_SPEC || ply.NextSwitchTime > CurTime() ) then return end
+
+	ply.NextSwitchTime = CurTime() + 30
+
 	ply:KillSilent()
 	player_manager.SetPlayerClass( ply, "noclass" )
 	ply:UnSpectate()
@@ -292,6 +300,11 @@ end
 concommand.Add( "stTeamSpec", stTeamSpec )
 
 function stTeamT( ply )
+	if ( ply:Team() == TEAM_RED || ply.NextSwitchTime > CurTime() ) then return end
+
+	ply.NextSwitchTime = CurTime() + 30
+
+	player_manager.SetPlayerClass( ply, "noclass" )
 	ply:UnSpectate()
 	ply:StripWeapons()
 	ply:SetTeam( TEAM_RED )
@@ -304,6 +317,11 @@ end
 concommand.Add( "stTeamT", stTeamT )
 
 function stTeamCT( ply )
+	if ( ply:Team() == TEAM_BLUE || ply.NextSwitchTime > CurTime() ) then return end
+
+	ply.NextSwitchTime = CurTime() + 30
+
+	player_manager.SetPlayerClass( ply, "noclass" )
 	ply:UnSpectate()
 	ply:StripWeapons()
 	ply:SetTeam( TEAM_BLUE )
@@ -318,30 +336,76 @@ concommand.Add( "stTeamCT", stTeamCT )
 ------------------------------------------
 --			Class Switching				--
 ------------------------------------------
---Class system will be overhauled. Two classes to test if system works. It does.
+--Class system will be overhauled.
 
 function assaultClass( ply )
+
+	if (player_manager.GetPlayerClass( ply ) = "assault" ) then return end
+
 	player_manager.SetPlayerClass( ply, "assault" )
 
-	if ply:Alive() then 
-		ply:Kill() 
-	end
+	if (player_manager.GetPlayerClass( ply ) = "noclass" ) then
+		if ply:Alive() then 
+			ply:Kill() 
+		end
 
-	ply:StripWeapons()
-	ply:Spawn()
+		ply:StripWeapons()
+		ply:Spawn()		
+	end
 
 end
 concommand.Add( "assaultClass", assaultClass )
 
 function infantryClass( ply )
+
+	if (player_manager.GetPlayerClass( ply ) = "infantry" ) then return end
+
 	player_manager.SetPlayerClass( ply, "infantry" )
 
-	if ply:Alive() then
-		ply:Kill() 
-	end
+	if (player_manager.GetPlayerClass( ply ) = "noclass") then
+		if ply:Alive() then 
+			ply:Kill() 
+		end
 
-	ply:StripWeapons()
-	ply:Spawn()
+		ply:StripWeapons()
+		ply:Spawn()		
+	end
 
 end
 concommand.Add( "infantryClass", infantryClass )
+
+function heavyClass( ply )
+
+	if (player_manager.GetPlayerClass( ply ) = "heavy" ) then return end
+
+	player_manager.SetPlayerClass( ply, "heavy" )
+
+	if (player_manager.GetPlayerClass( ply ) = "noclass") then
+		if ply:Alive() then 
+			ply:Kill() 
+		end
+
+		ply:StripWeapons()
+		ply:Spawn()		
+	end
+
+end
+concommand.Add( "heavyClass", heavyClass )
+
+function sniperClass( ply )
+
+	if (player_manager.GetPlayerClass( ply ) = "sniper" ) then return end
+
+	player_manager.SetPlayerClass( ply, "sniper" )
+
+	if (player_manager.GetPlayerClass( ply ) = "noclass") then
+		if ply:Alive() then 
+			ply:Kill() 
+		end
+
+		ply:StripWeapons()
+		ply:Spawn()		
+	end
+
+end
+concommand.Add( "sniperClass", sniperClass )

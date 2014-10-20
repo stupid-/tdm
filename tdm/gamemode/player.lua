@@ -1,25 +1,5 @@
 local ply = FindMetaTable("Player")
 
--- I will be changing how this is done
--- Already Changed how it was done, depreciating soon.
-local teams = {}
-
-teams[0] = {name = "Red", color = Vector( 1.0, .2, .2), weapons = {} }
-teams[1] = {name = "Blue", color = Vector( .2, .2, 1.0), weapons = {} }
-teams[2] = {name = "Spectator", color = Vector ( 0, 0 , 0 ), weapons = {} }
-
-function ply:SetGamemodeTeam ( n )
-
-	if not teams[n] then return false end
-
-	self:SetTeam( n )
-
-	--self:SetPlayerColor( teams[n].color )
-
-	return true
-
-end
-
 ------------------------------------------
 --	How much DMG is Taken		--
 ------------------------------------------
@@ -29,7 +9,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	-- Headshot Damage multiplyer
 	if ( hitgroup == HITGROUP_HEAD ) then
 	 
-		dmginfo:ScaleDamage( 2.75 )
+		dmginfo:ScaleDamage( 2 )
 	 
 	end
 	 
@@ -37,7 +17,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	if ( hitgroup == HITGROUP_CHEST ||
 		hitgroup == HITGROUP_STOMACH ) then
 
-		dmginfo:ScaleDamage( 1.5 )
+		dmginfo:ScaleDamage( 0.75 )
 
 	end
 
@@ -48,7 +28,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 		hitgroup == HITGROUP_RIGHTLEG ||
 		hitgroup == HITGROUP_GEAR ) then
 	 
-		dmginfo:ScaleDamage( 1 )
+		dmginfo:ScaleDamage( 0.25 )
 	 
 	end
 
@@ -59,12 +39,18 @@ end
 ------------------------------------------
 function GM:PlayerDeathThink( ply )
 
-	if (  ply.NextSpawnTime && ply.NextSpawnTime > CurTime() ) then return end
+	if ( ply.NextSpawnTime && ply.NextSpawnTime > CurTime() ) then return end
 
 	if ( ply:KeyPressed( IN_ATTACK ) || ply:KeyPressed( IN_ATTACK2 ) || ply:KeyPressed( IN_JUMP ) ) then
 	
 		ply:Spawn()
 		
+	end
+
+	if ( !ply:Alive() && (ply.NextSpawnTime + 4) < CurTime() && (player_manager.GetPlayerClass( ply ) != "noclass")) then
+
+		ply:Spawn()
+
 	end
 	
 end

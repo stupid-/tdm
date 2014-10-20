@@ -65,8 +65,6 @@ Menu for changing/switching teams mid game.
     })
 
 function chooseTeam( ply )
-	local PlayerName = LocalPlayer():Name()
-	local MapName = game.GetMap()
 
 	local ChooseTeamFrame = vgui.Create( "DFrame" )
 	ChooseTeamFrame:SetSize(ScrW(), ScrH()*0.3)

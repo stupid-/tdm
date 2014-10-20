@@ -5,7 +5,6 @@ Choose a team.
 
 ]]--
 
-
     surface.CreateFont( "Close",
     {
                     font    = "CloseCaption_Bold", 
@@ -67,7 +66,7 @@ Choose a team.
     })
 
 function welcomePlayer( ply )
-	local PlayerName = LocalPlayer():Name()
+	local PlayerName = ply:Name()
 	local MapName = game.GetMap()
 
 	local ChooseTeamFrame = vgui.Create( "DFrame" )

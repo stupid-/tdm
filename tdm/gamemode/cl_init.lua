@@ -11,6 +11,8 @@ include( "mapvote/cl_mapvote.lua" )
 include( "player_class/noclass.lua" )
 include( "player_class/assault.lua" )
 include( "player_class/infantry.lua" )
+include( "player_class/heavy.lua" )
+include( "player_class/sniper.lua" )
 
 --not my code, displaying hand models
 function GM:PostDrawViewModel( vm, ply, weapon )
