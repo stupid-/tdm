@@ -5,7 +5,7 @@ GM.Author = "Stupid"
 GM.Email = "stupid@stupids-servers.com"
 GM.Website = "www.stupids-servers.com"
 GM.TeamBased = true
-GM.Version = "0.04"
+GM.Version = "0.05"
 
 include( "mapvote/mapvote.lua" )
 

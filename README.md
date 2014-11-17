@@ -4,18 +4,21 @@ I was looking for a more competetive gamemode for my community, so I decided to 
 
 ## Current Version
 
-Alpha 0.04
+Alpha 0.05
+Updated Nov-16-2014
 
 ## Installation
 
-Drop the /tdm/ folder into the garrysmod/gamemodes folder and you are done. On your server, set your gamemode to **tdm**.
+Drop the /tdm/ folder into the garrysmod/gamemodes folder and you are done. On your server, set your gamemode to tdm.
 
-## TO-DO List
+Currently requries FAS 2.0 Sweps and Base.
+
+## To-do List
 
 * Custom Scoreboard 
 * More Classes/Weapons/Class Balancing
-* Updated Class Selection GUI
-* Updated Hud -- Current Hud is placeholder
+* Update Class Selection GUI
+* Update Hud -- Current Hud is placeholder
 
 ## Special Thanks / Credits
 
@@ -30,4 +33,4 @@ Drop the /tdm/ folder into the garrysmod/gamemodes folder and you are done. On y
 
 ## Copyright and License
 
-Copyright 2014 Colin Murphy aka Stupid, under the MIT License. 
+Copyright 2014 Stupid, under the MIT License. 

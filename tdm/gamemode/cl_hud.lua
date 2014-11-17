@@ -263,34 +263,11 @@ function GM:HUDPaint()
 	draw.DrawText( "Team Deathmatch", "AlphaFontShadowSmall", x - 65 + 1, y/6 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
 	draw.DrawText( "Team Deathmatch", "AlphaFontSmall", x - 65, y/6, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
 
-	--draw.RoundedBox( 0 , x - 65 + 10 + 1, y/6 - 40+2 + 1, x/500, y/14, Color(10,10,10,160) )
-	--draw.RoundedBox( 0 , x - 65 + 10, y/6 - 40+2, x/500, y/14, Color(255,255,255,180) )
-
-	--local material2 = Material ("materials/tdm/DM.png", "noclamp")
-	--surface.SetMaterial( material2 )
-	--surface.DrawTexturedRect(  x - x/8 + 24, y/6 - 30 + 2, 77, 46)
-
 	if team.GetName( LocalPlayer():Team() ) == "Spectator" then 
+
         -- Was testing the hud here.
 
 	else
-		--[[ Debug display for admins.
-		if (ply:Alive() && team.GetName( LocalPlayer():Team() ) != "Spectator"  && ply:IsAdmin()) then
-			local playerClass = player_manager.GetPlayerClass( ply )
-			local playerTeam = team.GetName( LocalPlayer():Team() )
-			local round = self:GetRound()
-			local time = self:GetRoundTime()
-			local sl = self:GetScoreLimit()
-			local left = self:GetRoundsLeft()
-
-		    draw.DrawText( "Team: "..playerTeam, "DebugFont", 10,5, Color(255, 255, 255, 235), TEXT_ALIGN_LEFT ) 
-		    draw.DrawText( "Class: "..playerClass, "DebugFont", 10,35, Color(255, 255, 255, 235), TEXT_ALIGN_LEFT ) 
-		    draw.DrawText( round, "DebugFont", 10,65, Color(255, 255, 255, 235), TEXT_ALIGN_LEFT ) 
-		    draw.DrawText( time, "DebugFont", 10,95, Color(255, 255, 255, 235), TEXT_ALIGN_LEFT ) 
-		    draw.DrawText( sl, "DebugFont", 10,125, Color(255, 255, 255, 235), TEXT_ALIGN_LEFT ) 
-		    draw.DrawText( left, "DebugFont", 10,155, Color(255, 255, 255, 235), TEXT_ALIGN_LEFT ) 
-		end
-		]]--
 
 		if (ply:Alive()) then
 	    	local playerTeam = team.GetName( ply:Team() )

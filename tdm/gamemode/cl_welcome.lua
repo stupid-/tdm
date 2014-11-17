@@ -87,7 +87,6 @@ function welcomePlayer( ply )
 		draw.DrawText( "Welcome, " .. PlayerName .. ".", "WelcomeMSG",  0 + w/2, 0 + (h/1.5)/3 - 31, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER )
 		draw.DrawText( "Please select a team.", "TeamMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + (h/1.5)/3 - 16 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
 		draw.DrawText( "Please select a team.", "TeamMSG", 0 + w/2, 0 + (h/1.5)/3 + (h/1.5)/3 - 16, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
-
 	end
 
 	local tabHover = false

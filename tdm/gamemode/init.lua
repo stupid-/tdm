@@ -2,7 +2,7 @@ include("shared.lua")
 include("player.lua")
 include("sv_rounds.lua")
 
---Classes
+--Classes  
 include("player_class/noclass.lua")
 include("player_class/assault.lua")
 include("player_class/infantry.lua")
@@ -32,7 +32,7 @@ AddCSLuaFile("player_class/sniper.lua")
 ------------------------------------------
 --				ConVars					--
 ------------------------------------------
-
+-- Need to fix the setting of some of the ConVars, not entirely working.
 local round_preparetime = CreateConVar( "tdm_preparetime", "20", FCVAR_ARCHIVE )
 local round_time = CreateConVar( "tdm_roundtime", "600", FCVAR_ARCHIVE )
 local round_endtime = CreateConVar( "tdm_endtime", "20", FCVAR_ARCHIVE )
@@ -94,6 +94,8 @@ function GM:Initialize()
 
 	SetGlobalInt( "TDM_ScoreLimit", round_scorelimit:GetInt() )
 
+	timer.Create( "CheckTeamBalance", 30, 0, function() GAMEMODE:CheckTeamBalance() end )
+
 end
 
 ------------------------------------------
@@ -148,40 +150,17 @@ function GM:PlayerSpawn ( ply )
         hook.Call( "PlayerLoadout", GAMEMODE, ply )
         hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
+    -- Incase someone spawns with no class picked, they will be silently killed and asked to pick a class.
+	elseif (player_manager.GetPlayerClass( ply ) == "noclass") then
+
+		ply:KillSilent()
+
+		ply:ConCommand("pickClass")
+
 	end
 
-	--Not my code, displaying hand models
-	if ply:Team() != TEAM_SPEC then
-		local oldhands = ply:GetHands()
-		if ( IsValid( oldhands ) ) then oldhands:Remove() end
-
-		local hands = ents.Create( "gmod_hands" )
-		if ( IsValid( hands ) ) then
-	    	ply:SetHands( hands )
-	    	hands:SetOwner( ply )
-
-		    -- Which hands should we use?
-		    local cl_playermodel = ply:GetInfo( "cl_playermodel" )
-		    local info = player_manager.TranslatePlayerHands( cl_playermodel )
-	    		if ( info ) then
-			    	hands:SetModel( info.model )
-			   		hands:SetSkin( info.skin )
-			    	hands:SetBodyGroups( info.body )
-	    		end
-
-		    -- Attach them to the viewmodel
-		    local vm = ply:GetViewModel( 0 )
-		    hands:AttachToViewmodel( vm )
-
-		    vm:DeleteOnRemove( hands )
-		    ply:DeleteOnRemove( hands )
-
-		    hands:Spawn()
-	  	end
-	end
 end
 
---For rounds in sv_rounds.lua 
 function GM:Think()
 
 	self:RoundThink()
@@ -235,21 +214,28 @@ end
 ------------------------------------------
 --			Taking Damage				--
 ------------------------------------------
+--Suiciding in TDM can be used to force a team to lose.
+--However suiciding is useful when a player is stuck,
+--May add the possibility of suiciding with a cooldown.
 
 function GM:CanPlayerSuicide( ply )
 
-	--if ply:Team() == TEAM_SPEC then return false end
+	if ply:Team() == TEAM_SPEC then return false end
+
+	if ply:IsAdmin() then return true end
 
 	return false
 
 end
 
+--Fall damage taken by players, has been many complaints about this
 function GM:GetFallDamage( ply, flFallSpeed )
 	
-	return flFallSpeed / 13
+	return flFallSpeed / 14
 	
 end
 
+--Player takes damage only if hurt by a member of the opposite team
 function GM:PlayerShouldTakeDamage( ply, attacker )
 
 	if ( IsValid( attacker ) ) then
@@ -271,9 +257,13 @@ function GM:DoPlayerDeath( victim, attacker, dmginfo )
 	if ( attacker:IsValid() && attacker:IsPlayer() ) then
 	
 		if ( attacker == victim ) then
+
 			attacker:AddFrags( -1 )
+
 		else
+
 			attacker:AddFrags( 1 )
+
 		end
 		
 	end
@@ -281,11 +271,13 @@ function GM:DoPlayerDeath( victim, attacker, dmginfo )
 	if victim:Team() == TEAM_RED then
 
 		local blueKills = GetGlobalInt( "TDM_BlueKills" )
+
 		SetGlobalInt( "TDM_BlueKills", blueKills + 1 )
 
 	elseif victim:Team() == TEAM_BLUE then
 
 		local redKills = GetGlobalInt( "TDM_RedKills" )
+
 		SetGlobalInt( "TDM_RedKills", redKills + 1 )
 
 	end
@@ -294,8 +286,6 @@ end
 ------------------------------------------
 --			Team Switching				--
 ------------------------------------------
--- Unless spectating, upon switching team player will be forced to choose a class. 
--- Need to add a team switching restriction system
 
 function stTeamSpec( ply )
 	if ( ply:Team() == 2 || ply.NextSwitchTime > CurTime() ) then return end
@@ -424,3 +414,77 @@ function sniperClass( ply )
 
 end
 concommand.Add( "sniperClass", sniperClass )
+
+-- I need to rewrite this, inspired by Fretta13, just need something that works atm. 
+function GM:CheckTeamBalance()
+	local CurrentRedPlayers = GetGlobalInt( "TDM_RedTeamNum" ) -- Team 0
+	local CurrentBluePlayers = GetGlobalInt( "TDM_BlueTeamNum" ) -- Team 1
+
+	if ( CurrentRedPlayers > ( CurrentBluePlayers + 1) ) then
+
+		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( 0 )
+
+		player_manager.SetPlayerClass( ply, "noclass" )
+		ply:UnSpectate()
+		ply:StripWeapons()
+		ply:SetTeam( 1 )
+		ply:KillSilent()
+		if (ply:IsBot()) then
+			player_manager.OnPlayerSpawn( ply )
+			player_manager.SetPlayerClass( ply, "infantry" )
+	        player_manager.RunClass( ply, "Spawn" )
+	        hook.Call( "PlayerLoadout", GAMEMODE, ply )
+	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
+	    else
+			ply:ConCommand("pickClass")
+		end
+
+		for k,v in pairs(player.GetAll()) do
+			v:ChatPrint( "Player "..ply:GetName().." has been automatically switched to the " .. team.GetName( ply:Team() ) .. " Team." )
+		end
+
+	elseif ( CurrentBluePlayers > ( CurrentRedPlayers + 1) ) then
+
+		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( 1 )
+
+		player_manager.SetPlayerClass( ply, "noclass" )
+		ply:UnSpectate()
+		ply:StripWeapons()
+		ply:SetTeam( 0 )
+		ply:KillSilent()
+
+		if (ply:IsBot()) then
+			player_manager.OnPlayerSpawn( ply )
+			player_manager.SetPlayerClass( ply, "infantry" )
+	        player_manager.RunClass( ply, "Spawn" )
+	        hook.Call( "PlayerLoadout", GAMEMODE, ply )
+	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
+	    else
+			ply:ConCommand("pickClass")
+		end
+
+		for k,v in pairs(player.GetAll()) do
+			v:ChatPrint( "Player "..ply:GetName().." has been automatically switched to the " .. team.GetName( ply:Team() ) .. " Team." )
+		end
+
+	end
+	
+end
+
+function GM:FindLeastCommittedPlayerOnTeam( teamid )
+
+	local worst
+
+	for k,v in pairs( team.GetPlayers( teamid ) ) do
+
+		if ( !worst || v:Frags() < worst:Frags() ) then
+
+			worst = v
+
+		end
+
+	end
+
+	return worst, "Least points on their team"
+
+end

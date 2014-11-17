@@ -21,17 +21,11 @@ PLAYER.AvoidPlayers			= true		-- Automatically swerves around other players
 PLAYER.UseVMHands			= true		-- Uses viewmodel hands
 
 function PLAYER:Loadout()
-
-	--[[
-	self.Player:GiveAmmo( 256,	"Pistol", 		true )
-	self.Player:GiveAmmo( 200,	"AR2", 			true )
-	self.Player:Give( "weapon_ar2" )
-	self.Player:Give( "weapon_pistol" )
-	self.Player:Give( "weapon_crowbar" )
-	]]--
 	
-	self.Player:Give( "weapon_csgo_m4a4" )
-	self.Player:Give( "weapon_csgo_glock" )
+	self.Player:GiveAmmo( 90,	"10x25MM", 		true )
+	self.Player:GiveAmmo( 120,	"7.62x51MM", 		true )
+	self.Player:Give( "fas2_g3" )
+	self.Player:Give( "fas2_glock20" )
 	self.Player:Give( "weapon_crowbar" )
 
 end

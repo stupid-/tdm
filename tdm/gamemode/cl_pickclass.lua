@@ -9,15 +9,13 @@ Feel free to modify this yourself.
 function pickClass( ply )
 	local ChooseClassFrame = vgui.Create( "DFrame" )
 	ChooseClassFrame:SetSize(ScrW()*0.6, ScrH()*0.6)
-	ChooseClassFrame:SetTitle("Welcome. Please Choose a Class.")
+	ChooseClassFrame:SetTitle("Please Choose a Class.")
 	ChooseClassFrame:Center()
 	ChooseClassFrame:SetVisible( true )
 	ChooseClassFrame:SetDraggable( false )
 	ChooseClassFrame:ShowCloseButton( true )
 	ChooseClassFrame:MakePopup()
-	--ChooseClassFrame.startTime = SysTime()
 	ChooseClassFrame.Paint = function()
-		--Derma_DrawBackgroundBlur(ChooseClassFrame, ChooseClassFrame.startTime)
 	end
 
 	local ChooseTeamSheet = vgui.Create( "DPropertySheet", ChooseClassFrame)
@@ -41,6 +39,7 @@ function pickClass( ply )
 			ChooseClassFrame:Close()
 		end
 	end
+
 
 	local SpectatorButton = vgui.Create('DButton')
 	SpectatorButton:SetParent(ChooseTeamSheet)
@@ -86,5 +85,6 @@ function pickClass( ply )
 			ChooseClassFrame:Close()
 		end
 	end
+	
 end
 concommand.Add("pickClass", pickClass)

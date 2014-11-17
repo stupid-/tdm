@@ -17,7 +17,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	if ( hitgroup == HITGROUP_CHEST ||
 		hitgroup == HITGROUP_STOMACH ) then
 
-		dmginfo:ScaleDamage( 0.75 )
+		dmginfo:ScaleDamage( 1.25 )
 
 	end
 
@@ -28,7 +28,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 		hitgroup == HITGROUP_RIGHTLEG ||
 		hitgroup == HITGROUP_GEAR ) then
 	 
-		dmginfo:ScaleDamage( 0.25 )
+		dmginfo:ScaleDamage( 0.75 )
 	 
 	end
 
@@ -41,7 +41,7 @@ function GM:PlayerDeathThink( ply )
 
 	if ( ply.NextSpawnTime && ply.NextSpawnTime > CurTime() ) then return end
 
-	if ( ply:KeyPressed( IN_ATTACK ) || ply:KeyPressed( IN_ATTACK2 ) || ply:KeyPressed( IN_JUMP ) ) then
+	if ( ply:KeyPressed( IN_ATTACK ) || ply:KeyPressed( IN_ATTACK2 ) || ply:KeyPressed( IN_JUMP ) && (player_manager.GetPlayerClass( ply ) == "noclass") ) then
 	
 		ply:Spawn()
 		

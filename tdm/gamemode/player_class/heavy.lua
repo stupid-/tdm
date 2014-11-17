@@ -22,16 +22,10 @@ PLAYER.UseVMHands			= true		-- Uses viewmodel hands
 
 function PLAYER:Loadout()
 
---[[
-	self.Player:GiveAmmo( 256,	"Pistol", 		true )
-	self.Player:GiveAmmo( 256,	"SMG1", 		true )
-	self.Player:Give( "weapon_smg1" )
-	self.Player:Give( "weapon_pistol" )
-	self.Player:Give( "weapon_crowbar" )
-]]--
-
-	self.Player:Give( "weapon_csgo_xm1014" )
-	self.Player:Give( "weapon_csgo_deagle" )
+	self.Player:GiveAmmo( 90,	"10x25MM", 		true )
+	self.Player:GiveAmmo( 48,	"12 Gauge", 		true )
+	self.Player:Give( "fas2_m3s90" )
+	self.Player:Give( "fas2_glock20" )
 	self.Player:Give( "weapon_crowbar" )
 
 end
