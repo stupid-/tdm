@@ -9,7 +9,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	-- Headshot Damage multiplyer
 	if ( hitgroup == HITGROUP_HEAD ) then
 	 
-		dmginfo:ScaleDamage( 2 )
+		dmginfo:ScaleDamage( 2.5 )
 	 
 	end
 	 

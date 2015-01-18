@@ -14,7 +14,7 @@ SetGlobalInt( "TDM_BlueKills", 0 )
 
 mapSettings = {
 	Length = 15, -- How long does the vote last?
-	AllowCurrent = true, -- Allow voting for map that was just played
+	AllowCurrent = false, -- Allow voting for map that was just played
 	Limit = 18, -- Limit of maps able to vote between
 	Prefix = {"tdm_", "cs_", "de_"}, -- Map Prefix, chooses all maps with set presets
 }

@@ -66,7 +66,7 @@ Choose a team.
     })
 
 function welcomePlayer( ply )
-	local PlayerName = ply:Name()
+	local PlayerName = LocalPlayer():Nick()
 	local MapName = game.GetMap()
 	local SpecPlayers = GetGlobalInt( "TDM_SpecTeamNum" )
 	local RedPlayers = GetGlobalInt( "TDM_RedTeamNum" )

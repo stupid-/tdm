@@ -22,13 +22,11 @@ PLAYER.UseVMHands			= true		-- Uses viewmodel hands
 
 function PLAYER:Loadout()
 
-	--fas2_att_compm4
-	self.Player:GiveAmmo( 90,	"10x25MM", 		true )
-	self.Player:GiveAmmo( 180,	"9x19MM", 		true )
-	self.Player:Give( "fas2_mp5a5" )
-	self.Player:Give( "fas2_glock20" )
+	self.Player:GiveAmmo( 80,	"pistol", 		true )
+	self.Player:GiveAmmo( 90,	"smg1", 		true )
+	self.Player:Give( "weapon_ttt_glock" )
+	self.Player:Give( "weapon_zm_mac10" )
 	self.Player:Give( "weapon_crowbar" )
-	self.Player:FAS2_PickUpAttachment( "suppressor" )
 
 end
 

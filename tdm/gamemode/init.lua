@@ -173,25 +173,112 @@ function GM:Think()
 
 end
 
+function GM:IsSpawnpointSuitable( ply, spawnpointent, bMakeSuitable )
+
+	local Pos = spawnpointent:GetPos()
+
+	-- Note that we're searching the default hull size here for a player in the way of our spawning.
+	-- This seems pretty rough, seeing as our player's hull could be different.. but it should do the job
+	-- ( HL2DM kills everything within a 128 unit radius )
+	local Ents = ents.FindInBox( Pos + Vector( -16, -16, 0 ), Pos + Vector( 16, 16, 72 ) )
+
+	if ( ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_SPEC or ply:Team() == TEAM_UNASSIGNED ) then return true end
+
+	local Blockers = 0
+
+	for k, v in pairs( Ents ) do
+		if ( IsValid( v ) && v:GetClass() == "player" && v:Alive() ) then
+
+			Blockers = Blockers + 1
+
+			if ( bMakeSuitable ) then
+				v:Kill()
+			end
+
+		end
+	end
+
+	if ( bMakeSuitable ) then return true end
+	if ( Blockers > 0 ) then return false end
+	return true
+
+end
+
 --Doing this just in case, team.SetSpawnPoint wasn't working. Works now. Leaving both in.
 function GM:PlayerSelectSpawn( ply ) 
  
     local spawns = ents.FindByClass( "info_player_terrorist" ) 
+    local Count = table.Count(spawns)
     local truespawn = table.Random(spawns)
 
     if (ply:Team() == TEAM_RED || ply:Team() == TEAM_SPEC) then
 
-        return truespawn
+		local ChosenSpawnPoint = nil
+		
+		-- Try to work out the best, random spawnpoint
+		for i=0, Count do
+		
+			ChosenSpawnPoint = truespawn
+
+			if ( ChosenSpawnPoint &&
+				ChosenSpawnPoint:IsValid() &&
+				ChosenSpawnPoint:IsInWorld() &&
+				ChosenSpawnPoint != ply:GetVar( "LastSpawnpoint" ) &&
+				ChosenSpawnPoint != self.LastSpawnPoint ) then
+				
+				if ( hook.Call( "IsSpawnpointSuitable", GAMEMODE, ply, ChosenSpawnPoint, i == Count ) ) then
+				
+					self.LastSpawnPoint = ChosenSpawnPoint
+					ply:SetVar( "LastSpawnpoint", ChosenSpawnPoint )
+					return ChosenSpawnPoint
+				
+				end
+				
+			end
+				
+		end
+		
+		return ChosenSpawnPoint
+
+        --return truespawn
 
     end 
 
 
     local spawns = ents.FindByClass( "info_player_counterterrorist" ) 
+    local Count = table.Count(spawns)
     local truespawn = table.Random(spawns)
 
     if (ply:Team() == TEAM_BLUE) then
 
-        return truespawn
+		local ChosenSpawnPoint = nil
+		
+		-- Try to work out the best, random spawnpoint
+		for i=0, Count do
+		
+			ChosenSpawnPoint = truespawn
+
+			if ( ChosenSpawnPoint &&
+				ChosenSpawnPoint:IsValid() &&
+				ChosenSpawnPoint:IsInWorld() &&
+				ChosenSpawnPoint != ply:GetVar( "LastSpawnpoint" ) &&
+				ChosenSpawnPoint != self.LastSpawnPoint ) then
+				
+				if ( hook.Call( "IsSpawnpointSuitable", GAMEMODE, ply, ChosenSpawnPoint, i == Count ) ) then
+				
+					self.LastSpawnPoint = ChosenSpawnPoint
+					ply:SetVar( "LastSpawnpoint", ChosenSpawnPoint )
+					return ChosenSpawnPoint
+				
+				end
+				
+			end
+				
+		end
+		
+		return ChosenSpawnPoint
+
+        --return truespawn
 
     end 
 

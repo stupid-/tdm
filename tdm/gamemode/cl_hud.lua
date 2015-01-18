@@ -244,7 +244,7 @@ function GM:HUDPaint()
 	self.Gradient = surface.GetTextureID("gui/gradient_up")
 	surface.SetDrawColor(  255, 255, 255, 1  );
 	surface.SetTexture( self.Gradient );
-	surface.DrawTexturedRect( ScrW()-292, ScrH() - 110, 200, 15 );	
+	surface.DrawTexturedRect( ScrW()-292, ScrH() - 110, 232, 15 );	
 
 	draw.DrawText( team1_deaths, "ScoreShadow", ScrW()-65 + 1, ScrH() - 87 + 1 , Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
 	draw.DrawText( team2_deaths, "ScoreShadow", ScrW()-65 + 1, ScrH() - 122 + 1 , Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
@@ -265,10 +265,11 @@ function GM:HUDPaint()
 
 	if team.GetName( LocalPlayer():Team() ) == "Spectator" then 
 
-        -- Was testing the hud here.
+        -- Spectator Hud Maybe
 
 	else
 
+        --No Hud if dead
 		if (ply:Alive()) then
 	    	local playerTeam = team.GetName( ply:Team() )
 	    	local playerClass = player_manager.GetPlayerClass( ply )
@@ -288,6 +289,7 @@ function GM:HUDPaint()
 			surface.SetTexture( self.Gradient );
 			surface.DrawTexturedRect( 57, ScrH() - 150, 306, 15 );
 
+            --If weapon equipped, display box and weapon name
 
 			if ply:GetActiveWeapon() != NULL then
 
@@ -311,16 +313,25 @@ function GM:HUDPaint()
 
 			end
 
+            -- AMMO #, if valid
+
 			if ( IsValid( LocalPlayer():GetActiveWeapon() ) ) then
+
 				local ammoLeft = LocalPlayer():GetActiveWeapon():Clip1()
+
 			    local ammoTotal = LocalPlayer():GetAmmoCount(LocalPlayer():GetActiveWeapon():GetPrimaryAmmoType())
-			    draw.RoundedBox( 0 , 295, ScrH() - 120, 2, 55, Color(255,255,255,10) )
 
-			    draw.DrawText( ammoTotal, "AmmoSmallShadow", 326 + 1, ScrH() - 121 + 1, Color(0, 0, 0, 250), TEXT_ALIGN_CENTER ) 
-				draw.DrawText( ammoTotal, "AmmoSmall", 326, ScrH() - 121, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+                if ammoLeft != -1 then
 
-				draw.DrawText( ammoLeft, "AmmoLargeShadow", 260 + 1, ScrH() - 126 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
-				draw.DrawText( ammoLeft, "AmmoLarge", 260, ScrH() - 126, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+                    draw.RoundedBox( 0 , 295, ScrH() - 120, 2, 55, Color(255,255,255,10) )
+
+                    draw.DrawText( ammoTotal, "AmmoSmallShadow", 326 + 1, ScrH() - 121 + 1, Color(0, 0, 0, 250), TEXT_ALIGN_CENTER ) 
+                    draw.DrawText( ammoTotal, "AmmoSmall", 326, ScrH() - 121, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+                    draw.DrawText( ammoLeft, "AmmoLargeShadow", 260 + 1, ScrH() - 126 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+                    draw.DrawText( ammoLeft, "AmmoLarge", 260, ScrH() - 126, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+                end
 			end
 		end
 
@@ -328,8 +339,13 @@ function GM:HUDPaint()
 end
 
 function GM:HUDShouldDraw( name )
+
     if ( name == "CHudHealth" or name == "CHudAmmo" or name == "CHudSecondaryAmmo") then
+
         return false
+
     end
+
     return true
+
 end

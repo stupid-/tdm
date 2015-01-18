@@ -37,6 +37,9 @@ function pickClass( ply )
 		else
 			RunConsoleCommand( "assaultClass" )
 			ChooseClassFrame:Close()
+			if ply:Alive() then
+				ply:ChatPrint( "You are now Assault. Your class will change once you die." )
+			end
 		end
 	end
 
@@ -53,9 +56,12 @@ function pickClass( ply )
 		else
 			RunConsoleCommand( "infantryClass" )
 			ChooseClassFrame:Close()
+			if ply:Alive() then
+				ply:ChatPrint( "You are now Infantry. Your class will change once you die." )
+			end
 		end
 	end
-
+/*
 	local SpectatorButton = vgui.Create('DButton')
 	SpectatorButton:SetParent(ChooseTeamSheet)
 	SpectatorButton:SetSize(100, 30)
@@ -85,6 +91,6 @@ function pickClass( ply )
 			ChooseClassFrame:Close()
 		end
 	end
-	
+*/
 end
 concommand.Add("pickClass", pickClass)
