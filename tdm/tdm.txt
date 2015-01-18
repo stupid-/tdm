@@ -15,7 +15,7 @@
 			"text"		"Preparing Round Time"
 			"help"		"The length of the preparing round in seconds."
 			"type"		"Numeric"
-			"default"	"20"
+			"default"	"40"
 		}
 
 		2
@@ -42,7 +42,7 @@
 			"text"		"Round Limit"
 			"help"		"Amount of rounds that will be played before map change begins."
 			"type"		"Numeric"
-			"default"	"2"
+			"default"	"1"
 		}
 
 		5

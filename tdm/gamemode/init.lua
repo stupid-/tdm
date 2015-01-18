@@ -20,6 +20,7 @@ AddCSLuaFile("cl_menus.lua")
 AddCSLuaFile("cl_hud.lua")
 AddCSLuaFile("cl_welcome.lua")
 AddCSLuaFile("cl_pickclass.lua")
+AddCSLuaFile("cl_voice.lua")
 AddCSLuaFile("mapvote/cl_mapvote.lua")
 
 --Classes For Client
@@ -28,6 +29,7 @@ AddCSLuaFile("player_class/assault.lua")
 AddCSLuaFile("player_class/infantry.lua")
 AddCSLuaFile("player_class/heavy.lua")
 AddCSLuaFile("player_class/sniper.lua")
+AddCSLuaFile("player_class/commando.lua")
 
 ------------------------------------------
 --				ConVars					--
@@ -130,15 +132,16 @@ function GM:PlayerInitialSpawn ( ply )
         hook.Call( "PlayerLoadout", GAMEMODE, ply )
         hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
-		ply:ConCommand("welcomePlayer")
+        timer.Simple( 3, function() ply:ConCommand("welcomePlayer") end )
 	end
 end
 
 function GM:PlayerSpawn ( ply )
 	if ply:Team() == TEAM_SPEC then 
+
 		ply:Spectate( OBS_MODE_ROAMING )
 
-	elseif (ply:Team() == TEAM_RED || ply:Team() == TEAM_BLUE ) then
+	elseif (ply:Team() == TEAM_RED && player_manager.GetPlayerClass( ply ) != "noclass" || ply:Team() == TEAM_BLUE && player_manager.GetPlayerClass( ply ) != "noclass" ) then
 
 		local color = team.GetColor( ply:Team() )
 
@@ -149,6 +152,15 @@ function GM:PlayerSpawn ( ply )
         player_manager.RunClass( ply, "Spawn" )
         hook.Call( "PlayerLoadout", GAMEMODE, ply )
         hook.Call( "PlayerSetModel", GAMEMODE, ply )
+
+        ply:GodEnable()
+
+        local function unprotect()
+        	if IsValid(ply) then
+        		ply:GodDisable()
+        	end
+        end
+        timer.Simple( 3.5, unprotect)
 
     -- Incase someone spawns with no class picked, they will be silently killed and asked to pick a class.
 	elseif (player_manager.GetPlayerClass( ply ) == "noclass") then
@@ -191,15 +203,11 @@ function GM:IsSpawnpointSuitable( ply, spawnpointent, bMakeSuitable )
 
 			Blockers = Blockers + 1
 
-			if ( bMakeSuitable ) then
-				v:Kill()
-			end
-
 		end
 	end
 
-	if ( bMakeSuitable ) then return true end
 	if ( Blockers > 0 ) then return false end
+	
 	return true
 
 end
@@ -306,8 +314,6 @@ end
 --May add the possibility of suiciding with a cooldown.
 
 function GM:CanPlayerSuicide( ply )
-
-	if ply:Team() == TEAM_SPEC then return false end
 
 	if ply:IsAdmin() then return true end
 
@@ -501,6 +507,24 @@ function sniperClass( ply )
 
 end
 concommand.Add( "sniperClass", sniperClass )
+
+function commandoClass( ply )
+
+	if (player_manager.GetPlayerClass( ply ) == "commando" || (ply:Team() == 2) ) then return end
+
+	player_manager.SetPlayerClass( ply, "commando" )
+
+	if (player_manager.GetPlayerClass( ply ) == "noclass") then
+		if ply:Alive() then 
+			ply:Kill() 
+		end
+
+		ply:StripWeapons()
+		ply:Spawn()		
+	end
+
+end
+concommand.Add( "commandoClass", commandoClass )
 
 -- I need to rewrite this, inspired by Fretta13, just need something that works atm. 
 function GM:CheckTeamBalance()

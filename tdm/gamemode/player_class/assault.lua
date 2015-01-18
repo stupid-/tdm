@@ -6,7 +6,7 @@ local PLAYER = {}
 
 PLAYER.DisplayName			= "Assault"
 PLAYER.WalkSpeed 			= 200
-PLAYER.RunSpeed				= 300
+PLAYER.RunSpeed				= 280
 PLAYER.CrouchedWalkSpeed 	= 0.3		-- Multiply move speed by this when crouching
 PLAYER.DuckSpeed			= 0.28		-- How fast to go from not ducking, to ducking
 PLAYER.UnDuckSpeed			= 0.28		-- How fast to go from ducking, to not ducking
@@ -21,11 +21,23 @@ PLAYER.AvoidPlayers			= true		-- Automatically swerves around other players
 PLAYER.UseVMHands			= true		-- Uses viewmodel hands
 
 function PLAYER:Loadout()
-	
-	self.Player:GiveAmmo( 160,	"Pistol", 		true )
-	self.Player:Give( "weapon_ttt_glock" )
-	self.Player:Give( "weapon_ttt_m16" )
-	self.Player:Give( "weapon_crowbar" )
+
+	if self.Player:Team() == TEAM_RED then
+
+		self.Player:GiveAmmo( 60,	"Pistol", 		true )
+		self.Player:GiveAmmo( 90,	"smg1", 		true )
+		self.Player:Give( "weapon_ttt_ak47" )
+		self.Player:Give( "weapon_crowbar" )
+		self.Player:Give( "weapon_zm_pistol" )
+
+	elseif self.Player:Team() == TEAM_BLUE then
+
+		self.Player:GiveAmmo( 160,	"Pistol", 		true )
+		self.Player:Give( "weapon_ttt_m16" )
+		self.Player:Give( "weapon_crowbar" )
+		self.Player:Give( "weapon_ttt_glock" )
+
+	end
 
 end
 

@@ -78,13 +78,14 @@ function chooseTeam( ply )
 	ChooseTeamFrame:ShowCloseButton( false )
 	ChooseTeamFrame:MakePopup()
 	function ChooseTeamFrame:Paint( w, h, ply )
-		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,5))
-		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(0,0,0,165))
+		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,25))
+		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(40,40,40,205))
 		draw.DrawText( "Changing teams?", "TeamMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 16 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
 		draw.DrawText( "Changing teams?", "TeamMSG", 0 + w/2, 0 + (h/1.5)/3 + 16, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
 
 	end
 
+/*
 	local tabHover = false
 	local HelpButton = vgui.Create('DButton')
 	HelpButton:SetParent(ChooseTeamFrame)
@@ -108,6 +109,7 @@ function chooseTeam( ply )
 	end
 	function HelpButton:DoClick()
 	end
+*/
 
 	local tabHover = false
 	local CloseButton = vgui.Create('DButton')
@@ -254,8 +256,8 @@ function redWins( ply )
 	RedWinsFrame:ShowCloseButton( false )
 	RedWinsFrame:MakePopup()
 	function RedWinsFrame:Paint( w, h, ply )
-		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,5))
-		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(180,30,30,205))
+		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,25))
+		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(180,30,30,225))
 		draw.DrawText( "Red Team Wins!", "WelcomeMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
 		draw.DrawText( "Red Team Wins!", "WelcomeMSG", 0 + w/2, 0 + (h/1.5)/3 , Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
 	end
@@ -302,8 +304,8 @@ function blueWins( ply )
 	BlueWinsFrame:ShowCloseButton( false )
 	BlueWinsFrame:MakePopup()
 	function BlueWinsFrame:Paint( w, h, ply )
-		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,5))
-		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(30,30,180,205))
+		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,25))
+		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(30,30,180,225))
 		draw.DrawText( "Blue Team Wins!", "WelcomeMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
 		draw.DrawText( "Blue Team Wins!", "WelcomeMSG", 0 + w/2, 0 + (h/1.5)/3, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
 	end

@@ -4,7 +4,7 @@ AddCSLuaFile()
 SWEP.HoldType			= "shotgun"
 
 if CLIENT then
-   SWEP.PrintName = "shotgun_name"
+   SWEP.PrintName = "Shotgun"
 
    SWEP.Slot = 2
    SWEP.Icon = "vgui/ttt/icon_shotgun"
@@ -18,9 +18,9 @@ SWEP.Kind = WEAPON_HEAVY
 SWEP.WeaponID = AMMO_SHOTGUN
 
 SWEP.Primary.Ammo = "Buckshot"
-SWEP.Primary.Damage = 11
-SWEP.Primary.Cone = 0.085
-SWEP.Primary.Delay = 0.8
+SWEP.Primary.Damage = 10
+SWEP.Primary.Cone = 0.125
+SWEP.Primary.Delay = 0.95
 SWEP.Primary.ClipSize = 8
 SWEP.Primary.ClipMax = 24
 SWEP.Primary.DefaultClip = 8

@@ -5,7 +5,7 @@ GM.Author = "Stupid"
 GM.Email = "stupid@stupids-servers.com"
 GM.Website = "www.stupids-servers.com"
 GM.TeamBased = true
-GM.Version = "0.06"
+GM.Version = "01-18-15.1"
 
 include( "mapvote/mapvote.lua" )
 
@@ -15,6 +15,7 @@ include( "player_class/assault.lua" )
 include( "player_class/infantry.lua" )
 include( "player_class/heavy.lua" )
 include( "player_class/sniper.lua" )
+include( "player_class/commando.lua" )
 
 TEAM_RED = 0
 TEAM_BLUE = 1

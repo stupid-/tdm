@@ -6,11 +6,11 @@ local PLAYER = {}
 
 PLAYER.DisplayName			= "Heavy"
 PLAYER.WalkSpeed 			= 200
-PLAYER.RunSpeed				= 290
-PLAYER.CrouchedWalkSpeed 	= 0.32		-- Multiply move speed by this when crouching
+PLAYER.RunSpeed				= 260
+PLAYER.CrouchedWalkSpeed 	= 0.30		-- Multiply move speed by this when crouching
 PLAYER.DuckSpeed			= 0.3		-- How fast to go from not ducking, to ducking
 PLAYER.UnDuckSpeed			= 0.3		-- How fast to go from ducking, to not ducking
-PLAYER.JumpPower			= 210		-- How powerful our jump should be
+PLAYER.JumpPower			= 200		-- How powerful our jump should be
 PLAYER.CanUseFlashlight     = true		-- Can we use the flashlight
 PLAYER.MaxHealth			= 100		-- Max health we can have
 PLAYER.StartHealth			= 100		-- How much health we start with
@@ -22,11 +22,17 @@ PLAYER.UseVMHands			= true		-- Uses viewmodel hands
 
 function PLAYER:Loadout()
 
+	self.Player:GiveAmmo( 80,	"pistol", 		true )
+	self.Player:GiveAmmo( 18,	"buckshot", 		true )
+	self.Player:Give( "weapon_zm_shotgun" )
+	self.Player:Give( "weapon_crowbar" )
+	self.Player:Give( "weapon_ttt_glock" )
+
 end
 
 function PLAYER:SetModel()
 
-	self.Player:SetModel( "models/player/phoenix.mdl" )
+	self.Player:SetModel( "models/player/police.mdl" )
 
 end
 

@@ -17,7 +17,7 @@ SWEP.Base = "weapon_tttbase"
 SWEP.Kind = WEAPON_HEAVY
 SWEP.WeaponID = AMMO_MAC10
 
-SWEP.Primary.Damage      = 12
+SWEP.Primary.Damage      = 13
 SWEP.Primary.Delay       = 0.065
 SWEP.Primary.Cone        = 0.03
 SWEP.Primary.ClipSize    = 30

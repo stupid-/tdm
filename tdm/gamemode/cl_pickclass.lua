@@ -22,7 +22,7 @@ function pickClass( ply )
 	ChooseTeamSheet:SetPos( 0, 25)
 	ChooseTeamSheet:SetSize(ScrW()*0.6, ScrH()*0.6)
 	ChooseTeamSheet.Paint = function()
-		draw.RoundedBox( 8, 0, 0, ChooseTeamSheet:GetWide(), ChooseTeamSheet:GetTall(), Color(0,0,0,55))
+		draw.RoundedBox( 8, 0, 0, ChooseTeamSheet:GetWide(), ChooseTeamSheet:GetTall(), Color(40,40,40,105))
 	end
 
 	local SpectatorButton = vgui.Create('DButton')
@@ -61,7 +61,7 @@ function pickClass( ply )
 			end
 		end
 	end
-/*
+
 	local SpectatorButton = vgui.Create('DButton')
 	SpectatorButton:SetParent(ChooseTeamSheet)
 	SpectatorButton:SetSize(100, 30)
@@ -85,12 +85,27 @@ function pickClass( ply )
 	SpectatorButton:SetDrawBackground(true)
 	SpectatorButton.DoClick = function() 
 		if player_manager.GetPlayerClass( ply ) == "sniper" then
-			ply:ChatPrint( "You are already Sniper." )
+			ply:ChatPrint( "You are already a Sniper." )
 		else
 			RunConsoleCommand( "sniperClass" )
 			ChooseClassFrame:Close()
 		end
 	end
-*/
+
+	local SpectatorButton = vgui.Create('DButton')
+	SpectatorButton:SetParent(ChooseTeamSheet)
+	SpectatorButton:SetSize(100, 30)
+	SpectatorButton:SetPos(0, 150)
+	SpectatorButton:SetText('Commando')
+	SpectatorButton:SetDrawBackground(true)
+	SpectatorButton.DoClick = function() 
+		if player_manager.GetPlayerClass( ply ) == "commando" then
+			ply:ChatPrint( "You are already a Commando." )
+		else
+			RunConsoleCommand( "commandoClass" )
+			ChooseClassFrame:Close()
+		end
+	end
+
 end
 concommand.Add("pickClass", pickClass)

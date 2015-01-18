@@ -81,14 +81,15 @@ function welcomePlayer( ply )
 	ChooseTeamFrame:ShowCloseButton( false )
 	ChooseTeamFrame:MakePopup()
 	function ChooseTeamFrame:Paint( w, h, ply )
-		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,5))
-		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(0,0,0,165))
+		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,25))
+		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(40,40,40,205))
 		draw.DrawText( "Welcome, " .. PlayerName .. ".", "WelcomeMSGShadow",  0 + w/2 + 1, 0 + (h/1.5)/3 - 31 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )
 		draw.DrawText( "Welcome, " .. PlayerName .. ".", "WelcomeMSG",  0 + w/2, 0 + (h/1.5)/3 - 31, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER )
 		draw.DrawText( "Please select a team.", "TeamMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + (h/1.5)/3 - 16 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
 		draw.DrawText( "Please select a team.", "TeamMSG", 0 + w/2, 0 + (h/1.5)/3 + (h/1.5)/3 - 16, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
 	end
 
+/*
 	local tabHover = false
 	local HelpButton = vgui.Create('DButton')
 	HelpButton:SetParent(ChooseTeamFrame)
@@ -113,7 +114,7 @@ function welcomePlayer( ply )
 	function HelpButton:DoClick()
 		--ChooseTeamFrame:Close()
 	end
-
+*/
 	local tabHover = false
 	local CloseButton = vgui.Create('DButton')
 	CloseButton:SetParent(ChooseTeamFrame)

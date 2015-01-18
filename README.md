@@ -4,17 +4,18 @@ I was looking for a more competetive gamemode for my community, so I decided to 
 
 ## Current Version
 
-Alpha 0.05
-Updated Nov-16-2014
+01-18-15.1
 
 ## Installation
 
 Drop the /tdm/ folder into the garrysmod/gamemodes folder and you are done. On your server, set your gamemode to tdm.
 
-Currently requries FAS 2.0 Sweps and Base.
+Add any content files to your fastdl server.
 
 ## To-do List
 
+* Fix Spawning Inside of Other Players
+* Settings and Customization
 * Custom Scoreboard 
 * More Classes/Weapons/Class Balancing
 * Update Class Selection GUI

@@ -10,6 +10,60 @@ SetGlobalInt( "TDM_RoundTime", 0 )
 SetGlobalInt( "TDM_RedKills", 0)
 SetGlobalInt( "TDM_BlueKills", 0 )
 
+local red_music = {
+	
+	"inno/africa.mp3",
+	"inno/brother.mp3",
+	"inno/hero.mp3",
+	"inno/lotr.mp3",
+	"inno/finalf.mp3",
+	"inno/joy.mp3",
+	"inno/oblivion.mp3",
+	"inno/park.mp3",
+	"inno/90s_v2.mp3",
+	"inno/gay_v2.mp3",
+	"inno/pirate.mp3",
+	"inno/victory_v2.mp3",
+	"inno/aot.mp3",
+	"inno/bf4.mp3",
+	"inno/rebel.mp3",
+	"inno/ru.mp3",
+	"inno/mother.mp3",
+	"inno/jack.mp3",
+	"inno/harder.mp3",
+	"inno/stepup.mp3",
+	"inno/careless.mp3",
+	"inno/men.mp3"
+
+}
+
+local blue_music = {
+	
+	"traitor/german.mp3",
+	"traitor/lotr2.mp3",
+	"traitor/march.mp3",
+	"traitor/septh.mp3",
+	"traitor/sad.mp3",
+	"traitor/mass.mp3",
+	"traitor/call.mp3",
+	"traitor/soviet.mp3",
+	"traitor/danger_v2.mp3",
+	"traitor/dropit_v2.mp3",
+	"traitor/jungle.mp3",
+	"traitor/saw_v2.mp3",
+	"traitor/died.mp3",
+	"traitor/kebab.mp3",
+	"traitor/lies.mp3",
+	"traitor/yns2.mp3",
+	"traitor/someone.mp3",
+	"traitor/sex.mp3",
+	"traitor/monster.mp3",
+	"traitor/shia.mp3",
+	"traitor/club.mp3",
+	"traitor/ussr.mp3"
+
+}
+
 --[[  Map Vote Code is by https://github.com/wiox/gmod-mapvote  ]]--
 
 mapSettings = {
@@ -40,6 +94,19 @@ GM.RoundFunctions = {
 		game.CleanUpMap()
 
 		gm:SetRoundTime( GetConVarNumber( "tdm_preparetime" ) or 15 )
+
+		--Ticking sound, round about to begin
+		timer.Simple ( (GetConVarNumber( "tdm_preparetime" ) - 11.25), function()
+
+			local soundCountdown = "surface.PlaySound( \"ui/ui_menu_flip_single_02.wav\" )"
+
+			for i =0,9 do
+
+				timer.Simple(1+i, function() BroadcastLua( soundCountdown ) end )
+
+			end 
+
+		end )
 
 		for k,v in pairs(player.GetAll()) do
 			v:KillSilent()
@@ -100,15 +167,29 @@ GM.RoundFunctions = {
 
 		if winner == 0 then
 
+			--Display RED WINS
 			for k,v in pairs(player.GetAll()) do
 				v:ConCommand("redWins")
 			end
 
+			--Play RED MUSIC
+			local song = table.Random( red_music )
+			song = "surface.PlaySound(\""..song.."\")"
+
+			BroadcastLua( song )
+
 		else
 
+			--Display BLUE WINS
 			for k,v in pairs(player.GetAll()) do
 				v:ConCommand("blueWins")
 			end
+
+			--Play BLUE MUSIC
+			local song = table.Random( blue_music )
+			song = "surface.PlaySound(\""..song.."\")"
+
+			BroadcastLua( song )
 
 		end
 
@@ -116,8 +197,12 @@ GM.RoundFunctions = {
 		SetGlobalInt( "TDM_RoundsLeft", rounds_left )
 
 		if rounds_left < 1 then
-		    
-	        MapVote.Start(mapSettings.Length, mapSettings.AllowCurrent, mapSettings.Limit, mapSettings.Prefix)  
+
+			timer.Simple(5, function()
+
+				MapVote.Start(mapSettings.Length, mapSettings.AllowCurrent, mapSettings.Limit, mapSettings.Prefix)  
+
+			end )
 	        
 		end
 

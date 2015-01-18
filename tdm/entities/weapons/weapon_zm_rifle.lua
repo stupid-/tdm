@@ -3,7 +3,7 @@ AddCSLuaFile()
 SWEP.HoldType           = "ar2"
 
 if CLIENT then
-   SWEP.PrintName          = "rifle_name"
+   SWEP.PrintName          = "Scout"
    SWEP.Slot               = 2
    SWEP.Icon = "vgui/ttt/icon_scout"
 end

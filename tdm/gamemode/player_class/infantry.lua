@@ -6,7 +6,7 @@ local PLAYER = {}
 
 PLAYER.DisplayName			= "Infantry"
 PLAYER.WalkSpeed 			= 210
-PLAYER.RunSpeed				= 315
+PLAYER.RunSpeed				= 295
 PLAYER.CrouchedWalkSpeed 	= 0.32		-- Multiply move speed by this when crouching
 PLAYER.DuckSpeed			= 0.3		-- How fast to go from not ducking, to ducking
 PLAYER.UnDuckSpeed			= 0.3		-- How fast to go from ducking, to not ducking
@@ -24,9 +24,9 @@ function PLAYER:Loadout()
 
 	self.Player:GiveAmmo( 80,	"pistol", 		true )
 	self.Player:GiveAmmo( 90,	"smg1", 		true )
-	self.Player:Give( "weapon_ttt_glock" )
 	self.Player:Give( "weapon_zm_mac10" )
 	self.Player:Give( "weapon_crowbar" )
+	self.Player:Give( "weapon_ttt_glock" )
 
 end
 

@@ -17,7 +17,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	if ( hitgroup == HITGROUP_CHEST ||
 		hitgroup == HITGROUP_STOMACH ) then
 
-		dmginfo:ScaleDamage( 1.25 )
+		dmginfo:ScaleDamage( 1.5 )
 
 	end
 
@@ -116,4 +116,11 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 	
 	MsgAll( ply:Nick() .. " was killed by " .. attacker:GetClass() .. "\n" )
 	
+end
+
+--Stop the pickup of props
+function GM:AllowPlayerPickup( ply, object )
+
+	return false
+		
 end

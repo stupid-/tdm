@@ -4,8 +4,8 @@ AddCSLuaFile()
 SWEP.HoldType			= "pistol"
 
 if CLIENT then
-   SWEP.PrintName = "sipistol_name"
-   SWEP.Slot = 6
+   SWEP.PrintName = "Silenced Pistol"
+   SWEP.Slot = 1
 
    SWEP.EquipMenuData = {
       type = "item_weapon",
@@ -27,7 +27,6 @@ SWEP.Primary.ClipMax = 80
 SWEP.Primary.Ammo = "Pistol"
 
 SWEP.Kind = WEAPON_EQUIP
-SWEP.CanBuy = {ROLE_TRAITOR} -- only traitors can buy
 SWEP.WeaponID = AMMO_SIPISTOL
 
 SWEP.AmmoEnt = "item_ammo_pistol_ttt"
