@@ -1,15 +1,17 @@
-
 AddCSLuaFile()
 
 SWEP.HoldType			= "shotgun"
 
 if CLIENT then
    SWEP.PrintName = "Shotgun"
-
-   SWEP.Slot = 2
-   SWEP.Icon = "vgui/ttt/icon_shotgun"
 end
 
+SWEP.Slot        = 2
+SWEP.SlotPos     = 1
+
+SWEP.Weight     = 5
+SWEP.AutoSwitchTo   = false
+SWEP.AutoSwitchFrom   = false
 
 SWEP.Base				= "weapon_tttbase"
 SWEP.Spawnable = true

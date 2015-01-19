@@ -5,12 +5,15 @@ SWEP.HoldType			= "melee"
 
 if CLIENT then
    SWEP.PrintName			= "Crowbar"
-
-   SWEP.Slot				= 0
-
-   SWEP.Icon = "vgui/ttt/icon_cbar"   
    SWEP.ViewModelFOV = 54
 end
+
+SWEP.Slot        = 0
+SWEP.SlotPos     = 1
+
+SWEP.Weight     = 3
+SWEP.AutoSwitchTo   = false
+SWEP.AutoSwitchFrom   = false
 
 SWEP.UseHands			= true
 SWEP.Base				= "weapon_tttbase"
@@ -19,7 +22,7 @@ SWEP.WorldModel			= "models/weapons/w_crowbar.mdl"
 SWEP.Weight			= 5
 SWEP.DrawCrosshair		= false
 SWEP.ViewModelFlip		= false
-SWEP.Primary.Damage = 20
+SWEP.Primary.Damage = 24
 SWEP.Primary.ClipSize		= -1
 SWEP.Primary.DefaultClip	= -1
 SWEP.Primary.Automatic		= true
@@ -33,8 +36,6 @@ SWEP.Secondary.Delay = 5
 
 SWEP.Kind = WEAPON_MELEE
 SWEP.WeaponID = AMMO_CROWBAR
-
-SWEP.InLoadoutFor = {ROLE_INNOCENT, ROLE_TRAITOR, ROLE_DETECTIVE}
 
 SWEP.NoSights = true
 SWEP.IsSilent = true

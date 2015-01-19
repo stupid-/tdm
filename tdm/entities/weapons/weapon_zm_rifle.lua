@@ -4,9 +4,14 @@ SWEP.HoldType           = "ar2"
 
 if CLIENT then
    SWEP.PrintName          = "Scout"
-   SWEP.Slot               = 2
-   SWEP.Icon = "vgui/ttt/icon_scout"
 end
+
+SWEP.Slot        = 2
+SWEP.SlotPos     = 1
+
+SWEP.Weight     = 5
+SWEP.AutoSwitchTo   = false
+SWEP.AutoSwitchFrom   = false
 
 SWEP.Base               = "weapon_tttbase"
 SWEP.Spawnable = true

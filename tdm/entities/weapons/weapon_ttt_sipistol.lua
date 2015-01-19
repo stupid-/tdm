@@ -5,15 +5,14 @@ SWEP.HoldType			= "pistol"
 
 if CLIENT then
    SWEP.PrintName = "Silenced Pistol"
-   SWEP.Slot = 1
-
-   SWEP.EquipMenuData = {
-      type = "item_weapon",
-      desc = "sipistol_desc"
-   };
-
-   SWEP.Icon = "vgui/ttt/icon_silenced"
 end
+
+SWEP.Slot        = 1
+SWEP.SlotPos     = 1
+
+SWEP.Weight     = 4
+SWEP.AutoSwitchTo   = false
+SWEP.AutoSwitchFrom   = false
 
 SWEP.Base = "weapon_tttbase"
 SWEP.Primary.Recoil	= 1.35

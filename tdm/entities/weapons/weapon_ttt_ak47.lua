@@ -2,9 +2,14 @@ AddCSLuaFile()
 
 if CLIENT then
    SWEP.PrintName = "AK47"
-   SWEP.Slot = 6
-   SWEP.Icon = "vgui/ttt/icon_ak47"
 end
+
+SWEP.Slot        = 2
+SWEP.SlotPos     = 1
+
+SWEP.Weight     = 5
+SWEP.AutoSwitchTo   = false
+SWEP.AutoSwitchFrom   = false
 
 -- Always derive from weapon_tttbase
 SWEP.Base = "weapon_tttbase"
@@ -40,8 +45,6 @@ SWEP.IronSightsAng = Vector( 2.737, 0.158, 0 )
 -- each. Can be: WEAPON_... MELEE, PISTOL, HEAVY, NADE, CARRY, EQUIP1, EQUIP2 or ROLE.
 -- Matching SWEP.Slot values: 0      1       2     3      4      6       7        8
 SWEP.Kind = WEAPON_HEAVY
-SWEP.Slot				= 2				-- Slot in the weapon selection menu
-SWEP.SlotPos				= 3
 
 -- If AutoSpawnable is true and SWEP.Kind is not WEAPON_EQUIP1/2, then this gun can
 -- be spawned as a random weapon.

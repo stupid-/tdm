@@ -234,16 +234,17 @@ local SCORE_BOARD = {
 			local scoreDeaths = "Deaths"
 			local scorePing = "Ping"
 
+			--DropShadows
+			draw.DrawText( scoreName, "ScoreboardHeadingShadow", 34 + 1, 11, Color(0, 0, 0, 200), TEXT_ALIGN_LEFT ) 
+			draw.DrawText( scoreKills, "ScoreboardHeadingShadow", 473 + 1, 11, Color(0, 0, 0, 200), TEXT_ALIGN_CENTER ) 
+			draw.DrawText( scoreDeaths, "ScoreboardHeadingShadow", 552 + 1, 11, Color(0, 0, 0, 200), TEXT_ALIGN_CENTER ) 
+			draw.DrawText( scorePing, "ScoreboardHeadingShadow", 632 + 1, 11, Color(0, 0, 0, 200), TEXT_ALIGN_CENTER ) 
+
 			draw.DrawText( scoreName, "ScoreboardHeading", 34, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
 			draw.DrawText( scoreKills, "ScoreboardHeading", 473, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scoreDeaths, "ScoreboardHeading", 552, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scorePing, "ScoreboardHeading", 632, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
 
-			--DropShadows
-			draw.DrawText( scoreName, "ScoreboardHeadingShadow", 34 + 1, 11, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
-			draw.DrawText( scoreKills, "ScoreboardHeadingShadow", 473 + 1, 11, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
-			draw.DrawText( scoreDeaths, "ScoreboardHeadingShadow", 552 + 1, 11, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
-			draw.DrawText( scorePing, "ScoreboardHeadingShadow", 632 + 1, 11, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
 		end
 
 		self.Scores = self:Add( "DScrollPanel" )

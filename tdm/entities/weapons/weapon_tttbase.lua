@@ -60,7 +60,7 @@ end
 SWEP.AutoSpawnable = false
 
 -- Set to true if weapon can be manually dropped by players (with Q)
-SWEP.AllowDrop = true
+SWEP.AllowDrop = false
 
 -- Set to true if weapon kills silently (no death scream)
 SWEP.IsSilent = false

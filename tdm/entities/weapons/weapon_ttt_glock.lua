@@ -6,10 +6,14 @@ SWEP.HoldType = "pistol"
 
 if CLIENT then
    SWEP.PrintName = "Glock"
-   SWEP.Slot = 1
-
-   SWEP.Icon = "vgui/ttt/icon_glock"
 end
+
+SWEP.Slot        = 1
+SWEP.SlotPos     = 1
+
+SWEP.Weight     = 4
+SWEP.AutoSwitchTo   = false
+SWEP.AutoSwitchFrom   = false
 
 SWEP.Kind = WEAPON_PISTOL
 SWEP.WeaponID = AMMO_GLOCK
