@@ -9,7 +9,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	-- Headshot Damage multiplyer
 	if ( hitgroup == HITGROUP_HEAD ) then
 	 
-		dmginfo:ScaleDamage( 2.5 )
+		dmginfo:ScaleDamage( 3.25 )
 	 
 	end
 	 
@@ -17,7 +17,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	if ( hitgroup == HITGROUP_CHEST ||
 		hitgroup == HITGROUP_STOMACH ) then
 
-		dmginfo:ScaleDamage( 1.5 )
+		dmginfo:ScaleDamage( 1.75 )
 
 	end
 
@@ -28,7 +28,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 		hitgroup == HITGROUP_RIGHTLEG ||
 		hitgroup == HITGROUP_GEAR ) then
 	 
-		dmginfo:ScaleDamage( 0.75 )
+		dmginfo:ScaleDamage( 1.25 )
 	 
 	end
 

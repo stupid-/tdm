@@ -21,6 +21,7 @@ AddCSLuaFile("cl_hud.lua")
 AddCSLuaFile("cl_welcome.lua")
 AddCSLuaFile("cl_pickclass.lua")
 AddCSLuaFile("cl_voice.lua")
+AddCSLuaFile("cl_scoreboard.lua")
 AddCSLuaFile("mapvote/cl_mapvote.lua")
 
 --Classes For Client
@@ -59,7 +60,8 @@ end
 
 function GM:ShowSpare2( ply ) -- F4
 
-	-- Coming soon
+	-- Coming soon --cl_help.lua
+	-- Help Menu
 
 end
 
@@ -96,7 +98,19 @@ function GM:Initialize()
 
 	SetGlobalInt( "TDM_ScoreLimit", round_scorelimit:GetInt() )
 
-	timer.Create( "CheckTeamBalance", 30, 0, function() GAMEMODE:CheckTeamBalance() end )
+	timer.Create( "CheckTeamBalance", 15, 0, function() 
+
+		if ( GetGlobalInt( "TDM_RoundState" ) == 0 or GetGlobalInt( "TDM_RoundState" ) == 1 ) then 
+
+			--Do Nothing, annoying when team balancing happens preround. 
+
+		else
+
+			GAMEMODE:CheckTeamBalance() 
+
+		end 
+
+	end )
 
 end
 
@@ -160,7 +174,7 @@ function GM:PlayerSpawn ( ply )
         		ply:GodDisable()
         	end
         end
-        timer.Simple( 3.5, unprotect)
+        timer.Simple( 4, unprotect)
 
     -- Incase someone spawns with no class picked, they will be silently killed and asked to pick a class.
 	elseif (player_manager.GetPlayerClass( ply ) == "noclass") then
@@ -214,7 +228,7 @@ end
 
 --Doing this just in case, team.SetSpawnPoint wasn't working. Works now. Leaving both in.
 function GM:PlayerSelectSpawn( ply ) 
- 
+
     local spawns = ents.FindByClass( "info_player_terrorist" ) 
     local Count = table.Count(spawns)
     local truespawn = table.Random(spawns)
@@ -289,6 +303,78 @@ function GM:PlayerSelectSpawn( ply )
         --return truespawn
 
     end 
+
+	/*
+	local spawns_spec = ents.FindByClass("info_player_counterterrorist")
+	spawns_spec = table.Add(spawns_spec, ents.FindByClass("info_player_terrorist"))
+	--Spectator Spawns
+	if (ply:Team() == TEAM_SPEC) then
+
+		local random_entry = math.random(#spawns_spec)
+
+		return spawns_spec[random_entry]
+
+	end
+
+
+    --RED TEAM SPAWNS
+    local spawns_red = ents.FindByClass( "info_player_terrorist" ) 
+	--Red Team Spawns, if spawned, current position can't be spawned in again for 5 seconds.
+    if (ply:Team() == TEAM_RED) && (#spawns_red > 0) then
+
+    	local random_entry = math.random(#spawns_red)
+
+    	timer.Simple(5, function() table.insert(spawns_red, spawns_red[random_entry]) end )
+
+    	table.remove(spawns_red, random_entry)
+
+        return spawns_red[random_entry]
+
+    else
+
+    	local random_entry = math.random(#spawns_red)
+
+    	timer.Simple(5.5, function() 
+
+    		timer.Simple(5, function() table.insert(spawns_red, spawns_red[random_entry]) end )
+
+    		table.remove(spawns_red, random_entry)
+
+    		return spawns_red[random_entry]
+
+    	end )
+
+    end
+
+    --BLUE TEAM SPAWNS
+    local spawns_blue = ents.FindByClass( "info_player_counterterrorist" ) 
+	--Blue Team Spawns, if spawned, current position can't be spawned in again for 5 seconds.
+    if (ply:Team() == TEAM_BLUE) && (#spawns_blue > 0) then
+
+    	local random_entry = math.random(#spawns_blue)
+
+    	timer.Simple(5, function() table.insert(spawns_blue, spawns_blue[random_entry]) end )
+
+    	table.remove(spawns_blue, random_entry)
+
+        return spawns_blue[random_entry]
+
+    else
+
+    	local random_entry = math.random(#spawns_blue)
+
+    	timer.Simple(5.5, function() 
+
+    		timer.Simple(5, function() table.insert(spawns_blue, spawns_blue[random_entry]) end )
+
+    		table.remove(spawns_blue, random_entry)
+
+    		return spawns_blue[random_entry]
+
+    	end )
+
+    end
+    */
 
 end
 

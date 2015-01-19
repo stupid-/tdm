@@ -68,9 +68,9 @@ local blue_music = {
 
 mapSettings = {
 	Length = 15, -- How long does the vote last?
-	AllowCurrent = false, -- Allow voting for map that was just played
+	AllowCurrent = true, -- Allow voting for map that was just played
 	Limit = 18, -- Limit of maps able to vote between
-	Prefix = {"tdm_", "cs_", "de_"}, -- Map Prefix, chooses all maps with set presets
+	Prefix = {"de_dust_go", "de_dust2_go", "de_nuke_go"}, -- Map Prefix, chooses all maps with set presets
 }
 
 --[[  The way rounds were setup is inspired by Mr-Gash's Deathrun https://github.com/Mr-Gash/GMod-Deathrun  ]]--

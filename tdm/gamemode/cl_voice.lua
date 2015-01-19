@@ -54,7 +54,7 @@ function PANEL:Paint( w, h )
 
 	if ( !IsValid( self.ply ) ) then return end
 
-	draw.RoundedBox( 4, 0, 0, w, h, teamVoiceColor )
+	draw.RoundedBox( 4, 0, 0, w, h, self.Color )
 
 end
 

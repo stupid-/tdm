@@ -4,7 +4,7 @@ I was looking for a more competetive gamemode for my community, so I decided to 
 
 ## Current Version
 
-01-18-15.1
+01-18-15.3
 
 ## Installation
 

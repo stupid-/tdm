@@ -6,6 +6,7 @@ include( "cl_hud.lua" )
 include( "cl_welcome.lua" )
 include( "cl_pickclass.lua" )
 include( "cl_voice.lua" )
+include( "cl_scoreboard.lua" )
 include( "mapvote/cl_mapvote.lua" )
 
 --Classes

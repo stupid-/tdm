@@ -15,14 +15,16 @@ function pickClass( ply )
 	ChooseClassFrame:SetDraggable( false )
 	ChooseClassFrame:ShowCloseButton( true )
 	ChooseClassFrame:MakePopup()
+	/*
 	ChooseClassFrame.Paint = function()
 	end
+	*/
 
 	local ChooseTeamSheet = vgui.Create( "DPropertySheet", ChooseClassFrame)
 	ChooseTeamSheet:SetPos( 0, 25)
 	ChooseTeamSheet:SetSize(ScrW()*0.6, ScrH()*0.6)
 	ChooseTeamSheet.Paint = function()
-		draw.RoundedBox( 8, 0, 0, ChooseTeamSheet:GetWide(), ChooseTeamSheet:GetTall(), Color(40,40,40,105))
+		draw.RoundedBox( 8, 0, 0, ChooseTeamSheet:GetWide(), ChooseTeamSheet:GetTall(), Color(40,40,40,155))
 	end
 
 	local SpectatorButton = vgui.Create('DButton')
@@ -74,6 +76,9 @@ function pickClass( ply )
 		else
 			RunConsoleCommand( "heavyClass" )
 			ChooseClassFrame:Close()
+			if ply:Alive() then
+				ply:ChatPrint( "You are now a Heavy. Your class will change once you die." )
+			end
 		end
 	end
 
@@ -89,6 +94,9 @@ function pickClass( ply )
 		else
 			RunConsoleCommand( "sniperClass" )
 			ChooseClassFrame:Close()
+			if ply:Alive() then
+				ply:ChatPrint( "You are now a Sniper. Your class will change once you die." )
+			end
 		end
 	end
 
@@ -104,6 +112,9 @@ function pickClass( ply )
 		else
 			RunConsoleCommand( "commandoClass" )
 			ChooseClassFrame:Close()
+			if ply:Alive() then
+				ply:ChatPrint( "You are now a Commando. Your class will change once you die." )
+			end
 		end
 	end
 
