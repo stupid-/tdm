@@ -100,7 +100,7 @@ function GM:Initialize()
 
 	timer.Create( "CheckTeamBalance", 15, 0, function() 
 
-		if ( GetGlobalInt( "TDM_RoundState" ) == 0 or GetGlobalInt( "TDM_RoundState" ) == 1 ) then 
+		if ( GetGlobalInt( "TDM_RoundState" ) == 0 or GetGlobalInt( "TDM_RoundState" ) == 1 or GetGlobalInt( "TDM_RoundState" ) == 3 ) then 
 
 			--Do Nothing, annoying when team balancing happens preround. 
 

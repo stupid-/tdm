@@ -33,7 +33,7 @@
 			"text"		"Ending Round Time"
 			"help"		"The length of the ending round in seconds."
 			"type"		"Numeric"
-			"default"	"20"
+			"default"	"30"
 		}
 
 		4

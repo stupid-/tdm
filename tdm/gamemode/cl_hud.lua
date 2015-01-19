@@ -299,7 +299,10 @@ function GM:HUDPaint()
 
 	if team.GetName( LocalPlayer():Team() ) == "Spectator" then 
 
-        -- Spectator Hud Maybe
+        --Commands so Spectators don't get stuck
+        local commandText = "[F1] Switch Teams - [F2] Change Classes"
+        draw.DrawText( commandText, "CommandsShadow", 60 + 11, ScrH()-78 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
+        draw.DrawText( commandText, "Commands", 60 + 10, ScrH()-78 , Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
 
 	else
 
@@ -325,12 +328,10 @@ function GM:HUDPaint()
 			surface.DrawTexturedRect( 57, ScrH() - 150, 306, 15 );
 
             --If weapon equipped, display box and weapon name
-
 			if ply:GetActiveWeapon() != NULL then
 
                 if playerTeam == "Red" then
 
-                    --TEST
                     self.Gradient = surface.GetTextureID("gui/gradient_up")
                     surface.SetDrawColor(175,20,20, 10 );
                     surface.SetTexture( self.Gradient );
@@ -350,13 +351,11 @@ function GM:HUDPaint()
                     
                     self.Gradient = surface.GetTextureID("gui/gradient_up")
                     surface.SetDrawColor( 255, 170, 170, 8 );
-                    --surface.SetDrawColor( 20, 20, 20, 30 );
                     surface.SetTexture( self.Gradient );
                     surface.DrawTexturedRect( 60, ScrH() - 95, 300, 35 );
 
                 elseif playerTeam == "Blue" then
 
-                    --TEST
                     self.Gradient = surface.GetTextureID("gui/gradient_up")
                     surface.SetDrawColor(20,20,175, 10 );
                     surface.SetTexture( self.Gradient );
@@ -377,7 +376,6 @@ function GM:HUDPaint()
                     
                     self.Gradient = surface.GetTextureID("gui/gradient_up")
                     surface.SetDrawColor( 170, 170, 255, 8 );
-                    --surface.SetDrawColor( 20, 20, 20, 30 );
                     surface.SetTexture( self.Gradient );
                     surface.DrawTexturedRect( 60, ScrH() - 95, 300, 35 );
 
