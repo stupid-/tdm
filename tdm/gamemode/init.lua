@@ -167,12 +167,18 @@ function GM:PlayerSpawn ( ply )
         hook.Call( "PlayerLoadout", GAMEMODE, ply )
         hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
+
+        --Most Basic Spawn Protection, 4 Seconds of God Mode.
         ply:GodEnable()
 
         local function unprotect()
+
         	if IsValid(ply) then
+
         		ply:GodDisable()
+
         	end
+
         end
         timer.Simple( 4, unprotect)
 
@@ -213,11 +219,13 @@ function GM:IsSpawnpointSuitable( ply, spawnpointent, bMakeSuitable )
 	local Blockers = 0
 
 	for k, v in pairs( Ents ) do
+
 		if ( IsValid( v ) && v:GetClass() == "player" && v:Alive() ) then
 
 			Blockers = Blockers + 1
 
 		end
+		
 	end
 
 	if ( Blockers > 0 ) then return false end

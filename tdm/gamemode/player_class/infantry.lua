@@ -25,7 +25,7 @@ function PLAYER:Loadout()
 	self.Player:GiveAmmo( 80,	"pistol", 		true )
 	self.Player:GiveAmmo( 90,	"smg1", 		true )
 	self.Player:Give( "weapon_zm_mac10" )
-	self.Player:Give( "weapon_crowbar" )
+	self.Player:Give( "weapon_zm_improvised" )
 	self.Player:Give( "weapon_ttt_glock" )
 
 end

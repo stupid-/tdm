@@ -27,7 +27,7 @@ function PLAYER:Loadout()
 		self.Player:GiveAmmo( 60,	"Pistol", 		true )
 		self.Player:GiveAmmo( 90,	"smg1", 		true )
 		self.Player:Give( "weapon_ttt_galil" )
-		self.Player:Give( "weapon_crowbar" )
+		self.Player:Give( "weapon_zm_improvised" )
 		self.Player:Give( "weapon_zm_pistol" )
 
 	elseif self.Player:Team() == TEAM_BLUE then

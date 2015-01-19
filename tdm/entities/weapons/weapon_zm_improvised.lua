@@ -4,7 +4,7 @@ AddCSLuaFile()
 SWEP.HoldType			= "melee"
 
 if CLIENT then
-   SWEP.PrintName			= "crowbar_name"
+   SWEP.PrintName			= "Crowbar"
 
    SWEP.Slot				= 0
 
