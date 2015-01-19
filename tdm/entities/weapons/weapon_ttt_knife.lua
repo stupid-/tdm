@@ -6,7 +6,7 @@ SWEP.HoldType = "knife"
 if CLIENT then
 
    SWEP.PrintName    = "knife_name"
-   SWEP.Slot         = 6
+   SWEP.Slot         = 0
   
    SWEP.ViewModelFlip = false
 
@@ -27,7 +27,7 @@ SWEP.ViewModel          = "models/weapons/cstrike/c_knife_t.mdl"
 SWEP.WorldModel         = "models/weapons/w_knife_t.mdl"
 
 SWEP.DrawCrosshair      = false
-SWEP.Primary.Damage         = 50
+SWEP.Primary.Damage         = 40
 SWEP.Primary.ClipSize       = -1
 SWEP.Primary.DefaultClip    = -1
 SWEP.Primary.Automatic      = true
@@ -40,11 +40,10 @@ SWEP.Secondary.Ammo     = "none"
 SWEP.Secondary.Delay = 1.4
 
 SWEP.Kind = WEAPON_EQUIP
-SWEP.CanBuy = {ROLE_TRAITOR} -- only traitors can buy
 SWEP.LimitedStock = true -- only buyable once
 SWEP.WeaponID = AMMO_KNIFE
 
-SWEP.IsSilent = true
+SWEP.IsSilent = false
 
 -- Pull out faster than standard guns
 SWEP.DeploySpeed = 2

@@ -15,14 +15,14 @@ SWEP.HoldType = "ar2"
 SWEP.Primary.Ammo = "SMG1"
 SWEP.Primary.Delay = 0.095
 SWEP.Primary.Recoil = 1.75
-SWEP.Primary.Cone = 0.03
+SWEP.Primary.Cone = 0.02
 SWEP.Primary.Damage = 16
 SWEP.Primary.Automatic = true
 SWEP.Primary.ClipSize = 35
 SWEP.Primary.ClipMax = 70
 SWEP.Primary.DefaultClip = 35
 SWEP.Primary.Sound = Sound( "Weapon_AK47.Single" )
-SWEP.HeadshotMultiplier = 2
+SWEP.HeadshotMultiplier = 3
 
 -- Model settings
 SWEP.UseHands = true

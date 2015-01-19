@@ -304,79 +304,71 @@ function GM:PlayerSelectSpawn( ply )
 
     end 
 
-	/*
-	local spawns_spec = ents.FindByClass("info_player_counterterrorist")
-	spawns_spec = table.Add(spawns_spec, ents.FindByClass("info_player_terrorist"))
-	--Spectator Spawns
-	if (ply:Team() == TEAM_SPEC) then
-
-		local random_entry = math.random(#spawns_spec)
-
-		return spawns_spec[random_entry]
-
-	end
-
-
-    --RED TEAM SPAWNS
-    local spawns_red = ents.FindByClass( "info_player_terrorist" ) 
-	--Red Team Spawns, if spawned, current position can't be spawned in again for 5 seconds.
-    if (ply:Team() == TEAM_RED) && (#spawns_red > 0) then
-
-    	local random_entry = math.random(#spawns_red)
-
-    	timer.Simple(5, function() table.insert(spawns_red, spawns_red[random_entry]) end )
-
-    	table.remove(spawns_red, random_entry)
-
-        return spawns_red[random_entry]
-
-    else
-
-    	local random_entry = math.random(#spawns_red)
-
-    	timer.Simple(5.5, function() 
-
-    		timer.Simple(5, function() table.insert(spawns_red, spawns_red[random_entry]) end )
-
-    		table.remove(spawns_red, random_entry)
-
-    		return spawns_red[random_entry]
-
-    	end )
-
-    end
-
-    --BLUE TEAM SPAWNS
-    local spawns_blue = ents.FindByClass( "info_player_counterterrorist" ) 
-	--Blue Team Spawns, if spawned, current position can't be spawned in again for 5 seconds.
-    if (ply:Team() == TEAM_BLUE) && (#spawns_blue > 0) then
-
-    	local random_entry = math.random(#spawns_blue)
-
-    	timer.Simple(5, function() table.insert(spawns_blue, spawns_blue[random_entry]) end )
-
-    	table.remove(spawns_blue, random_entry)
-
-        return spawns_blue[random_entry]
-
-    else
-
-    	local random_entry = math.random(#spawns_blue)
-
-    	timer.Simple(5.5, function() 
-
-    		timer.Simple(5, function() table.insert(spawns_blue, spawns_blue[random_entry]) end )
-
-    		table.remove(spawns_blue, random_entry)
-
-    		return spawns_blue[random_entry]
-
-    	end )
-
-    end
-    */
-
 end
+
+------------------------------------------
+--   Advanced Player Spawning (ACecool) --
+------------------------------------------
+/*
+local PlayerHullSize = { mins = Vector( -16, -16, 0 ), maxs = Vector( 16, 16, 72 ) };
+local function PlayerSelectSpawn( ply )
+    local _pos = vector_origin;
+    local _ang = angle_zero;
+    local _bSpawnPointBlocked = false;
+
+    -- Select random spawn point from either a table, or existing entity spawn points on the map
+    local _ents = ents.FindInBox( _pos + PlayerHullSize.mins, _pos + PlayerHullSize.maxs ) || { };
+    if ( #_ents > 0 ) then
+        -- You could detect if it is just crap, or if you need to just call it blocked and
+        -- recurse for a new spawn-point. Another alternative is that you can test areas NEAR the spawn
+        -- point to see if there are any free slots near ( preventing infinite loops if round start prevents
+        -- users from running ).
+        _bSpawnPointBlocked = true;
+    end
+
+    -- Recursive call... So, if a spawn point was selected, but is blocked, recurse..
+    if ( _bSpawnPointBlocked ) then
+        _pos, _ang = PlayerSelectSpawn( ply )
+    end
+
+    return _pos, _ang;
+end
+
+function GM:PlayerSelectSpawn( ply )
+    -- Custom function to see if player is a spectator / not on a team.
+    if ( ply:Unassigned( ) ) then return; end
+
+    -- Decided to make this a global to avoid running ents.FindByClass each time...
+    if ( !MOBILE_SPAWN_POINT || !IsValid( MOBILE_SPAWN_POINT ) ) then
+        -- Find a mobile spawn...
+        local _mobileSpawn = ents.FindByClass( 'info_mobile_spawn' )[ 1 ];
+
+        -- If there is no mobile spawn-point, create it...
+        if ( !IsValid( _mobileSpawn ) ) then
+            _mobileSpawn = ents.Create( "info_mobile_spawn" );
+            _mobileSpawn:SetPos( Vector( 0, 0, 0 ) );
+            _mobileSpawn:SetColor( Color( 0,0,0, 0 ) );
+            _mobileSpawn:Spawn( );
+        end
+
+        -- Set it...
+        MOBILE_SPAWN_POINT = _mobileSpawn;
+    end
+
+    -- Local helper-function to return a pos and angle for the player to spawn at
+    local _pos, _ang = PlayerSelectSpawn( ply );
+
+    -- If we return false, the player would spawn at vector_origin...
+    if ( !_pos || _ang ) then return false; end
+
+    -- Update the point-entity position and angle
+    MOBILE_SPAWN_POINT:SetPos( _pos );
+    MOBILE_SPAWN_POINT:SetAngles( _ang );
+
+    -- Return it, the engine does the rest...
+    return MOBILE_SPAWN_POINT;
+end
+*/
 
 ------------------------------------------
 --	Player Loadout (Just in case)		--

@@ -4,204 +4,204 @@ Heads up display.
 
 ]]--
 
-    surface.CreateFont( "DebugFont",
-    {
-                    font    = "DefaultBold",
-                    size    = 24,
-                    weight  = 400,
-                    antialias = true,
-                    shadow = true
-    })
+surface.CreateFont( "DebugFont",
+{
+    font    = "DefaultBold",
+    size    = 24,
+    weight  = 400,
+    antialias = true,
+    shadow = true
+})
 
-    surface.CreateFont( "Team",
-    {
-                    font    = "CloseCaption_Bold", 
-                    size    = 20,
-                    weight  = 700,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = true
-    })
+surface.CreateFont( "Team",
+{
+    font    = "CloseCaption_Bold", 
+    size    = 20,
+    weight  = 700,
+    antialias = true,
+    blursize = 0.2,
+    shadow = true
+})
 
-    surface.CreateFont( "AlphaFont",
-    {
-                    font    = "Triomphe",
-                    size    = 34,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "AlphaFont",
+{
+    font    = "Triomphe",
+    size    = 34,
+    weight  = 400,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
-    surface.CreateFont( "AlphaFontShadow",
-    {
-                    font    = "Triomphe", 
-                    size    = 34,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 2,
-                    shadow = false
-    })
+surface.CreateFont( "AlphaFontShadow",
+{
+    font    = "Triomphe", 
+    size    = 34,
+    weight  = 400,
+    antialias = true,
+    blursize = 2,
+    shadow = false
+})
 
-    surface.CreateFont( "AlphaFontSmall",
-    {
-                    font    = "Triomphe", 
-                    size    = 24,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "AlphaFontSmall",
+{
+    font    = "Triomphe", 
+    size    = 24,
+    weight  = 400,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
-    surface.CreateFont( "AlphaFontShadowSmall",
-    {
-                    font    = "Triomphe", 
-                    size    = 24,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 2,
-                    shadow = false
-    })
+surface.CreateFont( "AlphaFontShadowSmall",
+{
+    font    = "Triomphe", 
+    size    = 24,
+    weight  = 400,
+    antialias = true,
+    blursize = 2,
+    shadow = false
+})
 
-    surface.CreateFont( "TimeLeftShadow",
-    {
-                    font    = "CloseCaption_Normal", 
-                    size    = 26,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 1.5,
-                    shadow = false
-    })
+surface.CreateFont( "TimeLeftShadow",
+{
+    font    = "CloseCaption_Normal", 
+    size    = 26,
+    weight  = 400,
+    antialias = true,
+    blursize = 1.5,
+    shadow = false
+})
 
-    surface.CreateFont( "TimeLeft",
-    {
-                    font    = "CloseCaption_Normal", 
-                    size    = 26,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "TimeLeft",
+{
+    font    = "CloseCaption_Normal", 
+    size    = 26,
+    weight  = 400,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
-    surface.CreateFont( "MapShadow",
-    {
-                    font    = "CloseCaption_Normal", 
-                    size    = 22,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 2,
-                    shadow = false
-    })
+surface.CreateFont( "MapShadow",
+{
+    font    = "CloseCaption_Normal", 
+    size    = 22,
+    weight  = 400,
+    antialias = true,
+    blursize = 2,
+    shadow = false
+})
 
-    surface.CreateFont( "Map",
-    {
-                    font    = "CloseCaption_Normal", 
-                    size    = 22,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = true
-    })
+surface.CreateFont( "Map",
+{
+    font    = "CloseCaption_Normal", 
+    size    = 22,
+    weight  = 400,
+    antialias = true,
+    blursize = 0.2,
+    shadow = true
+})
 
-    surface.CreateFont( "Score",
-    {
-                    font    = "CloseCaption_Normal",
-                    size    = 24,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "Score",
+{
+    font    = "CloseCaption_Normal",
+    size    = 24,
+    weight  = 400,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
-    surface.CreateFont( "ScoreShadow",
-    {
-                    font    = "CloseCaption_Normal",
-                    size    = 24,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 1.5,
-                    shadow = false
-    })
+surface.CreateFont( "ScoreShadow",
+{
+    font    = "CloseCaption_Normal",
+    size    = 24,
+    weight  = 400,
+    antialias = true,
+    blursize = 1.5,
+    shadow = false
+})
 
-    surface.CreateFont( "AmmoSmall",
-    {
-                    font    = "CloseCaption_Normal",
-                    size    = 24,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "AmmoSmall",
+{
+    font    = "CloseCaption_Normal",
+    size    = 24,
+    weight  = 400,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
-    surface.CreateFont( "AmmoSmallShadow",
-    {
-                    font    = "CloseCaption_Normal", 
-                    size    = 24,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 2,
-                    shadow = false
-    })
+surface.CreateFont( "AmmoSmallShadow",
+{
+    font    = "CloseCaption_Normal", 
+    size    = 24,
+    weight  = 400,
+    antialias = true,
+    blursize = 2,
+    shadow = false
+})
 
-    surface.CreateFont( "AmmoLarge",
-    {
-                    font    = "CloseCaption_Normal", 
-                    size    = 48,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "AmmoLarge",
+{
+    font    = "CloseCaption_Normal", 
+    size    = 48,
+    weight  = 400,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
-    surface.CreateFont( "AmmoLargeShadow",
-    {
-                    font    = "CloseCaption_Normal", 
-                    size    = 48,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 2,
-                    shadow = false
-    })
+surface.CreateFont( "AmmoLargeShadow",
+{
+    font    = "CloseCaption_Normal", 
+    size    = 48,
+    weight  = 400,
+    antialias = true,
+    blursize = 2,
+    shadow = false
+})
 
-    surface.CreateFont( "Weapon",
-    {
-                    font    = "CloseCaption_Normal", 
-                    size    = 30,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "Weapon",
+{
+    font    = "CloseCaption_Normal", 
+    size    = 30,
+    weight  = 400,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
-    surface.CreateFont( "WeaponShadow",
-    {
-                    font    = "CloseCaption_Normal", 
-                    size    = 30,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 2,
-                    shadow = false
-    })
+surface.CreateFont( "WeaponShadow",
+{
+    font    = "CloseCaption_Normal", 
+    size    = 30,
+    weight  = 400,
+    antialias = true,
+    blursize = 2,
+    shadow = false
+})
 
-    surface.CreateFont( "CommandsShadow",
-    {
-                    font    = "CloseCaption_Bold", 
-                    size    = 13,
-                    weight  = 600,
-                    antialias = true,
-                    blursize = 1.5,
-                    shadow = false
-    })
+surface.CreateFont( "CommandsShadow",
+{
+    font    = "CloseCaption_Bold", 
+    size    = 13,
+    weight  = 600,
+    antialias = true,
+    blursize = 1.5,
+    shadow = false
+})
 
-    surface.CreateFont( "Commands",
-    {
-                    font    = "CloseCaption_Bold", 
-                    size    = 13,
-                    weight  = 600,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "Commands",
+{
+    font    = "CloseCaption_Bold", 
+    size    = 13,
+    weight  = 600,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
 
 function GM:HUDPaint()
@@ -297,7 +297,7 @@ function GM:HUDPaint()
 	draw.DrawText( "Team Deathmatch", "AlphaFontShadowSmall", x - 65 + 1, y/6 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
 	draw.DrawText( "Team Deathmatch", "AlphaFontSmall", x - 65, y/6, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
 
-	if team.GetName( LocalPlayer():Team() ) == "Spectator" then 
+	if LocalPlayer():Team() == TEAM_SPEC then 
 
         --Commands so Spectators don't get stuck
         local commandText = "[F1] Switch Teams - [F2] Change Classes"

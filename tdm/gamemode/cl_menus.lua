@@ -4,65 +4,65 @@ Menu for changing/switching teams mid game.
 
 ]]--
 
-    surface.CreateFont( "Close",
-    {
-                    font    = "CloseCaption_Bold", 
-                    size    = 13,
-                    weight  = 700,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "Close",
+{
+    font    = "CloseCaption_Bold", 
+    size    = 13,
+    weight  = 700,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
-    surface.CreateFont( "Button",
-    {
-                    font    = "Triomphe", 
-                    size    = 16,
-                    weight  = 700,
-                    antialias = true,
-                    blursize = 0.3,
-                    shadow = false
-    })
+surface.CreateFont( "Button",
+{
+    font    = "Triomphe", 
+    size    = 16,
+    weight  = 700,
+    antialias = true,
+    blursize = 0.3,
+    shadow = false
+})
 
-    surface.CreateFont( "WelcomeMSG",
-    {
-                    font    = "Triomphe",
-                    size    = 62,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "WelcomeMSG",
+{
+    font    = "Triomphe",
+    size    = 62,
+    weight  = 400,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
-    surface.CreateFont( "WelcomeMSGShadow",
-    {
-                    font    = "Triomphe",
-                    size    = 62,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 2,
-                    shadow = false
-    })
+surface.CreateFont( "WelcomeMSGShadow",
+{
+    font    = "Triomphe",
+    size    = 62,
+    weight  = 400,
+    antialias = true,
+    blursize = 2,
+    shadow = false
+})
 
-    surface.CreateFont( "TeamMSG",
-    {
-                    font    = "Triomphe",
-                    size    = 32,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 0.2,
-                    shadow = false
-    })
+surface.CreateFont( "TeamMSG",
+{
+    font    = "Triomphe",
+    size    = 32,
+    weight  = 400,
+    antialias = true,
+    blursize = 0.2,
+    shadow = false
+})
 
-    surface.CreateFont( "TeamMSGShadow",
-    {
-                    font    = "Triomphe",
-                    size    = 32,
-                    weight  = 400,
-                    antialias = true,
-                    blursize = 1.5,
-                    shadow = false
-    })
+surface.CreateFont( "TeamMSGShadow",
+{
+    font    = "Triomphe",
+    size    = 32,
+    weight  = 400,
+    antialias = true,
+    blursize = 1.5,
+    shadow = false
+})
 
 function chooseTeam( ply )
 	local SpecPlayers = GetGlobalInt( "TDM_SpecTeamNum" )

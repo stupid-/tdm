@@ -34,20 +34,6 @@ function PANEL:Setup( ply )
 	
 	self:InvalidateLayout()
 
-	teamVoiceColor = Color( 0, 0, 0, 240)
-
-	/*
-	if team.GetName( ply:Team() ) == "Red" then
-
-		teamVoiceColor = Color(  255, 60, 60, 240)
-
-	elseif team.GetName( ply:Team() ) == "Blue" then
-
-		teamVoiceColor = Color( 60, 60, 255, 240 )
-
-	end
-	*/
-
 end
 
 function PANEL:Paint( w, h )

@@ -1,22 +1,38 @@
-
+--Based on the base scorebaord, with modifications.
 surface.CreateFont( "ScoreboardDefault", {
 	font		= "Helvetica",
 	size		= 18,
-	weight		= 800
+	weight		= 800,
+    antialias = true,
+    blursize = 0.1
+})
+
+surface.CreateFont( "ScoreboardHeading", {
+	font		= "Helvetica",
+	size		= 18,
+	weight		= 800,
+    antialias = true,
+    blursize = 0.1,
+    shadow = false
+})
+
+surface.CreateFont( "ScoreboardHeadingShadow", {
+	font		= "Helvetica",
+	size		= 18,
+	weight		= 800,
+    antialias = true,
+    blursize = 1.5,
+    shadow = false
 })
 
 surface.CreateFont( "ScoreboardDefaultTitle", {
-	font		= "Helvetica",
+	font		= "Coolvetica",
 	size		= 32,
-	weight		= 800
+	weight		= 400,
+    antialias = true,
+    blursize = 0.2
 })
 
-
---
--- This defines a new panel type for the player row. The player row is given a player
--- and then from that point on it pretty much looks after itself. It updates player info
--- in the think function, and removes itself when the player leaves the server.
---
 local PLAYER_LINE = {
 	Init = function( self )
 
@@ -33,6 +49,7 @@ local PLAYER_LINE = {
 		self.Name:Dock( FILL )
 		self.Name:SetFont( "ScoreboardDefault" )
 		self.Name:SetDark( false )
+		self.Name:SetTextColor( Color( 255, 255, 255, 255 ) )
 		self.Name:DockMargin( 8, 0, 0, 0 )
 
 		self.Mute = self:Add( "DImageButton" )
@@ -41,23 +58,26 @@ local PLAYER_LINE = {
 
 		self.Ping = self:Add( "DLabel" )
 		self.Ping:Dock( RIGHT )
-		self.Ping:SetWidth( 60 )
+		self.Ping:SetWidth( 80 )
 		self.Ping:SetFont( "ScoreboardDefault" )
 		self.Ping:SetDark( false )
+		self.Ping:SetTextColor( Color( 255, 255, 255, 255 ) )
 		self.Ping:SetContentAlignment( 5 )
 
 		self.Deaths = self:Add( "DLabel" )
 		self.Deaths:Dock( RIGHT )
-		self.Deaths:SetWidth( 60 )
+		self.Deaths:SetWidth( 80 )
 		self.Deaths:SetFont( "ScoreboardDefault" )
 		self.Deaths:SetDark( false )
+		self.Deaths:SetTextColor( Color( 255, 255, 255, 255 ) )
 		self.Deaths:SetContentAlignment( 5 )
 
 		self.Kills = self:Add( "DLabel" )
 		self.Kills:Dock( RIGHT )
-		self.Kills:SetWidth( 60 )
+		self.Kills:SetWidth( 80 )
 		self.Kills:SetFont( "ScoreboardDefault" )
 		self.Kills:SetDark( false )
+		self.Kills:SetTextColor( Color( 255, 255, 255, 255 ) )
 		self.Kills:SetContentAlignment( 5 )
 
 		self:Dock( TOP )
@@ -74,9 +94,6 @@ local PLAYER_LINE = {
 		self.Avatar:SetPlayer( pl )
 
 		self:Think( self )
-
-		--local friend = self.Player:GetFriendStatus()
-		--MsgN( pl, " Friend: ", friend )
 
 	end,
 
@@ -142,8 +159,6 @@ local PLAYER_LINE = {
 			self:SetZPos( (self.NumKills * -10) + 2000 )
 		end
 
-		--self:SetZPos( (self.NumKills * -50) + self.NumDeaths )
-
 	end,
 
 	Paint = function( self, w, h )
@@ -157,36 +172,23 @@ local PLAYER_LINE = {
 		--
 
 		if ( self.Player:Team() == TEAM_SPEC) then
-			draw.RoundedBox( 4, 0, 0, w, h, Color( 200, 200, 200, 200 ) )
+			draw.RoundedBox( 2, 0, 0, w, h, Color( 150, 150, 150, 150 ) )
 			return
 		end
 
 		if ( self.Player:Team() == TEAM_RED ) then
-			draw.RoundedBox( 4, 0, 0, w, h, Color( 255, 60, 60, 200 ) )
+			--draw.RoundedBox( 2, 0, 0, w, h, Color( 235, 60, 60, 220 ) )
+			draw.RoundedBox( 2, 0, 0, w, h, Color( 40, 40, 40, 100 ) )
+			draw.RoundedBox( 2, 0, 0, w, h, Color( 235, 60, 60, 150 ) )
 			return
 		end
 
 		if ( self.Player:Team() == TEAM_BLUE ) then
-			draw.RoundedBox( 4, 0, 0, w, h, Color( 60, 60, 255, 200 ) )
+			--draw.RoundedBox( 2, 0, 0, w, h, Color( 60, 60, 235, 220 ) )
+			draw.RoundedBox( 2, 0, 0, w, h, Color( 40, 40, 40, 100 ) )
+			draw.RoundedBox( 2, 0, 0, w, h, Color( 60, 60, 235, 150 ) )
 			return
 		end
-
-		/*
-		team.SetUp(TEAM_RED, "Red", Color(255, 60, 60, 255), true)
-		team.SetUp(TEAM_BLUE, "Blue", Color(60, 60, 255, 255), true)
-		team.SetUp(TEAM_SPEC, "Spectator", Color(60, 60, 60 , 255), true)
-		if  ( !self.Player:Alive() ) then
-			draw.RoundedBox( 4, 0, 0, w, h, Color( 230, 200, 200, 255 ) )
-			return
-		end
-
-		if ( self.Player:IsAdmin() ) then
-			draw.RoundedBox( 4, 0, 0, w, h, Color( 230, 255, 230, 255 ) )
-			return
-		end
-		*/
-
-		--draw.RoundedBox( 4, 0, 0, w, h, Color( 230, 230, 230, 255 ) )
 
 	end
 }
@@ -205,7 +207,7 @@ local SCORE_BOARD = {
 
 		self.Header = self:Add( "Panel" )
 		self.Header:Dock( TOP )
-		self.Header:SetHeight( 100 )
+		self.Header:SetHeight( 80 )
 
 		self.Name = self.Header:Add( "DLabel" )
 		self.Name:SetFont( "ScoreboardDefaultTitle" )
@@ -213,14 +215,36 @@ local SCORE_BOARD = {
 		self.Name:Dock( TOP )
 		self.Name:SetHeight( 40 )
 		self.Name:SetContentAlignment( 5 )
-		self.Name:SetExpensiveShadow( 2, Color( 0, 0, 0, 200 ) )
+		self.Name:SetExpensiveShadow( 1, Color( 0, 0, 0, 200 ) )
+		function self.Name:Paint( w, h, ply )
+			--draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 0, 200 ) )
+		end
 
-		--self.NumPlayers = self.Header:Add( "DLabel" )
-		--self.NumPlayers:SetFont( "ScoreboardDefault" )
-		--self.NumPlayers:SetTextColor( Color( 255, 255, 255, 255 ) )
-		--self.NumPlayers:SetPos( 0, 100 - 30 )
-		--self.NumPlayers:SetSize( 300, 30 )
-		--self.NumPlayers:SetContentAlignment( 4 )
+		self.Other = self.Header:Add( "DLabel" )
+		self.Other:SetFont( "ScoreboardDefaultTitle" )
+		self.Other:SetTextColor( Color( 255, 255, 255, 255 ) )
+		self.Other:Dock( BOTTOM )
+		self.Other:SetContentAlignment( 5 )
+		self.Other:SetHeight( 40 )
+		function self.Other:Paint( w, h, ply )
+			--draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 250, 0, 200 ) )
+
+			local scoreName = "Player"
+			local scoreKills = "Kills"
+			local scoreDeaths = "Deaths"
+			local scorePing = "Ping"
+
+			draw.DrawText( scoreName, "ScoreboardHeading", 34, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+			draw.DrawText( scoreKills, "ScoreboardHeading", 473, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+			draw.DrawText( scoreDeaths, "ScoreboardHeading", 552, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+			draw.DrawText( scorePing, "ScoreboardHeading", 632, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+			--DropShadows
+			draw.DrawText( scoreName, "ScoreboardHeadingShadow", 34 + 1, 11, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+			draw.DrawText( scoreKills, "ScoreboardHeadingShadow", 473 + 1, 11, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+			draw.DrawText( scoreDeaths, "ScoreboardHeadingShadow", 552 + 1, 11, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+			draw.DrawText( scorePing, "ScoreboardHeadingShadow", 632 + 1, 11, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+		end
 
 		self.Scores = self:Add( "DScrollPanel" )
 		self.Scores:Dock( FILL )
@@ -244,6 +268,7 @@ local SCORE_BOARD = {
 
 		self.Name:SetText( GetHostName() )
 
+		self.Other:SetText( "" )
 		--
 		-- Loop through each player, and if one doesn't have a score entry - create it.
 		--
