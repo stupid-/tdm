@@ -340,3 +340,51 @@ function blueWins( ply )
 
 end
 concommand.Add("blueWins", blueWins)
+
+function nobodyWins( ply )
+
+	local NobodyWinsFrame = vgui.Create( "DFrame" )
+	NobodyWinsFrame:SetSize(ScrW(), ScrH()*0.3)
+	NobodyWinsFrame:SetTitle("")
+	NobodyWinsFrame:SetPos( 0, ScrH()/4)
+	NobodyWinsFrame:SetVisible( true )
+	NobodyWinsFrame:SetDraggable( false )
+	NobodyWinsFrame:ShowCloseButton( false )
+	NobodyWinsFrame:MakePopup()
+	function NobodyWinsFrame:Paint( w, h, ply )
+		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,25))
+		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(80,80,80,225))
+		draw.DrawText( "This was a Draw!", "WelcomeMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
+		draw.DrawText( "This was a Draw!", "WelcomeMSG", 0 + w/2, 0 + (h/1.5)/3, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
+	end
+
+	local tabHover = false
+	local GrayButton = vgui.Create('DButton')
+	GrayButton:SetParent(NobodyWinsFrame)
+	GrayButton:SetSize(ScrW()/10, ScrH()/20)
+	GrayButton:SetPos(ScrW()/2 - (ScrW()/10)/2, 0 + (ScrH()/4)/1.5 + ScrH()/20 + (ScrH()/20)/6)
+	GrayButton:SetText("Close")
+	GrayButton:SetTextColor( Color(255,255,255,255) )
+	GrayButton:SetFont("Button")
+	GrayButton:SetDrawBackground(true)
+	function GrayButton:OnCursorEntered()
+		tabHover = true
+	end
+	function GrayButton:OnCursorExited()
+		tabHover = false
+	end
+	function GrayButton:Paint(w, h)
+		if tabHover then
+			draw.RoundedBox( 2, 0, 0, w, h, Color(220,220,220,255))
+			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(60,60,60,250))
+		else
+			draw.RoundedBox( 2, 0, 0, w, h, Color(40,40,40,0))
+			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(40,40,40,250))
+		end
+	end
+	function GrayButton:DoClick()
+		NobodyWinsFrame:Close()
+	end
+
+end
+concommand.Add("nobodyWins", nobodyWins)

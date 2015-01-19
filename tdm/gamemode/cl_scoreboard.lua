@@ -152,11 +152,22 @@ local PLAYER_LINE = {
 		-- so if we set the z order according to kills they'll be ordered that way!
 		-- Careful though, it's a signed short internally, so needs to range between -32,768k and +32,767
 		--
+		-- Put team with most frags on top.
+		local redTeamFrags = team.TotalFrags( TEAM_RED )
+		local blueTeamFrags = team.TotalFrags( TEAM_BLUE )
 
-		if ( self.Player:Team() == TEAM_RED ) then
-			self:SetZPos( (self.NumKills * -10) )
-		elseif ( self.Player:Team() == TEAM_BLUE ) then
-			self:SetZPos( (self.NumKills * -10) + 2000 )
+		if redTeamFrags >= blueTeamFrags then
+			if ( self.Player:Team() == TEAM_RED) then
+				self:SetZPos( (self.NumKills * -10) )
+			elseif ( self.Player:Team() == TEAM_BLUE) then
+				self:SetZPos( (self.NumKills * -10) + 2000 )
+			end
+		else
+			if ( self.Player:Team() == TEAM_BLUE) then
+				self:SetZPos( (self.NumKills * -10) )
+			elseif ( self.Player:Team() == TEAM_RED) then
+				self:SetZPos( (self.NumKills * -10) + 2000 )
+			end
 		end
 
 	end,

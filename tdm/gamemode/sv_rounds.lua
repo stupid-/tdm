@@ -175,15 +175,12 @@ GM.RoundFunctions = {
 
 		BroadcastLua( sound )
 
-		for k,v in pairs(player.GetAll()) do
-			v:ChatPrint( team.GetName(winner).." Team wins." )
-		end
-
 		if winner == 0 then
 
 			--Display RED WINS
 			for k,v in pairs(player.GetAll()) do
 				v:ConCommand("redWins")
+				v:ChatPrint( team.GetName(winner).." Team wins." )
 			end
 
 			--Play RED MUSIC
@@ -192,11 +189,12 @@ GM.RoundFunctions = {
 
 			BroadcastLua( song )
 
-		else
+		elseif winner == 1 then
 
 			--Display BLUE WINS
 			for k,v in pairs(player.GetAll()) do
 				v:ConCommand("blueWins")
+				v:ChatPrint( team.GetName(winner).." Team wins." )
 			end
 
 			--Play BLUE MUSIC
@@ -204,6 +202,14 @@ GM.RoundFunctions = {
 			song = "surface.PlaySound(\""..song.."\")"
 
 			BroadcastLua( song )
+
+		elseif winner == 2 then
+
+			--Display DRAW
+			for k,v in pairs(player.GetAll()) do
+				v:ConCommand("nobodyWins")
+				v:ChatPrint( "Congratulations, nobody wins!" )
+			end
 
 		end
 
@@ -304,9 +310,13 @@ GM.ThinkRoundFunctions = {
 
 				gm:SetRound( ROUND_OVER, 0 )
 
-			else
+			elseif gm.GetBlueKills() > gm.GetRedKills() then
 
 				gm:SetRound( ROUND_OVER, 1 )
+
+			else
+
+				gm:SetRound( ROUND_OVER, 2 )
 
 			end
 

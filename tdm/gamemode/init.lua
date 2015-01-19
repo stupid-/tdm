@@ -32,14 +32,16 @@ AddCSLuaFile("player_class/heavy.lua")
 AddCSLuaFile("player_class/sniper.lua")
 AddCSLuaFile("player_class/commando.lua")
 
+--64.94.101.97:27015
+
 ------------------------------------------
 --				ConVars					--
 ------------------------------------------
--- Need to fix the setting of some of the ConVars, not entirely working.
-local round_preparetime = CreateConVar( "tdm_preparetime", "20", FCVAR_ARCHIVE )
+
+local round_preparetime = CreateConVar( "tdm_preparetime", "60", FCVAR_ARCHIVE )
 local round_time = CreateConVar( "tdm_roundtime", "600", FCVAR_ARCHIVE )
-local round_endtime = CreateConVar( "tdm_endtime", "20", FCVAR_ARCHIVE )
-local round_limit = CreateConVar( "tdm_roundlimit", "2", FCVAR_ARCHIVE )
+local round_endtime = CreateConVar( "tdm_endtime", "30", FCVAR_ARCHIVE )
+local round_limit = CreateConVar( "tdm_roundlimit", "1", FCVAR_ARCHIVE )
 local round_scorelimit = CreateConVar( "tdm_scorelimit", "50", FCVAR_ARCHIVE )
 
 ------------------------------------------
@@ -119,7 +121,7 @@ end
 ------------------------------------------
 
 function GM:PlayerInitialSpawn ( ply )
-	print("Player: " .. ply:Nick() .. " has joined.")
+	--print("Player: " .. ply:Nick() .. " has joined.")
 
 	ply.NextSwitchTime = 0
 
@@ -430,34 +432,38 @@ end
 function GM:DoPlayerDeath( victim, attacker, dmginfo )
 
 	victim:CreateRagdoll()
-	
-	victim:AddDeaths( 1 )
 
-	if ( attacker:IsValid() && attacker:IsPlayer() ) then
-	
-		if ( attacker == victim ) then
+	if ( GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS ) then
 
-			attacker:AddFrags( -1 )
+		victim:AddDeaths( 1 )
 
-		else
+		if ( attacker:IsValid() && attacker:IsPlayer() ) then
+		
+			if ( attacker == victim ) then
 
-			attacker:AddFrags( 1 )
+				attacker:AddFrags( -1 )
+
+			else
+
+				attacker:AddFrags( 1 )
+
+			end
+			
+		end
+
+		if victim:Team() == TEAM_RED then
+
+			local blueKills = GetGlobalInt( "TDM_BlueKills" )
+
+			SetGlobalInt( "TDM_BlueKills", blueKills + 1 )
+
+		elseif victim:Team() == TEAM_BLUE then
+
+			local redKills = GetGlobalInt( "TDM_RedKills" )
+
+			SetGlobalInt( "TDM_RedKills", redKills + 1 )
 
 		end
-		
-	end
-
-	if victim:Team() == TEAM_RED then
-
-		local blueKills = GetGlobalInt( "TDM_BlueKills" )
-
-		SetGlobalInt( "TDM_BlueKills", blueKills + 1 )
-
-	elseif victim:Team() == TEAM_BLUE then
-
-		local redKills = GetGlobalInt( "TDM_RedKills" )
-
-		SetGlobalInt( "TDM_RedKills", redKills + 1 )
 
 	end
 

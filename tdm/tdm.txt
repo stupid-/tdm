@@ -15,7 +15,7 @@
 			"text"		"Preparing Round Time"
 			"help"		"The length of the preparing round in seconds."
 			"type"		"Numeric"
-			"default"	"40"
+			"default"	"60"
 		}
 
 		2
