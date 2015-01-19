@@ -1,4 +1,3 @@
-
 AddCSLuaFile()
 
 SWEP.HoldType = "pistol"

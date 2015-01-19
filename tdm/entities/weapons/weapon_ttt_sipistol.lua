@@ -1,4 +1,3 @@
-
 AddCSLuaFile()
 
 SWEP.HoldType			= "pistol"
@@ -16,14 +15,16 @@ SWEP.AutoSwitchFrom   = false
 
 SWEP.Base = "weapon_tttbase"
 SWEP.Primary.Recoil	= 1.35
-SWEP.Primary.Damage = 28
-SWEP.Primary.Delay = 0.38
+SWEP.Primary.Damage = 22
+SWEP.Primary.Delay = 0.28
 SWEP.Primary.Cone = 0.02
 SWEP.Primary.ClipSize = 20
 SWEP.Primary.Automatic = true
 SWEP.Primary.DefaultClip = 20
 SWEP.Primary.ClipMax = 80
 SWEP.Primary.Ammo = "Pistol"
+
+SWEP.HeadshotMultiplier = 2.25
 
 SWEP.Kind = WEAPON_EQUIP
 SWEP.WeaponID = AMMO_SIPISTOL
@@ -58,4 +59,3 @@ function SWEP:WasBought(buyer)
       buyer:GiveAmmo( 20, "Pistol" )
    end
 end
-

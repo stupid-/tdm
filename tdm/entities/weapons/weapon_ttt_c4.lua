@@ -1,6 +1,3 @@
-
--- traitor equipment: c4 bomb
-
 AddCSLuaFile()
 
 SWEP.HoldType			= "slam"

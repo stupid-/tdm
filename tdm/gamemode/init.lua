@@ -132,9 +132,9 @@ function GM:PlayerInitialSpawn ( ply )
 
 		player_manager.OnPlayerSpawn( ply )
 		player_manager.SetPlayerClass( ply, "infantry" )
-        player_manager.RunClass( ply, "Spawn" )
-        hook.Call( "PlayerLoadout", GAMEMODE, ply )
-        hook.Call( "PlayerSetModel", GAMEMODE, ply )
+		player_manager.RunClass( ply, "Spawn" )
+		hook.Call( "PlayerLoadout", GAMEMODE, ply )
+		hook.Call( "PlayerSetModel", GAMEMODE, ply )
 		ply:KillSilent()
 		ply:Spawn()
 	else
@@ -144,11 +144,11 @@ function GM:PlayerInitialSpawn ( ply )
 
 		player_manager.OnPlayerSpawn( ply )
 		player_manager.SetPlayerClass( ply, "noclass" )
-        player_manager.RunClass( ply, "Spawn" )
-        hook.Call( "PlayerLoadout", GAMEMODE, ply )
-        hook.Call( "PlayerSetModel", GAMEMODE, ply )
+		player_manager.RunClass( ply, "Spawn" )
+		hook.Call( "PlayerLoadout", GAMEMODE, ply )
+		hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
-        timer.Simple( 3, function() ply:ConCommand("welcomePlayer") end )
+		timer.Simple( 3, function() ply:ConCommand("welcomePlayer") end )
 	end
 end
 
@@ -211,12 +211,9 @@ function GM:IsSpawnpointSuitable( ply, spawnpointent, bMakeSuitable )
 
 	local Pos = spawnpointent:GetPos()
 
-	-- Note that we're searching the default hull size here for a player in the way of our spawning.
-	-- This seems pretty rough, seeing as our player's hull could be different.. but it should do the job
-	-- ( HL2DM kills everything within a 128 unit radius )
 	local Ents = ents.FindInBox( Pos + Vector( -16, -16, 0 ), Pos + Vector( 16, 16, 72 ) )
 
-	if ( ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_SPEC or ply:Team() == TEAM_UNASSIGNED ) then return true end
+	if ( ply:Team() == TEAM_SPEC ) then return true end
 
 	local Blockers = 0
 
@@ -236,21 +233,33 @@ function GM:IsSpawnpointSuitable( ply, spawnpointent, bMakeSuitable )
 
 end
 
+
 --Doing this just in case, team.SetSpawnPoint wasn't working. Works now. Leaving both in.
 function GM:PlayerSelectSpawn( ply ) 
 
-    local spawns = ents.FindByClass( "info_player_terrorist" ) 
-    local Count = table.Count(spawns)
-    local truespawn = table.Random(spawns)
+	if (ply:Team() == TEAM_SPEC) then
 
-    if (ply:Team() == TEAM_RED || ply:Team() == TEAM_SPEC) then
+	    local spawns = ents.FindByClass( "info_player_terrorist" ) 
+
+	    spawns = table.Add(spawns, ents.FindByClass( "info_player_counterterrorist" ) )
+
+	    local truespawn = table.Random(spawns)
+
+	    return truespawn
+
+	end
+
+    if (ply:Team() == TEAM_RED) then
+
+	    local spawns = ents.FindByClass( "info_player_terrorist" )
+
+	    local Count = table.Count(spawns)
 
 		local ChosenSpawnPoint = nil
 		
-		-- Try to work out the best, random spawnpoint
 		for i=0, Count do
 		
-			ChosenSpawnPoint = truespawn
+			ChosenSpawnPoint = table.Random(spawns)
 
 			if ( ChosenSpawnPoint &&
 				ChosenSpawnPoint:IsValid() &&
@@ -272,23 +281,19 @@ function GM:PlayerSelectSpawn( ply )
 		
 		return ChosenSpawnPoint
 
-        --return truespawn
-
     end 
-
-
-    local spawns = ents.FindByClass( "info_player_counterterrorist" ) 
-    local Count = table.Count(spawns)
-    local truespawn = table.Random(spawns)
 
     if (ply:Team() == TEAM_BLUE) then
 
+	    local spawns = ents.FindByClass( "info_player_counterterrorist" ) 
+
+	    local Count = table.Count(spawns)
+
 		local ChosenSpawnPoint = nil
 		
-		-- Try to work out the best, random spawnpoint
 		for i=0, Count do
 		
-			ChosenSpawnPoint = truespawn
+			ChosenSpawnPoint = table.Random(spawns)
 
 			if ( ChosenSpawnPoint &&
 				ChosenSpawnPoint:IsValid() &&
@@ -310,75 +315,9 @@ function GM:PlayerSelectSpawn( ply )
 		
 		return ChosenSpawnPoint
 
-        --return truespawn
-
     end 
 
 end
-
-------------------------------------------
---   Advanced Player Spawning (ACecool) --
-------------------------------------------
-/*
-local PlayerHullSize = { mins = Vector( -16, -16, 0 ), maxs = Vector( 16, 16, 72 ) };
-local function PlayerSelectSpawn( ply )
-    local _pos = vector_origin;
-    local _ang = angle_zero;
-    local _bSpawnPointBlocked = false;
-
-    -- Select random spawn point from either a table, or existing entity spawn points on the map
-    local _ents = ents.FindInBox( _pos + PlayerHullSize.mins, _pos + PlayerHullSize.maxs ) || { };
-    if ( #_ents > 0 ) then
-        -- You could detect if it is just crap, or if you need to just call it blocked and
-        -- recurse for a new spawn-point. Another alternative is that you can test areas NEAR the spawn
-        -- point to see if there are any free slots near ( preventing infinite loops if round start prevents
-        -- users from running ).
-        _bSpawnPointBlocked = true;
-    end
-
-    -- Recursive call... So, if a spawn point was selected, but is blocked, recurse..
-    if ( _bSpawnPointBlocked ) then
-        _pos, _ang = PlayerSelectSpawn( ply )
-    end
-
-    return _pos, _ang;
-end
-
-function GM:PlayerSelectSpawn( ply )
-    -- Custom function to see if player is a spectator / not on a team.
-    if ( ply:Unassigned( ) ) then return; end
-
-    -- Decided to make this a global to avoid running ents.FindByClass each time...
-    if ( !MOBILE_SPAWN_POINT || !IsValid( MOBILE_SPAWN_POINT ) ) then
-        -- Find a mobile spawn...
-        local _mobileSpawn = ents.FindByClass( 'info_mobile_spawn' )[ 1 ];
-
-        -- If there is no mobile spawn-point, create it...
-        if ( !IsValid( _mobileSpawn ) ) then
-            _mobileSpawn = ents.Create( "info_mobile_spawn" );
-            _mobileSpawn:SetPos( Vector( 0, 0, 0 ) );
-            _mobileSpawn:SetColor( Color( 0,0,0, 0 ) );
-            _mobileSpawn:Spawn( );
-        end
-
-        -- Set it...
-        MOBILE_SPAWN_POINT = _mobileSpawn;
-    end
-
-    -- Local helper-function to return a pos and angle for the player to spawn at
-    local _pos, _ang = PlayerSelectSpawn( ply );
-
-    -- If we return false, the player would spawn at vector_origin...
-    if ( !_pos || _ang ) then return false; end
-
-    -- Update the point-entity position and angle
-    MOBILE_SPAWN_POINT:SetPos( _pos );
-    MOBILE_SPAWN_POINT:SetAngles( _ang );
-
-    -- Return it, the engine does the rest...
-    return MOBILE_SPAWN_POINT;
-end
-*/
 
 ------------------------------------------
 --	Player Loadout (Just in case)		--

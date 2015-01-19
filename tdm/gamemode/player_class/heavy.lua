@@ -23,7 +23,7 @@ PLAYER.UseVMHands			= true		-- Uses viewmodel hands
 function PLAYER:Loadout()
 
 	self.Player:GiveAmmo( 80,	"pistol", 		true )
-	self.Player:GiveAmmo( 18,	"buckshot", 		true )
+	self.Player:GiveAmmo( 24,	"buckshot", 		true )
 	self.Player:Give( "weapon_zm_shotgun" )
 	self.Player:Give( "weapon_zm_improvised" )
 	self.Player:Give( "weapon_ttt_glock" )

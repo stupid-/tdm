@@ -1,5 +1,3 @@
--- common code for all types of grenade
-
 AddCSLuaFile()
 
 SWEP.HoldReady = "grenade"

@@ -1,4 +1,3 @@
-
 AddCSLuaFile()
 
 SWEP.HoldType = "grenade"
@@ -35,4 +34,3 @@ SWEP.Weight			= 5
 function SWEP:GetGrenadeName()
    return "ttt_confgrenade_proj"
 end
-

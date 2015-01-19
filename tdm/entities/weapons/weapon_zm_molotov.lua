@@ -1,4 +1,3 @@
-
 AddCSLuaFile()
 
 SWEP.HoldType			= "grenade"
@@ -29,4 +28,3 @@ SWEP.AutoSpawnable      = true
 function SWEP:GetGrenadeName()
    return "ttt_firegrenade_proj"
 end
-
