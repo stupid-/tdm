@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$baseTexture" "sprites/scope"
+	"$baseTexture" "sprites/scope2"
 	"$translucent" "1"
 	"$vertexcolor" "1"
 	"$vertexalpha" "1"

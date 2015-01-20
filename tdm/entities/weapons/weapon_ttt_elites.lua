@@ -1,8 +1,4 @@
-if SERVER then
-	AddCSLuaFile( "shared.lua" )
-	resource.AddFile("tflppy/vgui/ttt/icon_elites.vmt")
-	resource.AddFile("tflppy/vgui/ttt/icon_elites.vtf")
-end
+AddCSLuaFile()
 
 if CLIENT then
 	SWEP.PrintName = "Dual Elites"
@@ -40,8 +36,6 @@ SWEP.Primary.Damage		= 16.7
 SWEP.Primary.Cone		  = 0.065
 SWEP.Primary.NumShots 	 = 0
 
---SWEP.IronSightsPos = Vector(-7.70, -12, 3.30 )
---SWEP.IronSightsAng = Vector( 2.00, 0.0, -13 )
 
 SWEP.IronSightsPos = Vector(-5.565, -4.00, 3.00)
 SWEP.IronSightsAng = Vector(0.00, 0.00, 0.00)

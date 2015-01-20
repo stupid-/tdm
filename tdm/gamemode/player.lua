@@ -7,7 +7,11 @@ local ply = FindMetaTable("Player")
 function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 
 	-- Headshot Damage multiplyer
+	ply.was_headshot = false
+
 	if ( hitgroup == HITGROUP_HEAD ) then
+
+		ply.was_headshot = true
 	 
 		dmginfo:ScaleDamage( 3.25 )
 	 
@@ -35,7 +39,51 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 end
 
 ------------------------------------------
---	When the player dies		--
+--	Death Sounds						--
+------------------------------------------
+
+local deathsounds = {
+   Sound("player/death1.wav"),
+   Sound("player/death2.wav"),
+   Sound("player/death3.wav"),
+   Sound("player/death4.wav"),
+   Sound("player/death5.wav"),
+   Sound("player/death6.wav"),
+   Sound("vo/npc/male01/pain07.wav"),
+   Sound("vo/npc/male01/pain08.wav"),
+   Sound("vo/npc/male01/pain09.wav"),
+   Sound("vo/npc/male01/pain04.wav"),
+   Sound("vo/npc/Barney/ba_pain06.wav"),
+   Sound("vo/npc/Barney/ba_pain07.wav"),
+   Sound("vo/npc/Barney/ba_pain09.wav"),
+   Sound("vo/npc/Barney/ba_ohshit03.wav"),
+   Sound("vo/npc/Barney/ba_no01.wav"),
+   Sound("vo/npc/male01/no02.wav"),
+   Sound("hostage/hpain/hpain1.wav"),
+   Sound("hostage/hpain/hpain2.wav"),
+   Sound("hostage/hpain/hpain3.wav"),
+   Sound("hostage/hpain/hpain4.wav"),
+   Sound("hostage/hpain/hpain5.wav"),
+   Sound("hostage/hpain/hpain6.wav")
+};
+
+local function PlayDeathSound(victim)
+
+   if not IsValid(victim) then return end
+
+   sound.Play(table.Random(deathsounds), victim:GetShootPos(), 90, 100)
+
+end
+
+--Don't play shitty hl2 beep when death occurs
+function GM:PlayerDeathSound()
+
+	return true
+	
+end
+
+------------------------------------------
+--	When the player dies				--
 ------------------------------------------
 function GM:PlayerDeathThink( ply )
 
@@ -64,6 +112,10 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 	ply.NextSpawnTime = CurTime() + 3 -- 3 Seconds to respawn
 	
 	ply.DeathTime = CurTime()
+
+   if ( !ply.was_headshot && attacker:IsPlayer() ) then
+      PlayDeathSound(ply)
+   end
 	
 	if ( IsValid( attacker ) && attacker:GetClass() == "trigger_hurt" ) then attacker = ply end
 	

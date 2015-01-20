@@ -25,18 +25,20 @@ function PLAYER:Loadout()
 	if self.Player:Team() == TEAM_RED then
 
 		self.Player:GiveAmmo( 60,	"Pistol", 		true )
-		self.Player:GiveAmmo( 120,	"smg1", 		true )
+		self.Player:GiveAmmo( 150,	"smg1", 		true )
 		self.Player:Give( "weapon_ttt_galil" )
 		self.Player:Give( "weapon_zm_improvised" )
 		self.Player:Give( "weapon_zm_pistol" )
+		self.Player:Give( "weapon_ttt_smokegrenade" )
 
 	elseif self.Player:Team() == TEAM_BLUE then
 
 		self.Player:GiveAmmo( 60,	"Pistol", 		true )
-		self.Player:GiveAmmo( 120,	"smg1", 		true )
+		self.Player:GiveAmmo( 150,	"smg1", 		true )
 		self.Player:Give( "weapon_ttt_famas" )
 		self.Player:Give( "weapon_zm_improvised" )
 		self.Player:Give( "weapon_ttt_glock" )
+		self.Player:Give( "weapon_ttt_smokegrenade" )
 
 	end
 

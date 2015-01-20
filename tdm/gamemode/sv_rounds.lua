@@ -70,7 +70,7 @@ mapSettings = {
 	Length = 15, -- How long does the vote last?
 	AllowCurrent = true, -- Allow voting for map that was just played
 	Limit = 18, -- Limit of maps able to vote between
-	Prefix = {"de_dust_go", "de_dust2_go", "de_nuke_go", "de_inferno_go", "de_train_go", "de_lake_go"}, -- Map Prefix, chooses all maps with set presets
+	Prefix = {"de_dust_go", "de_dust2_go", "de_nuke_go", "de_inferno_go", "de_train_go", "de_lake_go", "cs_assault", "cs_office", "cs_militia", "de_dolls", "de_tides", "de_port"}, -- Map Prefix, chooses all maps with set presets
 }
 
 --[[  The way rounds were setup is inspired by Mr-Gash's Deathrun https://github.com/Mr-Gash/GMod-Deathrun  ]]--

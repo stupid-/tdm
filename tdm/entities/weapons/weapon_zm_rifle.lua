@@ -40,7 +40,7 @@ SWEP.ViewModelFOV		= 54
 SWEP.ViewModel          = Model("models/weapons/cstrike/c_snip_scout.mdl")
 SWEP.WorldModel         = Model("models/weapons/w_snip_scout.mdl")
 
-SWEP.Primary.Sound = Sound(")weapons/scout/scout_fire-1.wav")
+SWEP.Primary.Sound = Sound("weapons/scout/scout_fire-1.wav")
 
 SWEP.Secondary.Sound = Sound("Default.Zoom")
 
@@ -98,7 +98,7 @@ function SWEP:Holster()
 end
 
 if CLIENT then
-   local scope = surface.GetTextureID("sprites/scope")
+   local scope = surface.GetTextureID("sprites/scope2")
    function SWEP:DrawHUD()
       if self:GetIronsights() then
          surface.SetDrawColor( 0, 0, 0, 255 )

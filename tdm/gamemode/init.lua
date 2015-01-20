@@ -22,6 +22,7 @@ AddCSLuaFile("cl_welcome.lua")
 AddCSLuaFile("cl_pickclass.lua")
 AddCSLuaFile("cl_voice.lua")
 AddCSLuaFile("cl_scoreboard.lua")
+AddCSLuaFile("cl_targetid.lua")
 AddCSLuaFile("mapvote/cl_mapvote.lua")
 
 --Classes For Client
@@ -31,8 +32,6 @@ AddCSLuaFile("player_class/infantry.lua")
 AddCSLuaFile("player_class/heavy.lua")
 AddCSLuaFile("player_class/sniper.lua")
 AddCSLuaFile("player_class/commando.lua")
-
---64.94.101.97:27015
 
 ------------------------------------------
 --				ConVars					--
@@ -157,6 +156,7 @@ function GM:PlayerSpawn ( ply )
 
 		ply:Spectate( OBS_MODE_ROAMING )
 
+	--Make sure the player has a class before spawned
 	elseif (ply:Team() == TEAM_RED && player_manager.GetPlayerClass( ply ) != "noclass" || ply:Team() == TEAM_BLUE && player_manager.GetPlayerClass( ply ) != "noclass" ) then
 
 		local color = team.GetColor( ply:Team() )
@@ -184,7 +184,7 @@ function GM:PlayerSpawn ( ply )
         end
         timer.Simple( 4, unprotect)
 
-    -- Incase someone spawns with no class picked, they will be silently killed and asked to pick a class.
+    -- If no class, force class selection or else no spawn
 	elseif (player_manager.GetPlayerClass( ply ) == "noclass") then
 
 		ply:KillSilent()
@@ -233,8 +233,6 @@ function GM:IsSpawnpointSuitable( ply, spawnpointent, bMakeSuitable )
 
 end
 
-
---Doing this just in case, team.SetSpawnPoint wasn't working. Works now. Leaving both in.
 function GM:PlayerSelectSpawn( ply ) 
 
 	if (ply:Team() == TEAM_SPEC) then
@@ -372,7 +370,7 @@ function GM:DoPlayerDeath( victim, attacker, dmginfo )
 
 	victim:CreateRagdoll()
 
-	if ( GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS ) then
+	if ( GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS or GetGlobalInt( "TDM_RoundState" ) == ROUND_OVER ) then
 
 		victim:AddDeaths( 1 )
 
@@ -414,7 +412,7 @@ end
 function stTeamSpec( ply )
 	if ( ply:Team() == 2 || ply.NextSwitchTime > CurTime() ) then return end
 
-	ply.NextSwitchTime = CurTime() + 30
+	ply.NextSwitchTime = CurTime() + 15
 
 	ply:KillSilent()
 	player_manager.SetPlayerClass( ply, "noclass" )
@@ -429,7 +427,14 @@ end
 concommand.Add( "stTeamSpec", stTeamSpec )
 
 function stTeamT( ply )
-	if ( ply:Team() == 0 || ply.NextSwitchTime > CurTime() ) then return end
+
+	local RedPlayers = GetGlobalInt( "TDM_RedTeamNum" )
+	local BluePlayers = GetGlobalInt( "TDM_BlueTeamNum" )
+
+	if ( ply:Team() == TEAM_RED || ply.NextSwitchTime > CurTime() ) then return end
+
+	--Protection against swapping and forcing an autobalance
+	if ( ply:Team() == TEAM_BLUE && RedPlayers == BluePlayers) then return end
 
 	ply.NextSwitchTime = CurTime() + 30
 
@@ -446,7 +451,10 @@ end
 concommand.Add( "stTeamT", stTeamT )
 
 function stTeamCT( ply )
-	if ( ply:Team() == 1 || ply.NextSwitchTime > CurTime() ) then return end
+	if ( ply:Team() == TEAM_BLUE || ply.NextSwitchTime > CurTime() ) then return end
+
+	--Protection against swapping and forcing an autobalance
+	if ( ply:Team() == TEAM_RED && RedPlayers == BluePlayers) then return end
 
 	ply.NextSwitchTime = CurTime() + 30
 
@@ -557,7 +565,7 @@ function commandoClass( ply )
 end
 concommand.Add( "commandoClass", commandoClass )
 
--- I need to rewrite this, inspired by Fretta13, just need something that works atm. 
+-- Inspired by Fretta13
 function GM:CheckTeamBalance()
 	local CurrentRedPlayers = GetGlobalInt( "TDM_RedTeamNum" ) -- Team 0
 	local CurrentBluePlayers = GetGlobalInt( "TDM_BlueTeamNum" ) -- Team 1
@@ -571,18 +579,25 @@ function GM:CheckTeamBalance()
 		ply:StripWeapons()
 		ply:SetTeam( 1 )
 		ply:KillSilent()
+		
 		if (ply:IsBot()) then
+
 			player_manager.OnPlayerSpawn( ply )
 			player_manager.SetPlayerClass( ply, "infantry" )
 	        player_manager.RunClass( ply, "Spawn" )
 	        hook.Call( "PlayerLoadout", GAMEMODE, ply )
 	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
+
 	    else
+
 			ply:ConCommand("pickClass")
+
 		end
 
 		for k,v in pairs(player.GetAll()) do
+
 			v:ChatPrint( "Player "..ply:GetName().." has been automatically switched to the " .. team.GetName( ply:Team() ) .. " Team." )
+
 		end
 
 	elseif ( CurrentBluePlayers > ( CurrentRedPlayers + 1) ) then
@@ -596,17 +611,22 @@ function GM:CheckTeamBalance()
 		ply:KillSilent()
 
 		if (ply:IsBot()) then
+
 			player_manager.OnPlayerSpawn( ply )
 			player_manager.SetPlayerClass( ply, "infantry" )
 	        player_manager.RunClass( ply, "Spawn" )
 	        hook.Call( "PlayerLoadout", GAMEMODE, ply )
 	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
 	    else
+
 			ply:ConCommand("pickClass")
+
 		end
 
 		for k,v in pairs(player.GetAll()) do
+
 			v:ChatPrint( "Player "..ply:GetName().." has been automatically switched to the " .. team.GetName( ply:Team() ) .. " Team." )
+
 		end
 
 	end

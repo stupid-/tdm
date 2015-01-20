@@ -25,6 +25,14 @@ surface.CreateFont( "ScoreboardHeadingShadow", {
     shadow = false
 })
 
+surface.CreateFont( "ScoreboardDefaultTitleShadow", {
+	font		= "Coolvetica",
+	size		= 32,
+	weight		= 400,
+    antialias = true,
+    blursize = 1.5
+})
+
 surface.CreateFont( "ScoreboardDefaultTitle", {
 	font		= "Coolvetica",
 	size		= 32,
@@ -227,6 +235,8 @@ local SCORE_BOARD = {
 		self.Name:SetExpensiveShadow( 1, Color( 0, 0, 0, 200 ) )
 		function self.Name:Paint( w, h, ply )
 			--draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 0, 200 ) )
+			draw.SimpleText( GetHostName(), "ScoreboardDefaultTitleShadow", 351, 21, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
+			draw.SimpleText( GetHostName(), "ScoreboardDefaultTitle", 350, 20, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 		end
 
 		self.Other = self.Header:Add( "DLabel" )
@@ -276,7 +286,7 @@ local SCORE_BOARD = {
 
 	Think = function( self, w, h )
 
-		self.Name:SetText( GetHostName() )
+		self.Name:SetText( "" )
 
 		self.Other:SetText( "" )
 		--
