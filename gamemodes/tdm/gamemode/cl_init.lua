@@ -8,6 +8,7 @@ include( "cl_pickclass.lua" )
 include( "cl_voice.lua" )
 include( "cl_scoreboard.lua" )
 include( "cl_targetid.lua" )
+include( "cl_deathnotice.lua" )
 include( "mapvote/cl_mapvote.lua" )
 
 --Classes

@@ -82,7 +82,7 @@ function ENT:Explode(tr)
 
       local roundState = GetGlobalInt( "TDM_RoundState" )
 
-      if (roundState == 1 or roundState == 3) then return end
+      if (roundState == 0 or roundState == 1 or roundState == 3) then return end
       -- Smoke particles can't get cleaned up when a round restarts, so prevent
       -- them from existing post-round.
       --local round = GetRound()

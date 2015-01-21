@@ -5,6 +5,28 @@ Choose a team.
 
 ]]--
 
+surface.CreateFont( "stupidButton",
+{
+    font    = "Marlett", 
+    size    = 13,
+    weight  = 600,
+    antialias = true,
+    blursize = 0.2,
+	symbol = true,
+    shadow = false
+})
+
+surface.CreateFont( "stupidButton2",
+{
+    font    = "Marlett", 
+    size    = 11,
+    weight  = 600,
+    antialias = true,
+    blursize = 0.2,
+	symbol = true,
+    shadow = false
+})
+
 surface.CreateFont( "Close",
 {
     font    = "CloseCaption_Bold", 
@@ -72,6 +94,16 @@ function welcomePlayer( ply )
 	local RedPlayers = GetGlobalInt( "TDM_RedTeamNum" )
 	local BluePlayers = GetGlobalInt( "TDM_BlueTeamNum" )
 
+	--Force update of information
+	timer.Create( "NumberCheckTimer", 1, 0, function() 
+
+		PlayerName = LocalPlayer():Nick()
+		SpecPlayers = GetGlobalInt( "TDM_SpecTeamNum" )
+		RedPlayers = GetGlobalInt( "TDM_RedTeamNum" )
+		BluePlayers = GetGlobalInt( "TDM_BlueTeamNum" )
+
+	end )
+
 	local ChooseTeamFrame = vgui.Create( "DFrame" )
 	ChooseTeamFrame:SetSize(ScrW(), ScrH()*0.3)
 	ChooseTeamFrame:SetTitle("")
@@ -89,14 +121,14 @@ function welcomePlayer( ply )
 		draw.DrawText( "Please select a team.", "TeamMSG", 0 + w/2, 0 + (h/1.5)/3 + (h/1.5)/3 - 16, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
 	end
 
-/*
+
 	local tabHover = false
 	local HelpButton = vgui.Create('DButton')
 	HelpButton:SetParent(ChooseTeamFrame)
 	HelpButton:SetSize(45, 22)
 	HelpButton:SetPos( ScrW()-90, 0 )
 	HelpButton:SetFont("Close")
-	HelpButton:SetText('Help')
+	HelpButton:SetText("")
 	HelpButton:SetTextColor( Color(255,255,255,255) )
 	function HelpButton:OnCursorEntered()
 		tabHover = true
@@ -110,18 +142,19 @@ function welcomePlayer( ply )
 		else
 			draw.RoundedBox( 0, 0, 0, w, h, Color(120,120,120,210))
 		end
+		draw.SimpleText( "s", "stupidButton2", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function HelpButton:DoClick()
 		--ChooseTeamFrame:Close()
 	end
-*/
+
 	local tabHover = false
 	local CloseButton = vgui.Create('DButton')
 	CloseButton:SetParent(ChooseTeamFrame)
 	CloseButton:SetSize(45, 22)
 	CloseButton:SetPos( ScrW()-45, 0 )
 	CloseButton:SetFont("Close")
-	CloseButton:SetText('Close')
+	CloseButton:SetText("")
 	CloseButton:SetTextColor( Color(255,255,255,255) )
 	function CloseButton:OnCursorEntered()
 		tabHover = true
@@ -133,11 +166,13 @@ function welcomePlayer( ply )
 		if tabHover then
 			draw.RoundedBox( 0, 0, 0, w, h, Color(240,30,30,210))
 		else
-			draw.RoundedBox( 0, 0, 0, w, h, Color(250,70,70,210))
+			draw.RoundedBox( 0, 0, 0, w, h, Color(250,120,120,210))
 		end
+		draw.SimpleText( "r", "stupidButton", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function CloseButton:DoClick()
 		ChooseTeamFrame:Close()
+		timer.Stop( "NumberCheckTimer" )
 	end
 
 	local tabHover = false
@@ -145,7 +180,7 @@ function welcomePlayer( ply )
 	SpectatorButton:SetParent(ChooseTeamFrame)
 	SpectatorButton:SetSize(ScrW()/10, ScrH()/20)
 	SpectatorButton:SetPos(ScrW()/2 - (ScrW()/10)/2, 0 + (ScrH()/4)/1.5 + ScrH()/20 + (ScrH()/20)/6)
-	SpectatorButton:SetText("SPECTATE ("..SpecPlayers..")")
+	SpectatorButton:SetText("")
 	SpectatorButton:SetTextColor( Color(255,255,255,255) )
 	SpectatorButton:SetFont("Button")
 	SpectatorButton:SetDrawBackground(true)
@@ -163,9 +198,11 @@ function welcomePlayer( ply )
 			draw.RoundedBox( 2, 0, 0, w, h, Color(65,65,65,0))
 			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(65,65,65,255))
 		end
+		draw.SimpleText( "SPECTATE ("..SpecPlayers..")", "Button", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function SpectatorButton:DoClick()
 		ChooseTeamFrame:Close()
+		timer.Stop( "NumberCheckTimer" )
 	end
 
 	local tabHover = false
@@ -173,7 +210,7 @@ function welcomePlayer( ply )
 	RedButton:SetParent(ChooseTeamFrame)
 	RedButton:SetSize(ScrW()/10, ScrH()/20)
 	RedButton:SetPos(ScrW()/3 - (ScrW()/10)/2, 0 + (ScrH()/4)/1.5 + ScrH()/20 + (ScrH()/20)/6 )
-	RedButton:SetText("TEAM RED ("..RedPlayers..")")
+	RedButton:SetText("")
 	RedButton:SetTextColor( Color(255,255,255,255) )
 	RedButton:SetFont("Button")
 	RedButton:SetDrawBackground(true)
@@ -191,6 +228,7 @@ function welcomePlayer( ply )
 			draw.RoundedBox( 2, 0, 0, w, h, Color(40,40,40,0))
 			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(180,30,30,250))
 		end
+		draw.SimpleText( "TEAM RED ("..RedPlayers..")", "Button", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function RedButton:DoClick()
 		if ply:Team() == 0 then
@@ -201,6 +239,7 @@ function welcomePlayer( ply )
 			else 
 				RunConsoleCommand( "stTeamT" )
 				ChooseTeamFrame:Close()
+				timer.Stop( "NumberCheckTimer" )
 			end
 		end
 	end
@@ -210,7 +249,7 @@ function welcomePlayer( ply )
 	BlueButton:SetParent(ChooseTeamFrame)
 	BlueButton:SetSize(ScrW()/10, ScrH()/20)
 	BlueButton:SetPos(ScrW()/2 + ScrW()/6 - (ScrW()/10)/2, 0 + (ScrH()/4)/1.5 + ScrH()/20 + (ScrH()/20)/6)
-	BlueButton:SetText("TEAM BLUE ("..BluePlayers..")")
+	BlueButton:SetText("")
 	BlueButton:SetTextColor( Color(255,255,255,255) )
 	BlueButton:SetFont("Button")
 	BlueButton:SetDrawBackground(true)
@@ -228,6 +267,7 @@ function welcomePlayer( ply )
 			draw.RoundedBox( 2, 0, 0, w, h, Color(40,40,40,0))
 			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(30,30,180,250))
 		end
+		draw.SimpleText( "TEAM BLUE ("..BluePlayers..")", "Button", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function BlueButton:DoClick()
 		if ply:Team() == 1 then
@@ -238,6 +278,7 @@ function welcomePlayer( ply )
 			else
 				RunConsoleCommand( "stTeamCT" )
 				ChooseTeamFrame:Close()
+				timer.Stop( "NumberCheckTimer" )
 			end
 		end
 	end

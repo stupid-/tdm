@@ -23,6 +23,7 @@ AddCSLuaFile("cl_pickclass.lua")
 AddCSLuaFile("cl_voice.lua")
 AddCSLuaFile("cl_scoreboard.lua")
 AddCSLuaFile("cl_targetid.lua")
+AddCSLuaFile("cl_deathnotice.lua")
 AddCSLuaFile("mapvote/cl_mapvote.lua")
 
 --Classes For Client

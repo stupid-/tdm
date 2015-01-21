@@ -504,7 +504,7 @@ hook.Add( "PostDrawOpaqueRenderables", "PlayerNamesOverHeadsYeah", function()
                 local Ang = (Pos - (LocalPlayer():EyePos())):Angle()
 
                 cam.Start3D2D(Pos, Angle(0, Ang.y-90, 90), 0.065) 
-                    draw.SimpleText(pl:Nick(),"HeadTextShadow2",3,3,Color(210,60,60,145),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)   
+                    draw.SimpleText(pl:Nick(),"HeadTextShadow2",3,3,Color(210,60,60,185),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)   
                     draw.SimpleText(pl:Nick(),"HeadTextShadow",6,6,Color(0,0,0,145),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)      
                     draw.SimpleText(pl:Nick(),"HeadTextShadow",3,3,Color(0,0,0,245),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)    
                     draw.SimpleText(pl:Nick(),"HeadText",0,0,Color(255,255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)     
@@ -526,7 +526,7 @@ hook.Add( "PostDrawOpaqueRenderables", "PlayerNamesOverHeadsYeah", function()
                 local Ang = (Pos - (LocalPlayer():EyePos())):Angle()
 
                 cam.Start3D2D(Pos, Angle(0, Ang.y-90, 90), 0.065) 
-                    draw.SimpleText(pl:Nick(),"HeadTextShadow2",3,3,Color(60,60,210,145),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)   
+                    draw.SimpleText(pl:Nick(),"HeadTextShadow2",3,3,Color(60,60,210,185),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)   
                     draw.SimpleText(pl:Nick(),"HeadTextShadow",6,6,Color(0,0,0,145),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)      
                     draw.SimpleText(pl:Nick(),"HeadTextShadow",3,3,Color(0,0,0,245),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)    
                     draw.SimpleText(pl:Nick(),"HeadText",0,0,Color(255,255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)     
@@ -553,7 +553,7 @@ hook.Add( "PostDrawOpaqueRenderables", "PlayerNamesOverHeadsYeah", function()
                 local Ang = (Pos - (LocalPlayer():EyePos())):Angle()
 
                 cam.Start3D2D(Pos, Angle(0, Ang.y-90, 90), 0.065) 
-                    draw.SimpleText(pl:Nick(),"HeadTextShadow2",3,3,Color(210,60,60,145),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)   
+                    draw.SimpleText(pl:Nick(),"HeadTextShadow2",3,3,Color(210,60,60,185),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)   
                     draw.SimpleText(pl:Nick(),"HeadTextShadow",6,6,Color(0,0,0,145),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)      
                     draw.SimpleText(pl:Nick(),"HeadTextShadow",3,3,Color(0,0,0,245),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)    
                     draw.SimpleText(pl:Nick(),"HeadText",0,0,Color(255,255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)     
@@ -580,11 +580,11 @@ hook.Add( "PostDrawOpaqueRenderables", "PlayerNamesOverHeadsYeah", function()
                 local Ang = (Pos - (LocalPlayer():EyePos())):Angle()
 
                 cam.Start3D2D(Pos, Angle(0, Ang.y-90, 90), 0.065) 
-                    draw.SimpleText(pl:Nick(),"HeadTextShadow2",3,3,Color(60,60,210,145),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)   
+                    draw.SimpleText(pl:Nick(),"HeadTextShadow2",3,3,Color(60,60,210,185),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)   
                     draw.SimpleText(pl:Nick(),"HeadTextShadow",6,6,Color(0,0,0,145),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)      
                     draw.SimpleText(pl:Nick(),"HeadTextShadow",3,3,Color(0,0,0,245),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)    
                     draw.SimpleText(pl:Nick(),"HeadText",0,0,Color(255,255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)     
-                cam.End3D2D()w
+                cam.End3D2D()
                 
             end
 

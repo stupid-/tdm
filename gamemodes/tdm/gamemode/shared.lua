@@ -82,6 +82,8 @@ if CLIENT then
 	usermessage.Hook("HIT_MARK", function()
 		hit = true
 		opac = 150
+		--hitmarker sound
+		surface.PlaySound( "tdm/hitmarker.wav" )
 		timer.Simple(0.2, function()   
 			hook.Add("Think", "hit_fade", function()
 				opac = opac - 5
