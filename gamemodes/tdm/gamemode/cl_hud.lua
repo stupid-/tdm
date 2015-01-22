@@ -341,7 +341,7 @@ function GM:HUDPaint()
 	if LocalPlayer():Team() == TEAM_SPEC then 
 
         --Commands so Spectators don't get stuck
-        local commandText = "[F1] Switch Teams - [F2] Change Classes"
+        local commandText = "[F1] Switch Teams"
         draw.DrawText( commandText, "CommandsShadow", 60 + 11, ScrH()-78 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
         draw.DrawText( commandText, "Commands", 60 + 10, ScrH()-78 , Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
 

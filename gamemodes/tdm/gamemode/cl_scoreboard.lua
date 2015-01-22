@@ -200,7 +200,7 @@ local PLAYER_LINE = {
 				draw.RoundedBox( 2, 0, 0, w, h, Color( 235, 60, 60, 150 ) )
 			else
 				draw.RoundedBox( 2, 0, 0, w, h, Color( 40, 40, 40, 100 ) )
-				draw.RoundedBox( 2, 0, 0, w, h, Color( 235, 60, 60, 80 ) )
+				draw.RoundedBox( 2, 0, 0, w, h, Color( 235, 60, 60, 60 ) )
 			end
 
 			return
@@ -213,7 +213,7 @@ local PLAYER_LINE = {
 				draw.RoundedBox( 2, 0, 0, w, h, Color( 60, 60, 235, 150 ) )
 			else
 				draw.RoundedBox( 2, 0, 0, w, h, Color( 40, 40, 40, 100 ) )
-				draw.RoundedBox( 2, 0, 0, w, h, Color( 60, 60, 235, 80 ) )
+				draw.RoundedBox( 2, 0, 0, w, h, Color( 60, 60, 235, 60 ) )
 			end
 			return
 		end
