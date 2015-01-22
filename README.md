@@ -4,7 +4,7 @@ I was looking for a more competetive gamemode for my community, so I decided to 
 
 ## Current Version
 
-Alpha 01-20-15
+Alpha 01-22-15
 
 ## Installation
 
@@ -25,6 +25,8 @@ Add any content files to your fastdl server.
 
 * Wiox - Map Voting Addon - https://github.com/wiox/gmod-mapvote
 * Mr-Gash - Inspiration on rounds system - https://github.com/Mr-Gash/GMod-Deathrun
+* bobbleheadbob - Help with advanced spawning system
+* Bad King Urgrain - Code from TTT used to place and read spawns from text files
 
 ## Author
 

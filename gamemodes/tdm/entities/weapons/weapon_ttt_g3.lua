@@ -2,9 +2,14 @@ AddCSLuaFile()
 
 if CLIENT then
    SWEP.PrintName = "G3SG1"
-   SWEP.Slot = 2
-   SWEP.Icon = "tflippy/vgui/ttt/icon_g3sg1"
 end
+
+SWEP.Slot        = 2
+SWEP.SlotPos     = 2
+
+SWEP.Weight     = 5
+SWEP.AutoSwitchTo   = false
+SWEP.AutoSwitchFrom   = false
 
 -- Always derive from weapon_tttbase
 SWEP.Base = "weapon_tttbase"

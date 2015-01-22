@@ -17,7 +17,7 @@ PLAYER.StartHealth			= 100		-- How much health we start with
 PLAYER.StartArmor			= 0			-- How much armour we start with
 PLAYER.DropWeaponOnDie		= false		-- Do we drop our weapon when we die
 PLAYER.TeammateNoCollide 	= true		-- Do we collide with teammates or run straight through them
-PLAYER.AvoidPlayers			= false		-- Automatically swerves around other players
+PLAYER.AvoidPlayers			= true		-- Automatically swerves around other players
 PLAYER.UseVMHands			= true		-- Uses viewmodel hands
 
 function PLAYER:Loadout()
@@ -29,7 +29,7 @@ function PLAYER:Loadout()
 		self.Player:Give( "weapon_ttt_ak47" )
 		self.Player:Give( "weapon_zm_improvised" )
 		self.Player:Give( "weapon_zm_pistol" )
-		self.Player:Give( "weapon_ttt_smokegrenade" )
+		self.Player:Give( "weapon_ttt_frag" )
 
 	elseif self.Player:Team() == TEAM_BLUE then
 
@@ -37,7 +37,7 @@ function PLAYER:Loadout()
 		self.Player:Give( "weapon_ttt_m16" )
 		self.Player:Give( "weapon_zm_improvised" )
 		self.Player:Give( "weapon_ttt_glock" )
-		self.Player:Give( "weapon_ttt_smokegrenade" )
+		self.Player:Give( "weapon_ttt_frag" )
 
 	end
 

@@ -70,7 +70,8 @@ mapSettings = {
 	Length = 15, -- How long does the vote last?
 	AllowCurrent = true, -- Allow voting for map that was just played
 	Limit = 18, -- Limit of maps able to vote between
-	Prefix = {"de_dust_go", "de_dust2_go", "de_nuke_go", "de_inferno_go", "de_train_go", "de_lake_go", "cs_assault", "cs_office", "cs_militia", "de_dolls", "de_tides", "de_port"}, -- Map Prefix, chooses all maps with set presets
+	--Prefix = {"de_dust_go", "de_dust2_go", "de_nuke_go", "de_inferno_go", "de_train_go", "de_lake_go", "cs_assault", "cs_office", "cs_militia", "de_dolls", "de_tides", "de_port"}, -- Map Prefix, chooses all maps with set presets
+	Prefix = {"de_dust_go", "de_dust2_go", "de_nuke_go", "de_inferno_go"},
 }
 
 --[[  The way rounds were setup is inspired by Mr-Gash's Deathrun https://github.com/Mr-Gash/GMod-Deathrun  ]]--
@@ -94,6 +95,8 @@ GM.RoundFunctions = {
 		game.CleanUpMap()
 
 		gm:SetRoundTime( GetConVarNumber( "tdm_preparetime" ) or 15 )
+
+		timer.Simple(5, SpawnEntities)
 
 		--Ticking sound, round about to begin
 		timer.Simple ( (GetConVarNumber( "tdm_preparetime" ) - 11.25), function()
@@ -145,6 +148,8 @@ GM.RoundFunctions = {
 		gm:SetRoundTime( GetConVarNumber( "tdm_roundtime" ) or 600 ) -- 10 minutes default
 
 		game.CleanUpMap()
+
+		timer.Simple(5, SpawnEntities)
 
 		for k,v in pairs(player.GetAll()) do
 

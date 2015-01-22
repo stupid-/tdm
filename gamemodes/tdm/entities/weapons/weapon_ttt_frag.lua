@@ -2,8 +2,6 @@ AddCSLuaFile()
 
 if CLIENT then
    SWEP.PrintName = "Frag Grenade"
-   SWEP.Slot = 3
-   SWEP.Icon = "vgui/ttt/icon_nades"
 end
 
 -- Always derive from weapon_tttbasegrenade
@@ -11,7 +9,14 @@ SWEP.Base = "weapon_tttbasegrenade"
 
 -- Standard GMod values
 SWEP.HoldType = "grenade"
-SWEP.Weight = 5
+
+
+SWEP.Slot        = 3
+SWEP.SlotPos     = 1
+
+SWEP.Weight     = 6
+SWEP.AutoSwitchTo   = false
+SWEP.AutoSwitchFrom   = true
 
 -- Model settings
 SWEP.UseHands = true
@@ -43,20 +48,11 @@ SWEP.InLoadoutFor = { nil }
 SWEP.LimitedStock = true
 
 -- If AllowDrop is false, players can't manually drop the gun with Q
-SWEP.AllowDrop = true
+SWEP.AllowDrop = false
 
 -- If NoSights is true, the weapon won't have ironsights
 SWEP.NoSights = true
 
 function SWEP:GetGrenadeName()
    return "ttt_frag_proj"
-end
-
--- Equipment menu information is only needed on the client
-if CLIENT then
-   -- Text shown in the equip menu
-   SWEP.EquipMenuData = {
-      type = "Grenade",
-      desc = "A highly explosive grenade."
-   }
 end

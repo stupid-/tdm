@@ -1,6 +1,7 @@
 include("shared.lua")
 include("player.lua")
 include("sv_rounds.lua")
+include("ent_import.lua")
 
 --Classes  
 include("player_class/noclass.lua")
@@ -8,14 +9,15 @@ include("player_class/assault.lua")
 include("player_class/infantry.lua")
 include("player_class/heavy.lua")
 include("player_class/sniper.lua")
+include("player_class/commando.lua")
 
 --Map Voting (Not My Code), By https://github.com/wiox/gmod-mapvote
 include("mapvote/mapvote.lua")
 include("mapvote/sv_mapvote.lua")
 
 --Includes for Client
-AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
+AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("cl_menus.lua")
 AddCSLuaFile("cl_hud.lua")
 AddCSLuaFile("cl_welcome.lua")
@@ -55,6 +57,9 @@ function GM:ShowHelp( ply ) -- F1
 end
 
 function GM:ShowTeam( ply ) -- F2 
+
+	--Just down show class menu unless you're not a spectator
+	if ply:Team() == TEAM_SPEC then return end
 
 	ply:ConCommand("pickClass") --cl_picklass.lua
 
@@ -114,6 +119,8 @@ function GM:Initialize()
 
 	end )
 
+	--SpawnEntities()
+
 end
 
 ------------------------------------------
@@ -171,7 +178,7 @@ function GM:PlayerSpawn ( ply )
         hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
 
-        --Most Basic Spawn Protection, 4 Seconds of God Mode.
+        --Most Basic Spawn Protection, 2 Seconds of God Mode.
         ply:GodEnable()
 
         local function unprotect()
@@ -183,7 +190,19 @@ function GM:PlayerSpawn ( ply )
         	end
 
         end
-        timer.Simple( 4, unprotect)
+        timer.Simple( 2.5, unprotect)
+
+        
+        hook.Add( "KeyPress", "RemoveSpawnProtection", function( ply, key ) 
+
+        	if ( key == IN_ATTACK && ply:HasGodMode() ) then
+
+        		unprotect()
+
+        	end
+
+        end )
+        
 
     -- If no class, force class selection or else no spawn
 	elseif (player_manager.GetPlayerClass( ply ) == "noclass") then
@@ -208,115 +227,276 @@ function GM:Think()
 
 end
 
-function GM:IsSpawnpointSuitable( ply, spawnpointent, bMakeSuitable )
+------------------------------------------
+--		Create extra spawn entities		--
+------------------------------------------
 
+function SpawnEntities()
+
+	local import = ents.TDM.CanImportEntities( game.GetMap() )
+
+	if import then
+
+		ents.TDM.ProcessImportScript( game.GetMap() )
+
+	end
+
+end
+
+function PlayerAdvancedSpawnSelection( ply, spawnpointent, enemy_team )
+	
 	local Pos = spawnpointent:GetPos()
 
-	local Ents = ents.FindInBox( Pos + Vector( -16, -16, 0 ), Pos + Vector( 16, 16, 72 ) )
+	--This is within the size of 48 players between you and an enemy
+	local EnemyEnts = ents.FindInBox( Pos + Vector( -1024, -1024, -144 ), Pos + Vector( 1024, 1024, 216 ) )
 
-	if ( ply:Team() == TEAM_SPEC ) then return true end
+	local FriendlyEnts = ents.FindInBox( Pos + Vector( -16, -16, 0 ), Pos + Vector( 16, 16, 72 ) )
 
 	local Blockers = 0
 
-	for k, v in pairs( Ents ) do
+	for k, v in pairs( EnemyEnts ) do
+
+		if ( IsValid( v ) && v:GetClass() == "player" && v:Alive() && v:Team() == enemy_team ) then
+
+			Blockers = Blockers + 1
+
+		end
+
+	end
+
+	for k, v in pairs( FriendlyEnts ) do
 
 		if ( IsValid( v ) && v:GetClass() == "player" && v:Alive() ) then
 
 			Blockers = Blockers + 1
 
 		end
-		
+
 	end
 
 	if ( Blockers > 0 ) then return false end
-	
+
 	return true
+
+end
+
+local function GetThreeRandomTeammates( playerTeam )
+
+	--Find Random Alive Players on team
+	local teamAlivePlayers = team.GetPlayers( playerTeam )
+
+	--Weed out the dead players
+	for k, v in pairs( teamAlivePlayers ) do
+
+		if ( !v:Alive() ) then
+
+			table.RemoveByValue( teamAlivePlayers, v:Nick() )
+
+		end
+
+	end
+
+	p1 = table.Random( teamAlivePlayers )
+
+	table.RemoveByValue( teamAlivePlayers, p1:Nick() )
+
+	p2 = table.Random( teamAlivePlayers )
+
+	table.RemoveByValue( teamAlivePlayers, p2:Nick() )
+
+	p3 = table.Random( teamAlivePlayers )
+
+	return p1, p2, p3
 
 end
 
 function GM:PlayerSelectSpawn( ply ) 
 
-	if (ply:Team() == TEAM_SPEC) then
+    playerTeam = ply:Team()
+
+	if ( playerTeam == TEAM_SPEC ) then
 
 	    local spawns = ents.FindByClass( "info_player_terrorist" ) 
 
 	    spawns = table.Add(spawns, ents.FindByClass( "info_player_counterterrorist" ) )
 
+	    spawns = table.Add(spawns, ents.FindByClass( "info_mobile_spawn" ) )
+
 	    local truespawn = table.Random(spawns)
 
 	    return truespawn
 
+	else
+
+    	local roundState = GetGlobalInt( "TDM_RoundState" )
+
+    	local opposingTeam = nil
+
+    	if ( playerTeam == TEAM_RED ) then
+
+    		opposingTeam = TEAM_BLUE 
+
+    	else 
+
+    		opposingTeam = TEAM_RED 
+
+    	end
+
+		local teamAlivePlayers = team.GetPlayers( playerTeam )
+
+		--Weed out the dead players
+		for k, v in pairs( teamAlivePlayers ) do
+
+			if ( !v:Alive() ) then
+
+				table.RemoveByValue( teamAlivePlayers, v:Nick() )
+
+			end
+
+		end
+
+		Spawnpoints = {}
+		Spawnpoints[ TEAM_RED ] = {}
+		Spawnpoints[ TEAM_BLUE ] = {}
+
+		--Add Team Red Basic Spawn Hub
+		table.Add( Spawnpoints[ TEAM_RED ], ents.FindByClass( "info_player_terrorist" ) )
+
+		--Add Team Blue Basic Spawn Hub
+		table.Add( Spawnpoints[ TEAM_BLUE ], ents.FindByClass( "info_player_counterterrorist" ) )
+
+		--Add the mobile spawn points
+		table.Add( Spawnpoints[ TEAM_RED ], ents.FindByClass( "info_mobile_spawn" ) )
+		table.Add( Spawnpoints[ TEAM_BLUE ], ents.FindByClass( "info_mobile_spawn" ) )
+
+		local SpawnPointCount = table.Count( Spawnpoints[ playerTeam ] )
+
+		local PlayerAliveCount = table.Count( teamAlivePlayers )
+
+		local randomTeamSpawnPoint = nil
+
+		--if Less than 3 teammates are alive, choose random spawn
+		if PlayerAliveCount <= 3 then
+
+			--Check and see if any spawn is X Distance away from enemy
+			for i=0, SpawnPointCount do
+
+				randomTeamSpawnPoint = table.Random( Spawnpoints[ playerTeam ] )
+				MsgN( randomTeamSpawnPoint )
+				
+				if ( randomTeamSpawnPoint && 
+					randomTeamSpawnPoint:IsValid() && 
+					randomTeamSpawnPoint:IsInWorld() &&
+					randomTeamSpawnPoint != ply:GetVar( "LastSpawnpoint" ) &&
+					randomTeamSpawnPoint != self.LastSpawnPoint ) then
+
+					if PlayerAdvancedSpawnSelection( ply, randomTeamSpawnPoint, opposingTeam ) then
+
+						self.LastSpawnPoint = randomTeamSpawnPoint
+						ply:SetVar( "LastSpawnpoint", randomTeamSpawnPoint )
+						return randomTeamSpawnPoint
+
+					end
+
+				end
+
+			end
+
+			return randomTeamSpawnPoint
+
+		--if 4 or more teammates are alive, find nearby spawn points
+		else
+
+			local PossibleSpawnPoint = table.Copy( Spawnpoints[ playerTeam ] )
+			local num = #PossibleSpawnPoint
+			local closest = nil
+			for i=1, num do
+
+				local p1,p2,p3 = GetThreeRandomTeammates( playerTeam )
+				local v1,v2,v3 = p1:GetPos(), p2:GetPos(), p3:GetPos()
+				local x1,x2,x3,y1,y2,y3 = v1.x, v2.x, v3.x, v1.y, v2.y, v3.y
+				local xAvg = ( x1 + x2 + x3 )/3
+				local yAvg = ( y1 + y2 + y3 )/3
+				local centroid = Vector( xAvg, yAvg, 0 )
+
+				--Find Closest Possible Spawn point
+				local closestDist = ( PossibleSpawnPoint[ table.maxn( PossibleSpawnPoint ) ]:GetPos() - centroid):Length2D() 
+				closest = PossibleSpawnPoint[ table.maxn( PossibleSpawnPoint ) ]
+
+				local closestKey = table.maxn( PossibleSpawnPoint )
+				for k, v in pairs( PossibleSpawnPoint ) do
+
+					if v then
+						local dist = ( v:GetPos() - centroid ):Length2D()
+						if dist < closestDist then 
+
+							closest = v
+							closestDist = dist
+							closestKey = k
+
+							MsgN( closest )
+
+						end
+					end
+				end
+
+				if not PlayerAdvancedSpawnSelection( ply, closest, opposingTeam ) then
+
+					PossibleSpawnPoint[ closestKey ] = nil
+
+				else
+
+					break -- Found what we want, stop the loop
+
+				end
+
+			end
+
+			if ( closest &&
+				closest:IsValid() &&
+				closest:IsInWorld() ) then 
+
+				MsgN("Returned Closest")
+
+				return closest
+
+			else 
+
+				for i=0, SpawnPointCount do
+
+					randomTeamSpawnPoint = table.Random( Spawnpoints[ playerTeam ] )
+
+					
+					if ( randomTeamSpawnPoint && 
+						randomTeamSpawnPoint:IsValid() && 
+						randomTeamSpawnPoint:IsInWorld() &&
+						randomTeamSpawnPoint != ply:GetVar( "LastSpawnpoint" ) &&
+						randomTeamSpawnPoint != self.LastSpawnPoint ) then
+
+						if PlayerAdvancedSpawnSelection( ply, randomTeamSpawnPoint, opposingTeam ) then
+
+							self.LastSpawnPoint = randomTeamSpawnPoint
+							ply:SetVar( "LastSpawnpoint", randomTeamSpawnPoint )
+							return randomTeamSpawnPoint
+
+						end
+
+					end
+
+				end
+
+				MsgN("Not Closest")
+
+				return randomTeamSpawnPoint
+
+			end
+
+		end
+
 	end
 
-    if (ply:Team() == TEAM_RED) then
-
-	    local spawns = ents.FindByClass( "info_player_terrorist" )
-
-	    local Count = table.Count(spawns)
-
-		local ChosenSpawnPoint = nil
-		
-		for i=0, Count do
-		
-			ChosenSpawnPoint = table.Random(spawns)
-
-			if ( ChosenSpawnPoint &&
-				ChosenSpawnPoint:IsValid() &&
-				ChosenSpawnPoint:IsInWorld() &&
-				ChosenSpawnPoint != ply:GetVar( "LastSpawnpoint" ) &&
-				ChosenSpawnPoint != self.LastSpawnPoint ) then
-				
-				if ( hook.Call( "IsSpawnpointSuitable", GAMEMODE, ply, ChosenSpawnPoint, i == Count ) ) then
-				
-					self.LastSpawnPoint = ChosenSpawnPoint
-					ply:SetVar( "LastSpawnpoint", ChosenSpawnPoint )
-					return ChosenSpawnPoint
-				
-				end
-				
-			end
-				
-		end
-		
-		return ChosenSpawnPoint
-
-    end 
-
-    if (ply:Team() == TEAM_BLUE) then
-
-	    local spawns = ents.FindByClass( "info_player_counterterrorist" ) 
-
-	    local Count = table.Count(spawns)
-
-		local ChosenSpawnPoint = nil
-		
-		for i=0, Count do
-		
-			ChosenSpawnPoint = table.Random(spawns)
-
-			if ( ChosenSpawnPoint &&
-				ChosenSpawnPoint:IsValid() &&
-				ChosenSpawnPoint:IsInWorld() &&
-				ChosenSpawnPoint != ply:GetVar( "LastSpawnpoint" ) &&
-				ChosenSpawnPoint != self.LastSpawnPoint ) then
-				
-				if ( hook.Call( "IsSpawnpointSuitable", GAMEMODE, ply, ChosenSpawnPoint, i == Count ) ) then
-				
-					self.LastSpawnPoint = ChosenSpawnPoint
-					ply:SetVar( "LastSpawnpoint", ChosenSpawnPoint )
-					return ChosenSpawnPoint
-				
-				end
-				
-			end
-				
-		end
-		
-		return ChosenSpawnPoint
-
-    end 
-
 end
+
 
 ------------------------------------------
 --	Player Loadout (Just in case)		--
@@ -618,6 +798,7 @@ function GM:CheckTeamBalance()
 	        player_manager.RunClass( ply, "Spawn" )
 	        hook.Call( "PlayerLoadout", GAMEMODE, ply )
 	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
+
 	    else
 
 			ply:ConCommand("pickClass")

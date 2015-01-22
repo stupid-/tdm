@@ -5,7 +5,7 @@ GM.Author = "Stupid"
 GM.Email = "stupid@stupids-servers.com"
 GM.Website = "www.stupids-servers.com"
 GM.TeamBased = true
-GM.Version = "01-20-15"
+GM.Version = "01-22-15"
 
 include( "mapvote/mapvote.lua" )
 
@@ -22,9 +22,9 @@ TEAM_BLUE = 1
 TEAM_SPEC = 2
 
 function GM:CreateTeams()
-	team.SetUp(TEAM_RED, "Red", Color(255, 60, 60, 255), true)
-	team.SetUp(TEAM_BLUE, "Blue", Color(60, 60, 255, 255), true)
-	team.SetUp(TEAM_SPEC, "Spectator", Color(60, 60, 60 , 255), true)
+	team.SetUp(TEAM_RED, "Red", Color( 255, 60, 60, 255 ), true)
+	team.SetUp(TEAM_BLUE, "Blue", Color( 60, 60, 255, 255 ), true)
+	team.SetUp(TEAM_SPEC, "Spectator", Color( 60, 60, 60 , 255 ), true)
 
 	--Set Spawn Points
 	team.SetSpawnPoint( TEAM_RED, {"info_player_terrorist"} )

@@ -176,3 +176,36 @@ function GM:AllowPlayerPickup( ply, object )
 	return false
 		
 end
+
+--Health Regen
+hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply ) 
+
+	--Stop Healing if Hurt
+	timer.Stop( "PlayerHealthRegenDelayTimer" )
+	timer.Stop( "PlayerActiveHealthRegen" )
+
+	--After 10 seconds of not being hurt
+	timer.Create( "PlayerHealthRegenDelayTimer", 10, 1, function() 
+
+		--Start the healing over this interval
+		timer.Create( "PlayerActiveHealthRegen", 0.25, 0, function()
+
+			if ( ply:Alive() and ply:Health() < 100 ) then
+
+				ply:SetHealth( ply:Health() + 1 )
+
+			end
+
+			if ( !ply:Alive() or ply:Health() == 100 ) then
+
+				timer.Stop( "PlayerHealthRegenDelayTimer" )
+
+				timer.Stop( "PlayerActiveHealthRegen" )
+
+			end
+
+		end )
+
+	end )
+
+end )

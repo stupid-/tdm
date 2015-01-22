@@ -18,6 +18,10 @@ end
 
 function ENT:Explode( tr )
    if SERVER then
+
+      local roundState = GetGlobalInt( "TDM_RoundState" )
+      if (roundState == 0 or roundState == 1 or roundState == 3) then return end
+
       self:SetNoDraw( true )
       self:SetSolid( SOLID_NONE )
       

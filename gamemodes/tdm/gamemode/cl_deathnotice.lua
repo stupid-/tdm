@@ -16,6 +16,7 @@ surface.CreateFont( "CSKillIcons",
     shadow = false
 })
 
+--Default Killicons
 killicon.AddFont( "prop_physics", 		"HL2MPTypeDeath", 	"9", 	Color_Icon )
 killicon.AddFont( "weapon_smg1", 		"HL2MPTypeDeath", 	"/",	Color_Icon )
 killicon.AddFont( "weapon_357", 		"HL2MPTypeDeath", 	".", 	Color_Icon )
@@ -30,20 +31,23 @@ killicon.AddFont( "grenade_ar2", 		"HL2MPTypeDeath", 	"7", 	Color_Icon )
 killicon.AddFont( "weapon_stunstick", 	"HL2MPTypeDeath", 	"!", 	Color_Icon )
 killicon.AddFont( "npc_satchel", 		"HL2MPTypeDeath", 	"*", 	Color_Icon )
 killicon.AddFont( "npc_tripmine", 		"HL2MPTypeDeath", 	"*", 	Color_Icon )
-killicon.AddFont( "weapon_crowbar", 	"HL2MPTypeDeath", 	"6", 	Color_Icon )
 killicon.AddFont( "weapon_physcannon",	"HL2MPTypeDeath",	",",	Color_Icon )
-killicon.AddFont( "weapon_ttt_m16", 	"CSKillIcons",		"w",	Color_Icon )
-killicon.AddFont( "weapon_ttt_ak47", 	"CSKillIcons",		"b",	Color_Icon )
-killicon.AddFont( "weapon_ttt_famas", 	"CSKillIcons",		"t",	Color_Icon )
-killicon.AddFont( "weapon_zm_rifle", 	"CSKillIcons",		"n",	Color_Icon )
-killicon.AddFont( "weapon_zm_shotgun", 	"CSKillIcons",		"k",	Color_Icon )
-killicon.AddFont( "weapon_zm_mac10", 	"CSKillIcons",		"l",	Color_Icon )
-killicon.AddFont( "weapon_ttt_galil", 	"CSKillIcons",		"v",	Color_Icon )
-killicon.AddFont( "weapon_ttt_sipistol", 	"CSKillIcons",	"a",	Color_Icon )
-killicon.AddFont( "weapon_zm_pistol", 	"CSKillIcons",		"y",	Color_Icon )
-killicon.AddFont( "weapon_ttt_glock", 	"CSKillIcons",		"c",	Color_Icon )
-killicon.AddFont( "weapon_ttt_famas", 	"CSKillIcons",		"t",	Color_Icon )
-
+--CSS Killicons
+killicon.AddFont( "weapon_zm_improvised", 	"HL2MPTypeDeath", 	"6", 	Color_Icon )
+killicon.AddFont( "weapon_ttt_m16", 		"CSKillIcons",		"w",	Color_Icon )
+killicon.AddFont( "weapon_ttt_ak47", 		"CSKillIcons",		"b",	Color_Icon )
+killicon.AddFont( "weapon_ttt_famas", 		"CSKillIcons",		"t",	Color_Icon )
+killicon.AddFont( "weapon_zm_rifle", 		"CSKillIcons",		"n",	Color_Icon )
+killicon.AddFont( "weapon_zm_shotgun", 		"CSKillIcons",		"B",	Color_Icon )
+killicon.AddFont( "weapon_ttt_pump", 		"CSKillIcons",		"k",	Color_Icon )
+killicon.AddFont( "weapon_zm_mac10", 		"CSKillIcons",		"l",	Color_Icon )
+killicon.AddFont( "weapon_ttt_galil", 		"CSKillIcons",		"v",	Color_Icon )
+killicon.AddFont( "weapon_ttt_sipistol", 	"CSKillIcons",		"a",	Color_Icon )
+killicon.AddFont( "weapon_zm_pistol", 		"CSKillIcons",		"y",	Color_Icon )
+killicon.AddFont( "weapon_ttt_glock", 		"CSKillIcons",		"c",	Color_Icon )
+killicon.AddFont( "weapon_ttt_famas", 		"CSKillIcons",		"t",	Color_Icon )
+killicon.AddFont( "weapon_ttt_g3",	 		"CSKillIcons",		"i",	Color_Icon )
+killicon.AddFont( "ttt_frag_proj", 			"CSKillIcons",		"h",	Color_Icon )
 
 local Deaths = {}
 

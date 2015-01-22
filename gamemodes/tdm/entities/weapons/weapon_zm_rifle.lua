@@ -98,7 +98,7 @@ function SWEP:Holster()
 end
 
 if CLIENT then
-   local scope = surface.GetTextureID("sprites/scope2")
+   local scope = surface.GetTextureID("sprites/scope")
    function SWEP:DrawHUD()
       if self:GetIronsights() then
          surface.SetDrawColor( 0, 0, 0, 255 )
@@ -131,6 +131,12 @@ if CLIENT then
 
          surface.SetDrawColor(255, 0, 0, 255)
          surface.DrawLine(x, y, x + 1, y + 1)
+
+         -- scope
+         surface.SetTexture(scope)
+         surface.SetDrawColor(255, 255, 255, 255)
+
+         surface.DrawTexturedRectRotated(x, y, scope_size, scope_size, 0)
 
       else
          return self.BaseClass.DrawHUD(self)
