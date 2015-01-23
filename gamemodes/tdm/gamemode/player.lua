@@ -180,15 +180,21 @@ end
 --Health Regen
 hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply ) 
 
+	--Create unique id's for players who are hurt
+	ply.RegenDelay = "Delay_" .. ply:SteamID64()
+	
+	ply.RegenActive = "Active" .. ply:SteamID64()
+
 	--Stop Healing if Hurt
-	timer.Stop( "PlayerHealthRegenDelayTimer" )
-	timer.Stop( "PlayerActiveHealthRegen" )
+	timer.Destroy( ply.RegenDelay )
+
+	timer.Destroy( ply.RegenActive )
 
 	--After 10 seconds of not being hurt
-	timer.Create( "PlayerHealthRegenDelayTimer", 10, 1, function() 
+	timer.Create( ply.RegenDelay, 10, 1, function() 
 
 		--Start the healing over this interval
-		timer.Create( "PlayerActiveHealthRegen", 0.25, 0, function()
+		timer.Create( ply.RegenActive, 0.25, 0, function()
 
 			if ( ply:Alive() and ply:Health() < 100 ) then
 
@@ -198,9 +204,9 @@ hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply )
 
 			if ( !ply:Alive() or ply:Health() == 100 ) then
 
-				timer.Stop( "PlayerHealthRegenDelayTimer" )
+				timer.Destroy( ply.RegenDelay )
 
-				timer.Stop( "PlayerActiveHealthRegen" )
+				timer.Destroy( ply.RegenActive )
 
 			end
 

@@ -1,7 +1,6 @@
 # Team Deathmatch Extra Spawns
 # For map: de_nuke_go
 # Exported by: Stupid
-setting:	replacespawns 1
 info_mobile_spawn	1370.575439 -356.568146 -415.449707	0.080 -169.700 -0.078
 info_mobile_spawn	1270.183350 -323.512024 -415.465240	0.011 -98.340 -0.011
 info_mobile_spawn	339.958496 -202.506165 -415.424622	0.001 34.816 -0.078

@@ -4,7 +4,7 @@ I was looking for a more competetive gamemode for my community, so I decided to 
 
 ## Current Version
 
-Alpha 01-22-15
+Alpha 01-23-15
 
 ## Installation
 
@@ -14,12 +14,10 @@ Add any content files to your fastdl server.
 
 ## To-do List
 
-* Fix Spawning Inside of Other Players
 * Settings and Customization
-* Custom Scoreboard 
 * More Classes/Weapons/Class Balancing
 * Update Class Selection GUI
-* Update Hud -- Current Hud is placeholder
+* Update Advanced Spawning System
 
 ## Special Thanks / Credits
 

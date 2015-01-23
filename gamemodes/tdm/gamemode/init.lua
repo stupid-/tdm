@@ -2,6 +2,7 @@ include("shared.lua")
 include("player.lua")
 include("sv_rounds.lua")
 include("ent_import.lua")
+include("config/config.lua")
 
 --Classes  
 include("player_class/noclass.lua")
@@ -87,11 +88,15 @@ function GM:PlayerAuthed ( ply, steamid, uniqueid )
 
 	print ("Player: " .. ply:Nick() .. " ( " .. steamid .. " ) has authenticated.")
 
+	PrintMessage( HUD_PRINTTALK, Format( "Player %s has joined the game.", ply:Nick() ) )
+
 end
 
 function GM:PlayerDisconnected( ply )
 
 	print("Player: " .. ply:Nick() .. " has disconnected.")
+
+	PrintMessage( HUD_PRINTTALK, Format( "Player %s has disconnected.", ply:Nick() ) )
 
 end
 
@@ -118,8 +123,6 @@ function GM:Initialize()
 		end 
 
 	end )
-
-	--SpawnEntities()
 
 end
 
@@ -155,7 +158,7 @@ function GM:PlayerInitialSpawn ( ply )
 		hook.Call( "PlayerLoadout", GAMEMODE, ply )
 		hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
-		timer.Simple( 3, function() ply:ConCommand("welcomePlayer") end )
+		timer.Simple( 2, function() ply:ConCommand("welcomePlayer") end )
 	end
 end
 
@@ -248,7 +251,7 @@ function PlayerAdvancedSpawnSelection( ply, spawnpointent, enemy_team )
 	local Pos = spawnpointent:GetPos()
 
 	--This is within the size of 48 players between you and an enemy
-	local EnemyEnts = ents.FindInBox( Pos + Vector( -1024, -1024, -144 ), Pos + Vector( 1024, 1024, 216 ) )
+	local EnemyEnts = ents.FindInBox( Pos + Vector( -1536, -1536, -144 ), Pos + Vector( 1536, 1536, 216 ) )
 
 	local FriendlyEnts = ents.FindInBox( Pos + Vector( -16, -16, 0 ), Pos + Vector( 16, 16, 72 ) )
 
@@ -829,6 +832,6 @@ function GM:FindLeastCommittedPlayerOnTeam( teamid )
 
 	end
 
-	return worst, "Least points on their team"
+	return worst
 
 end
