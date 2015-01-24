@@ -1,5 +1,5 @@
 # Team Deathmatch Extra Spawns
-# For map: de_inferno_go
+# For map: stdm_inferno
 # Exported by: Stupid
 info_mobile_spawn	-968.390076 -428.556183 0.557210	0.136 64.902 0.000
 info_mobile_spawn	-970.206299 176.568893 0.583540	-0.306 -38.521 0.254

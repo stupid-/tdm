@@ -1,41 +1,42 @@
-include("shared.lua")
-include("player.lua")
-include("sv_rounds.lua")
-include("ent_import.lua")
-include("config/config.lua")
+include( "shared.lua" )
+include( "player.lua" )
+include( "sv_rounds.lua" )
+include( "ent_import.lua" )
+include( "config/config.lua" )
 
 --Classes  
-include("player_class/noclass.lua")
-include("player_class/assault.lua")
-include("player_class/infantry.lua")
-include("player_class/heavy.lua")
-include("player_class/sniper.lua")
-include("player_class/commando.lua")
+include( "player_class/noclass.lua" )
+include( "player_class/assault.lua" )
+include( "player_class/infantry.lua" )
+include( "player_class/heavy.lua" )
+include( "player_class/sniper.lua" )
+include( "player_class/commando.lua" )
 
 --Map Voting (Not My Code), By https://github.com/wiox/gmod-mapvote
-include("mapvote/mapvote.lua")
-include("mapvote/sv_mapvote.lua")
+include( "mapvote/mapvote.lua" )
+include( "mapvote/sv_mapvote.lua" )
 
 --Includes for Client
-AddCSLuaFile("shared.lua")
-AddCSLuaFile("cl_init.lua")
-AddCSLuaFile("cl_menus.lua")
-AddCSLuaFile("cl_hud.lua")
-AddCSLuaFile("cl_welcome.lua")
-AddCSLuaFile("cl_pickclass.lua")
-AddCSLuaFile("cl_voice.lua")
-AddCSLuaFile("cl_scoreboard.lua")
-AddCSLuaFile("cl_targetid.lua")
-AddCSLuaFile("cl_deathnotice.lua")
-AddCSLuaFile("mapvote/cl_mapvote.lua")
+AddCSLuaFile( "shared.lua" )
+AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "cl_menus.lua" )
+AddCSLuaFile( "cl_hud.lua" )
+AddCSLuaFile( "cl_welcome.lua" )
+AddCSLuaFile( "cl_pickclass.lua" )
+AddCSLuaFile( "cl_voice.lua" )
+AddCSLuaFile( "cl_scoreboard.lua" )
+AddCSLuaFile( "cl_targetid.lua" )
+AddCSLuaFile( "cl_deathnotice.lua" )
+AddCSLuaFile( "cl_deathscreen.lua" )
+AddCSLuaFile( "mapvote/cl_mapvote.lua" )
 
 --Classes For Client
-AddCSLuaFile("player_class/noclass.lua")
-AddCSLuaFile("player_class/assault.lua")
-AddCSLuaFile("player_class/infantry.lua")
-AddCSLuaFile("player_class/heavy.lua")
-AddCSLuaFile("player_class/sniper.lua")
-AddCSLuaFile("player_class/commando.lua")
+AddCSLuaFile( "player_class/noclass.lua" )
+AddCSLuaFile( "player_class/assault.lua" )
+AddCSLuaFile( "player_class/infantry.lua" )
+AddCSLuaFile( "player_class/heavy.lua" )
+AddCSLuaFile( "player_class/sniper.lua" )
+AddCSLuaFile( "player_class/commando.lua" )
 
 ------------------------------------------
 --				ConVars					--
@@ -53,7 +54,7 @@ local round_scorelimit = CreateConVar( "tdm_scorelimit", "50", FCVAR_ARCHIVE )
 
 function GM:ShowHelp( ply ) -- F1
 
-	ply:ConCommand("chooseTeam") --cl_menus.lua
+	ply:ConCommand( "chooseTeam" ) --cl_menus.lua
 
 end
 
@@ -62,7 +63,7 @@ function GM:ShowTeam( ply ) -- F2
 	--Just down show class menu unless you're not a spectator
 	if ply:Team() == TEAM_SPEC then return end
 
-	ply:ConCommand("pickClass") --cl_picklass.lua
+	ply:ConCommand( "pickClass" ) --cl_picklass.lua
 
 end
 
@@ -79,14 +80,14 @@ end
 
 function GM:PlayerConnect ( name, ip )
 
-	print("Player: " .. name .. " has connected.")
+	print( "Player: " .. name .. " has connected." )
 
 end
 
 
 function GM:PlayerAuthed ( ply, steamid, uniqueid )
 
-	print ("Player: " .. ply:Nick() .. " ( " .. steamid .. " ) has authenticated.")
+	print ( "Player: " .. ply:Nick() .. " ( " .. steamid .. " ) has authenticated." )
 
 	PrintMessage( HUD_PRINTTALK, Format( "Player %s has joined the game.", ply:Nick() ) )
 
@@ -94,7 +95,7 @@ end
 
 function GM:PlayerDisconnected( ply )
 
-	print("Player: " .. ply:Nick() .. " has disconnected.")
+	print( "Player: " .. ply:Nick() .. " has disconnected." )
 
 	PrintMessage( HUD_PRINTTALK, Format( "Player %s has disconnected.", ply:Nick() ) )
 
@@ -131,14 +132,19 @@ end
 ------------------------------------------
 
 function GM:PlayerInitialSpawn ( ply )
-	--print("Player: " .. ply:Nick() .. " has joined.")
+
+	ply.EnemyAttackers = {}
+
+	ply.Assists = 0
+
+	ply.SuicideCount = 0
 
 	ply.NextSwitchTime = 0
 
 	-- IsBot() Is for testing gamemode features in private.
-	if (ply:IsBot()) then
+	if ( ply:IsBot() ) then
 		-- Randomly Set Bot Team
-		ply:SetTeam( math.random(0, 1) )
+		ply:SetTeam( math.random( TEAM_RED, TEAM_BLUE) )
 
 		player_manager.OnPlayerSpawn( ply )
 		player_manager.SetPlayerClass( ply, "infantry" )
@@ -158,7 +164,7 @@ function GM:PlayerInitialSpawn ( ply )
 		hook.Call( "PlayerLoadout", GAMEMODE, ply )
 		hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
-		timer.Simple( 2, function() ply:ConCommand("welcomePlayer") end )
+		timer.Simple( 2, function() ply:ConCommand( "welcomePlayer" ) end )
 	end
 end
 
@@ -168,7 +174,7 @@ function GM:PlayerSpawn ( ply )
 		ply:Spectate( OBS_MODE_ROAMING )
 
 	--Make sure the player has a class before spawned
-	elseif (ply:Team() == TEAM_RED && player_manager.GetPlayerClass( ply ) != "noclass" || ply:Team() == TEAM_BLUE && player_manager.GetPlayerClass( ply ) != "noclass" ) then
+	elseif ( ply:Team() == TEAM_RED && player_manager.GetPlayerClass( ply ) != "noclass" || ply:Team() == TEAM_BLUE && player_manager.GetPlayerClass( ply ) != "noclass" ) then
 
 		local color = team.GetColor( ply:Team() )
 
@@ -193,12 +199,12 @@ function GM:PlayerSpawn ( ply )
         	end
 
         end
-        timer.Simple( 2.5, unprotect)
+        timer.Simple( 2.5, unprotect )
 
         
         hook.Add( "KeyPress", "RemoveSpawnProtection", function( ply, key ) 
 
-        	if ( key == IN_ATTACK && ply:HasGodMode() ) then
+        	if ( key == IN_ATTACK && ply:HasGodMode() && ply:Alive() ) then
 
         		unprotect()
 
@@ -208,7 +214,7 @@ function GM:PlayerSpawn ( ply )
         
 
     -- If no class, force class selection or else no spawn
-	elseif (player_manager.GetPlayerClass( ply ) == "noclass") then
+	elseif ( player_manager.GetPlayerClass( ply ) == "noclass" ) then
 
 		ply:KillSilent()
 
@@ -385,7 +391,6 @@ function GM:PlayerSelectSpawn( ply )
 			for i=0, SpawnPointCount do
 
 				randomTeamSpawnPoint = table.Random( Spawnpoints[ playerTeam ] )
-				MsgN( randomTeamSpawnPoint )
 				
 				if ( randomTeamSpawnPoint && 
 					randomTeamSpawnPoint:IsValid() && 
@@ -437,8 +442,6 @@ function GM:PlayerSelectSpawn( ply )
 							closestDist = dist
 							closestKey = k
 
-							MsgN( closest )
-
 						end
 					end
 				end
@@ -458,8 +461,6 @@ function GM:PlayerSelectSpawn( ply )
 			if ( closest &&
 				closest:IsValid() &&
 				closest:IsInWorld() ) then 
-
-				MsgN("Returned Closest")
 
 				return closest
 
@@ -487,8 +488,6 @@ function GM:PlayerSelectSpawn( ply )
 					end
 
 				end
-
-				MsgN("Not Closest")
 
 				return randomTeamSpawnPoint
 
@@ -594,7 +593,7 @@ end
 ------------------------------------------
 
 function stTeamSpec( ply )
-	if ( ply:Team() == 2 || ply.NextSwitchTime > CurTime() ) then return end
+	if ( ply:Team() == TEAM_SPEC || ply.NextSwitchTime > CurTime() ) then return end
 
 	ply.NextSwitchTime = CurTime() + 15
 
@@ -661,7 +660,7 @@ concommand.Add( "stTeamCT", stTeamCT )
 
 function assaultClass( ply )
 
-	if (player_manager.GetPlayerClass( ply ) == "assault" || (ply:Team() == 2) ) then return end
+	if (player_manager.GetPlayerClass( ply ) == "assault" || (ply:Team() == TEAM_SPEC) ) then return end
 
 	player_manager.SetPlayerClass( ply, "assault" )
 
@@ -679,7 +678,7 @@ concommand.Add( "assaultClass", assaultClass )
 
 function infantryClass( ply )
 
-	if (player_manager.GetPlayerClass( ply ) == "infantry" || (ply:Team() == 2) ) then return end
+	if (player_manager.GetPlayerClass( ply ) == "infantry" || (ply:Team() == TEAM_SPEC) ) then return end
 
 	player_manager.SetPlayerClass( ply, "infantry" )
 
@@ -697,7 +696,7 @@ concommand.Add( "infantryClass", infantryClass )
 
 function heavyClass( ply )
 
-	if (player_manager.GetPlayerClass( ply ) == "heavy" || (ply:Team() == 2) ) then return end
+	if (player_manager.GetPlayerClass( ply ) == "heavy" || (ply:Team() == TEAM_SPEC) ) then return end
 
 	player_manager.SetPlayerClass( ply, "heavy" )
 
@@ -715,7 +714,7 @@ concommand.Add( "heavyClass", heavyClass )
 
 function sniperClass( ply )
 
-	if (player_manager.GetPlayerClass( ply ) == "sniper" || (ply:Team() == 2) ) then return end
+	if (player_manager.GetPlayerClass( ply ) == "sniper" || (ply:Team() == TEAM_SPEC) ) then return end
 
 	player_manager.SetPlayerClass( ply, "sniper" )
 
@@ -733,7 +732,7 @@ concommand.Add( "sniperClass", sniperClass )
 
 function commandoClass( ply )
 
-	if (player_manager.GetPlayerClass( ply ) == "commando" || (ply:Team() == 2) ) then return end
+	if (player_manager.GetPlayerClass( ply ) == "commando" || (ply:Team() == TEAM_SPEC) ) then return end
 
 	player_manager.SetPlayerClass( ply, "commando" )
 
@@ -756,12 +755,12 @@ function GM:CheckTeamBalance()
 
 	if ( CurrentRedPlayers > ( CurrentBluePlayers + 1) ) then
 
-		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( 0 )
+		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( TEAM_RED )
 
 		player_manager.SetPlayerClass( ply, "noclass" )
 		ply:UnSpectate()
 		ply:StripWeapons()
-		ply:SetTeam( 1 )
+		ply:SetTeam( TEAM_BLUE )
 		ply:KillSilent()
 		
 		if (ply:IsBot()) then
@@ -786,12 +785,12 @@ function GM:CheckTeamBalance()
 
 	elseif ( CurrentBluePlayers > ( CurrentRedPlayers + 1) ) then
 
-		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( 1 )
+		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( TEAM_BLUE )
 
 		player_manager.SetPlayerClass( ply, "noclass" )
 		ply:UnSpectate()
 		ply:StripWeapons()
-		ply:SetTeam( 0 )
+		ply:SetTeam( TEAM_RED )
 		ply:KillSilent()
 
 		if (ply:IsBot()) then

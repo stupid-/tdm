@@ -141,6 +141,21 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 		net.Broadcast()
 		
 		MsgAll( attacker:Nick() .. " suicided!\n" )
+
+		--Issue of players suiciding with grenades to force team loss
+		ply.SuicideCount = ply.SuicideCount + 1
+
+		if (ply.SuicideCount >= 3) then
+
+			ply:Ban( 10, false)
+
+			if ply:Nick() == "Bugboydavis" then 
+				ply:Kick( "Banned for 10 minutes. Reason: The bug just got swatted." )
+			else 
+				ply:Kick( "Banned for 10 minutes. Reason: Forcing team loss." )
+			end
+
+		end
 		
 	return end
 
@@ -178,12 +193,12 @@ function GM:AllowPlayerPickup( ply, object )
 end
 
 --Health Regen
-hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply ) 
+hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply, attacker ) 
 
 	--Create unique id's for players who are hurt
 	ply.RegenDelay = "Delay_" .. ply:SteamID64()
 	
-	ply.RegenActive = "Active" .. ply:SteamID64()
+	ply.RegenActive = "Active_" .. ply:SteamID64()
 
 	--Stop Healing if Hurt
 	timer.Destroy( ply.RegenDelay )
@@ -200,6 +215,9 @@ hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply )
 
 				ply:SetHealth( ply:Health() + 1 )
 
+				--Reset Enemy Attackers, as healing starts assists are cancelled out
+				ply.EnemyAttackers = {}
+
 			end
 
 			if ( !ply:Alive() or ply:Health() == 100 ) then
@@ -213,5 +231,38 @@ hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply )
 		end )
 
 	end )
+
+end )
+
+--Assists Baby
+hook.Add( "PlayerHurt", "TDMAssists", function( victim, attacker ) 
+
+	if ( attacker:IsPlayer() && !table.HasValue( victim.EnemyAttackers, attacker ) ) then
+
+		table.insert( victim.EnemyAttackers, attacker )
+
+	end
+
+end )
+
+--Add assists on death
+hook.Add( "PlayerDeath", "TDMAssistspt2", function( victim, inflictor, attacker ) 
+
+	for k, v in pairs ( victim.EnemyAttackers ) do
+
+		if ( v:Nick() != attacker:Nick() && GetRound() == ROUND_IN_PROGRESS ) then
+
+			v.Assists = v.Assists + 1
+
+		end
+
+	end
+
+end )
+
+--Advanced Death Information
+hook.Add( "PlayerDeath", "TDMDeathMessage", function( victim, inflictor, attacker ) 
+
+
 
 end )

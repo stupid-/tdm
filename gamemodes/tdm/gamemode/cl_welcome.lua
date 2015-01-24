@@ -121,7 +121,6 @@ function welcomePlayer( ply )
 		draw.DrawText( "Please select a team.", "TeamMSG", 0 + w/2, 0 + (h/1.5)/3 + (h/1.5)/3 - 16, Color(255, 255, 255, 235), TEXT_ALIGN_CENTER ) 
 	end
 
-
 	local tabHover = false
 	local HelpButton = vgui.Create('DButton')
 	HelpButton:SetParent(ChooseTeamFrame)
@@ -198,7 +197,7 @@ function welcomePlayer( ply )
 			draw.RoundedBox( 2, 0, 0, w, h, Color(65,65,65,0))
 			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(65,65,65,255))
 		end
-		draw.SimpleText( "SPECTATE ("..SpecPlayers..")", "Button", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
+		draw.SimpleText( "SPECTATE ("..SpecPlayers..")", "Button", w/2, h/2 - 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function SpectatorButton:DoClick()
 		ChooseTeamFrame:Close()
@@ -228,7 +227,7 @@ function welcomePlayer( ply )
 			draw.RoundedBox( 2, 0, 0, w, h, Color(40,40,40,0))
 			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(180,30,30,250))
 		end
-		draw.SimpleText( "TEAM RED ("..RedPlayers..")", "Button", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
+		draw.SimpleText( "TEAM RED ("..RedPlayers..")", "Button", w/2, h/2 - 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function RedButton:DoClick()
 		if ply:Team() == 0 then
@@ -267,7 +266,7 @@ function welcomePlayer( ply )
 			draw.RoundedBox( 2, 0, 0, w, h, Color(40,40,40,0))
 			draw.RoundedBox( 2, 1, 1, w-2, h-2, Color(30,30,180,250))
 		end
-		draw.SimpleText( "TEAM BLUE ("..BluePlayers..")", "Button", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
+		draw.SimpleText( "TEAM BLUE ("..BluePlayers..")", "Button", w/2, h/2 - 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function BlueButton:DoClick()
 		if ply:Team() == 1 then

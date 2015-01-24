@@ -80,6 +80,14 @@ local PLAYER_LINE = {
 		self.Deaths:SetTextColor( Color( 255, 255, 255, 255 ) )
 		self.Deaths:SetContentAlignment( 5 )
 
+		self.ScoreAssists = self:Add( "DLabel" )
+		self.ScoreAssists:Dock( RIGHT )
+		self.ScoreAssists:SetWidth( 80 )
+		self.ScoreAssists:SetFont( "ScoreboardDefault" )
+		self.ScoreAssists:SetDark( false )
+		self.ScoreAssists:SetTextColor( Color( 255, 255, 255, 255 ) )
+		self.ScoreAssists:SetContentAlignment( 5 )
+
 		self.Kills = self:Add( "DLabel" )
 		self.Kills:Dock( RIGHT )
 		self.Kills:SetWidth( 80 )
@@ -107,6 +115,8 @@ local PLAYER_LINE = {
 
 	Think = function( self )
 
+		--local pl = self.GetPlayer()
+
 		if ( !IsValid( self.Player ) ) then
 			self:Remove()
 			return
@@ -121,6 +131,14 @@ local PLAYER_LINE = {
 			self.NumKills = self.Player:Frags()
 			self.Kills:SetText( self.NumKills )
 		end
+
+		/*
+		if ( self.NumAssists == nil || self.NumAssists != ????? ) then
+			self.NumAssists = ??????
+			self.ScoreAssists:SetText( self.NumAssists )
+		end
+		*/
+		self.ScoreAssists:SetText( 0 )
 
 		if ( self.NumDeaths == nil || self.NumDeaths != self.Player:Deaths() ) then
 			self.NumDeaths = self.Player:Deaths()
@@ -261,17 +279,20 @@ local SCORE_BOARD = {
 
 			local scoreName = "Player"
 			local scoreKills = "Kills"
+			local scoreAssists = "Assists"
 			local scoreDeaths = "Deaths"
 			local scorePing = "Ping"
 
 			--DropShadows
 			draw.DrawText( scoreName, "ScoreboardHeadingShadow", 34 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_LEFT ) 
-			draw.DrawText( scoreKills, "ScoreboardHeadingShadow", 473 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER ) 
+			draw.DrawText( scoreKills, "ScoreboardHeadingShadow", 393 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER ) 
+			draw.DrawText( scoreAssists, "ScoreboardHeadingShadow", 473 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scoreDeaths, "ScoreboardHeadingShadow", 552 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scorePing, "ScoreboardHeadingShadow", 632 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER ) 
 
 			draw.DrawText( scoreName, "ScoreboardHeading", 34, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
-			draw.DrawText( scoreKills, "ScoreboardHeading", 473, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+			draw.DrawText( scoreKills, "ScoreboardHeading", 393, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+			draw.DrawText( scoreAssists, "ScoreboardHeading", 473, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scoreDeaths, "ScoreboardHeading", 552, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scorePing, "ScoreboardHeading", 632, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
 

@@ -24,7 +24,7 @@ function pickClass( ply )
 	ChooseTeamSheet:SetPos( 0, 25)
 	ChooseTeamSheet:SetSize(ScrW()*0.6, ScrH()*0.6)
 	ChooseTeamSheet.Paint = function()
-		draw.RoundedBox( 8, 0, 0, ChooseTeamSheet:GetWide(), ChooseTeamSheet:GetTall(), Color(40,40,40,155))
+		--draw.RoundedBox( 8, 0, 0, ChooseTeamSheet:GetWide(), ChooseTeamSheet:GetTall(), Color(40,40,40,155))
 	end
 
 	local SpectatorButton = vgui.Create('DButton')

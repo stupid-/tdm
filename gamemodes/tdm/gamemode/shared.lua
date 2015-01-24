@@ -5,7 +5,7 @@ GM.Author = "Stupid"
 GM.Email = "stupid@stupids-servers.com"
 GM.Website = "www.stupids-servers.com"
 GM.TeamBased = true
-GM.Version = "01-23-15"
+GM.Version = "01-24-15"
 
 include( "mapvote/mapvote.lua" )
 
@@ -17,14 +17,14 @@ include( "player_class/heavy.lua" )
 include( "player_class/sniper.lua" )
 include( "player_class/commando.lua" )
 
-TEAM_RED = 0
-TEAM_BLUE = 1
-TEAM_SPEC = 2
+TEAM_RED = 1
+TEAM_BLUE = 2
+TEAM_SPEC = 3
 
 function GM:CreateTeams()
-	team.SetUp(TEAM_RED, "Red", Color( 255, 60, 60, 255 ), true)
-	team.SetUp(TEAM_BLUE, "Blue", Color( 60, 60, 255, 255 ), true)
-	team.SetUp(TEAM_SPEC, "Spectator", Color( 60, 60, 60 , 255 ), true)
+	team.SetUp( TEAM_RED, "Red", Color( 255, 60, 60, 255 ), true )
+	team.SetUp( TEAM_BLUE, "Blue", Color( 60, 60, 255, 255 ), true )
+	team.SetUp( TEAM_SPEC, "Spectator", Color( 60, 60, 60 , 255 ), true )
 
 	--Set Spawn Points
 	team.SetSpawnPoint( TEAM_RED, {"info_player_terrorist"} )
@@ -35,6 +35,14 @@ function GM:CreateTeams()
 	util.PrecacheModel( 'models/player/leet.mdl' )
 	util.PrecacheModel( 'models/player/phoenix.mdl' )
 	util.PrecacheModel( 'models/player/barney.mdl' )
+end
+
+function GetAssists( ply )
+
+	local PlayerAssists = ply.Assists 
+
+	return PlayerAssists
+
 end
 
 function GM:GetRound()

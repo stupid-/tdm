@@ -179,7 +179,7 @@ GM.RoundFunctions = {
 
 		BroadcastLua( sound )
 
-		if winner == 0 then
+		if winner == TEAM_RED then
 
 			--Display RED WINS
 			for k,v in pairs(player.GetAll()) do
@@ -193,7 +193,7 @@ GM.RoundFunctions = {
 
 			BroadcastLua( song )
 
-		elseif winner == 1 then
+		elseif winner == TEAM_BLUE then
 
 			--Display BLUE WINS
 			for k,v in pairs(player.GetAll()) do
@@ -207,7 +207,7 @@ GM.RoundFunctions = {
 
 			BroadcastLua( song )
 
-		elseif winner == 2 then
+		elseif winner == TEAM_SPEC then
 
 			--Display DRAW
 			for k,v in pairs(player.GetAll()) do
@@ -222,9 +222,9 @@ GM.RoundFunctions = {
 
 		if rounds_left < 1 then
 
-			timer.Simple(5, function()
+			timer.Simple( 5, function()
 
-				MapVote.Start(mapSettings.Length, mapSettings.AllowCurrent, mapSettings.Limit, TDM_PlayableMaps)  
+				MapVote.Start( mapSettings.Length, mapSettings.AllowCurrent, mapSettings.Limit, TDM_PlayableMaps )  
 
 			end )
 	        
@@ -302,25 +302,25 @@ GM.ThinkRoundFunctions = {
 
 		if gm:GetScoreLimit() <= gm.GetRedKills() then
 
-			gm:SetRound( ROUND_OVER, 0 )
+			gm:SetRound( ROUND_OVER, TEAM_RED )
 
 		elseif gm:GetScoreLimit() <= gm.GetBlueKills() then
 
-			gm:SetRound( ROUND_OVER, 1 )
+			gm:SetRound( ROUND_OVER, TEAM_BLUE )
 
 		elseif gm:GetRoundTime() <= 0 then
 
 			if gm.GetRedKills() > gm.GetBlueKills() then
 
-				gm:SetRound( ROUND_OVER, 0 )
+				gm:SetRound( ROUND_OVER, TEAM_RED )
 
 			elseif gm.GetBlueKills() > gm.GetRedKills() then
 
-				gm:SetRound( ROUND_OVER, 1 )
+				gm:SetRound( ROUND_OVER, TEAM_BLUE )
 
 			else
 
-				gm:SetRound( ROUND_OVER, 2 )
+				gm:SetRound( ROUND_OVER, TEAM_SPEC )
 
 			end
 

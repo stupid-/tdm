@@ -9,6 +9,7 @@ include("cl_voice.lua")
 include("cl_scoreboard.lua")
 include("cl_targetid.lua")
 include("cl_deathnotice.lua")
+include("cl_deathscreen.lua")
 include("mapvote/cl_mapvote.lua")
 
 --Classes
