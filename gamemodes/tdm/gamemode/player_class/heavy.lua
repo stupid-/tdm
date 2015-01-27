@@ -27,7 +27,7 @@ function PLAYER:Loadout()
 	self.Player:Give( "weapon_zm_shotgun" )
 	self.Player:Give( "weapon_zm_improvised" )
 	self.Player:Give( "weapon_ttt_glock" )
-	self.Player:Give( "weapon_ttt_smokegrenade" )
+	self.Player:Give( "weapon_ttt_frag" )
 
 end
 

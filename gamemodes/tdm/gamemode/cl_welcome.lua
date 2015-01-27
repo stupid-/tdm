@@ -230,7 +230,7 @@ function welcomePlayer( ply )
 		draw.SimpleText( "TEAM RED ("..RedPlayers..")", "Button", w/2, h/2 - 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function RedButton:DoClick()
-		if ply:Team() == 0 then
+		if ply:Team() == TEAM_RED then
 		ply:ChatPrint( "You are already on the Red Team." )
 		else
 			if RedPlayers > BluePlayers then
@@ -269,7 +269,7 @@ function welcomePlayer( ply )
 		draw.SimpleText( "TEAM BLUE ("..BluePlayers..")", "Button", w/2, h/2 - 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function BlueButton:DoClick()
-		if ply:Team() == 1 then
+		if ply:Team() == TEAM_BLUE then
 		ply:ChatPrint( "You are already on Team Blue." )
 		else
 			if BluePlayers > RedPlayers then

@@ -132,13 +132,10 @@ local PLAYER_LINE = {
 			self.Kills:SetText( self.NumKills )
 		end
 
-		/*
-		if ( self.NumAssists == nil || self.NumAssists != ????? ) then
-			self.NumAssists = ??????
+		if ( self.NumAssists == nil || self.NumAssists != self.Player:GetNWInt( "Assists", 0 ) ) then
+			self.NumAssists = self.Player:GetNWInt( "Assists", 0 )
 			self.ScoreAssists:SetText( self.NumAssists )
 		end
-		*/
-		self.ScoreAssists:SetText( 0 )
 
 		if ( self.NumDeaths == nil || self.NumDeaths != self.Player:Deaths() ) then
 			self.NumDeaths = self.Player:Deaths()

@@ -111,17 +111,13 @@ function GM:Initialize()
 
 	SetGlobalInt( "TDM_ScoreLimit", round_scorelimit:GetInt() )
 
-	timer.Create( "CheckTeamBalance", 15, 0, function() 
+	timer.Create( "CheckTeamBalance", 30, 0, function() 
 
-		if ( GetGlobalInt( "TDM_RoundState" ) == 0 or GetGlobalInt( "TDM_RoundState" ) == 1 or GetGlobalInt( "TDM_RoundState" ) == 3 ) then 
-
-			--Do Nothing, annoying when team balancing happens preround. 
-
-		else
+		if ( GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS ) then
 
 			GAMEMODE:CheckTeamBalance() 
 
-		end 
+		end
 
 	end )
 
@@ -135,7 +131,7 @@ function GM:PlayerInitialSpawn ( ply )
 
 	ply.EnemyAttackers = {}
 
-	ply.Assists = 0
+	ply:SetNWInt( "Assists", 0 )
 
 	ply.SuicideCount = 0
 
@@ -201,7 +197,6 @@ function GM:PlayerSpawn ( ply )
         end
         timer.Simple( 2.5, unprotect )
 
-        
         hook.Add( "KeyPress", "RemoveSpawnProtection", function( ply, key ) 
 
         	if ( key == IN_ATTACK && ply:HasGodMode() && ply:Alive() ) then
@@ -233,6 +228,7 @@ function GM:Think()
 	SetGlobalInt( "TDM_RedTeamNum", team.NumPlayers( TEAM_RED ) )
 
 	SetGlobalInt( "TDM_BlueTeamNum", team.NumPlayers( TEAM_BLUE ) )
+
 
 end
 
@@ -368,13 +364,8 @@ function GM:PlayerSelectSpawn( ply )
 		Spawnpoints[ TEAM_RED ] = {}
 		Spawnpoints[ TEAM_BLUE ] = {}
 
-		--Add Team Red Basic Spawn Hub
 		table.Add( Spawnpoints[ TEAM_RED ], ents.FindByClass( "info_player_terrorist" ) )
-
-		--Add Team Blue Basic Spawn Hub
 		table.Add( Spawnpoints[ TEAM_BLUE ], ents.FindByClass( "info_player_counterterrorist" ) )
-
-		--Add the mobile spawn points
 		table.Add( Spawnpoints[ TEAM_RED ], ents.FindByClass( "info_mobile_spawn" ) )
 		table.Add( Spawnpoints[ TEAM_BLUE ], ents.FindByClass( "info_mobile_spawn" ) )
 

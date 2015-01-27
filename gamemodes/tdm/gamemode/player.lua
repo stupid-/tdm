@@ -200,10 +200,23 @@ hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply, attacker )
 	
 	ply.RegenActive = "Active_" .. ply:SteamID64()
 
+	ply.ResetValues = "Values_" .. ply:SteamID64()
+
 	--Stop Healing if Hurt
 	timer.Destroy( ply.RegenDelay )
 
 	timer.Destroy( ply.RegenActive )
+
+	timer.Destroy( ply.ResetValues )
+
+	timer.Create( ply.ResetValues, 6, 1, function() 
+
+		--Reset Damage Table / Assists if no damage taken after 6 seconds.
+		ply.EnemyAttackers = {}
+
+		ply.DamageTable = nil
+
+	end )
 
 	--After 10 seconds of not being hurt
 	timer.Create( ply.RegenDelay, 10, 1, function() 
@@ -214,9 +227,6 @@ hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply, attacker )
 			if ( ply:Alive() and ply:Health() < 100 ) then
 
 				ply:SetHealth( ply:Health() + 1 )
-
-				--Reset Enemy Attackers, as healing starts assists are cancelled out
-				ply.EnemyAttackers = {}
 
 			end
 
@@ -235,11 +245,30 @@ hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply, attacker )
 end )
 
 --Assists Baby
-hook.Add( "PlayerHurt", "TDMAssists", function( victim, attacker ) 
+hook.Add( "PlayerHurt", "TDMAssists", function( victim, attacker, damageTaken ) 
 
 	if ( attacker:IsPlayer() && !table.HasValue( victim.EnemyAttackers, attacker ) ) then
 
 		table.insert( victim.EnemyAttackers, attacker )
+
+	end
+
+	if attacker:IsPlayer() then
+
+		victim.DamageTable = victim.DamageTable or { null, 0, 0 }
+
+		if victim.DamageTable[1] == attacker then
+
+			victim.DamageTable[2] = victim.DamageTable[2] + 1
+			victim.DamageTable[3] = victim.DamageTable[3] + damageTaken
+
+		else
+
+			victim.DamageTable[1] = attacker
+			victim.DamageTable[2] = victim.DamageTable[2] + 1
+			victim.DamageTable[3] = victim.DamageTable[3] + damageTaken
+
+		end
 
 	end
 
@@ -248,21 +277,62 @@ end )
 --Add assists on death
 hook.Add( "PlayerDeath", "TDMAssistspt2", function( victim, inflictor, attacker ) 
 
+	local roundState = GetGlobalInt( "TDM_RoundState" )
+
 	for k, v in pairs ( victim.EnemyAttackers ) do
 
-		if ( v:Nick() != attacker:Nick() && GetRound() == ROUND_IN_PROGRESS ) then
+		if ( v:Nick() != attacker:Nick() && roundState == ROUND_IN_PROGRESS ) then
 
-			v.Assists = v.Assists + 1
+			v:SetNWInt( "Assists", ( v:GetNWInt( "Assists", 0) + 1 ) )
+
+			table.RemoveByValue( victim.EnemyAttackers, v )
 
 		end
 
 	end
 
+	--Death Message Incoming
+	if attacker == inflictor and attacker == victim then
+
+		victim.DamageTable = nil
+
+	end
+
+	if roundState == ROUND_IN_PROGRESS then
+
+		timer.Simple(0.25, function() 
+
+			net.Start("PlayerDeathMessage")
+				--send attacker
+				net.WriteEntity( attacker )
+				--send attacker team
+				net.WriteEntity( attacker:Team() )
+				--send hits
+				net.WriteInt( victim.DamageTable[2], 8 )
+				--send damage
+				net.WriteInt( math.Round( victim.DamageTable[3] ), 1 6)
+
+			net.Send( victim )
+
+			victim.DamageTable = nil
+
+		end )
+
+	end
+
 end )
 
---Advanced Death Information
-hook.Add( "PlayerDeath", "TDMDeathMessage", function( victim, inflictor, attacker ) 
+--In case player dies from world
+hook.Add( "EntityTakeDamage", "TDMEntityDamageTable", function( ply, dmg )
 
+	ply.DamageTable = ply.DamageTable or { null, 0, 0 }
 
+	if not dmg:GetAttacker():IsPlayer() then
 
-end )
+		ply.DamageTable[1] = null
+		ply.DamageTable[2] = ply.DamageTable[2] + 1
+		ply.DamageTable[3] = ply.DamageTable[3] + dmg:GetDamage()
+
+	end
+
+end)
