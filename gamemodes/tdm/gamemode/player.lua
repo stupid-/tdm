@@ -175,6 +175,13 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 		net.Broadcast()
 		
 		MsgAll( attacker:Nick() .. " killed " .. ply:Nick() .. " using " .. inflictor:GetClass() .. "\n" )
+
+		if ply.was_headshot then
+
+			umsg.Start( "Headshot_Death", attacker )
+			umsg.End()
+
+		end
 		
 	return end
 	
