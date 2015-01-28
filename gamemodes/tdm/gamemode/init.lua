@@ -38,6 +38,9 @@ AddCSLuaFile( "player_class/heavy.lua" )
 AddCSLuaFile( "player_class/sniper.lua" )
 AddCSLuaFile( "player_class/commando.lua" )
 
+--Network Strings
+util.AddNetworkString( "PlayerDeathMessage" )
+
 ------------------------------------------
 --				ConVars					--
 ------------------------------------------

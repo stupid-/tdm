@@ -48,6 +48,7 @@ killicon.AddFont( "weapon_ttt_glock", 		"CSKillIcons",		"c",	Color_Icon )
 killicon.AddFont( "weapon_ttt_famas", 		"CSKillIcons",		"t",	Color_Icon )
 killicon.AddFont( "weapon_ttt_g3",	 		"CSKillIcons",		"i",	Color_Icon )
 killicon.AddFont( "ttt_frag_proj", 			"CSKillIcons",		"h",	Color_Icon )
+killicon.AddFont( "headshot", 				"CSKillIcons",		"D",	Color_Icon )
 
 local Deaths = {}
 
@@ -72,11 +73,12 @@ local function RecvPlayerKilledByPlayer()
 	local victim 	= net.ReadEntity();
 	local inflictor	= net.ReadString();
 	local attacker 	= net.ReadEntity();
+	local was_headshot = net.ReadBit();
 
 	if ( !IsValid( attacker ) ) then return end
 	if ( !IsValid( victim ) ) then return end
 			
-	GAMEMODE:AddDeathNotice( attacker:Name(), attacker:Team(), inflictor, victim:Name(), victim:Team() )
+	GAMEMODE:AddDeathNotice( attacker:Name(), attacker:Team(), inflictor, victim:Name(), victim:Team(), was_headshot )
 
 end
 	
@@ -161,7 +163,7 @@ net.Receive( "NPCKilledNPC", RecvNPCKilledNPC )
    Name: gamemode:AddDeathNotice( Victim, Attacker, Weapon )
    Desc: Adds an death notice entry
 -----------------------------------------------------------]]
-function GM:AddDeathNotice( Victim, team1, Inflictor, Attacker, team2 )
+function GM:AddDeathNotice( Victim, team1, Inflictor, Attacker, team2, was_headshot )
 
 	local Death = {}
 	Death.victim 	= 	Victim
@@ -171,6 +173,8 @@ function GM:AddDeathNotice( Victim, team1, Inflictor, Attacker, team2 )
 	Death.left		= 	Victim
 	Death.right		= 	Attacker
 	Death.icon		=	Inflictor
+
+	Death.headshot  =	was_headshot
 	
 	if ( team1 == -1 ) then Death.color1 = table.Copy( NPC_Color ) 
 	else Death.color1 = table.Copy( team.GetColor( team1 ) ) end
@@ -198,18 +202,42 @@ local function DrawDeath( x, y, death, hud_deathnotice_time )
 	death.color1.a = alpha
 	death.color2.a = alpha
 	
-	-- Draw Icon
-	killicon.Draw( x, y, death.icon, alpha )
+	--Counter Strike: Source headshot looking killicon
+	if death.headshot == 1 then
+
+		local w2, h2 = killicon.GetSize( "headshot" )
+
+		-- Draw Icon
+		killicon.Draw( x - w2 + 16, y, death.icon, alpha )
+
+		killicon.Draw( x + 16, y, "headshot", alpha )
+			
+		-- Draw KILLER
+		if (death.left) then
+			draw.SimpleText( death.left, 	"ChatFont", x - (w/2) - 32 - (w2/2), y, 		death.color1, 	TEXT_ALIGN_RIGHT )
+		end
 		
-	-- Draw KILLER
-	if (death.left) then
-		draw.SimpleText( death.left, 	"ChatFont", x - (w/2) - 16, y, 		death.color1, 	TEXT_ALIGN_RIGHT )
+		-- Draw VICTIM
+		draw.SimpleText( death.right, 		"ChatFont", x + (w/2) + 16,			 y, 		death.color2, 	TEXT_ALIGN_LEFT )
+		
+		return (y + h*0.70)
+
+	else
+
+		-- Draw Icon
+		killicon.Draw( x, y, death.icon, alpha )
+			
+		-- Draw KILLER
+		if (death.left) then
+			draw.SimpleText( death.left, 	"ChatFont", x - (w/2) - 16, y, 		death.color1, 	TEXT_ALIGN_RIGHT )
+		end
+		
+		-- Draw VICTIM
+		draw.SimpleText( death.right, 		"ChatFont", x + (w/2) + 16, y, 		death.color2, 	TEXT_ALIGN_LEFT )
+		
+		return (y + h*0.70)
+
 	end
-	
-	-- Draw VICTIM
-	draw.SimpleText( death.right, 		"ChatFont", x + (w/2) + 16, y, 		death.color2, 	TEXT_ALIGN_LEFT )
-	
-	return (y + h*0.70)
 
 end
 

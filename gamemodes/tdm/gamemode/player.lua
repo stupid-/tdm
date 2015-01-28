@@ -21,6 +21,8 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	if ( hitgroup == HITGROUP_CHEST ||
 		hitgroup == HITGROUP_STOMACH ) then
 
+		ply.was_headshot = false
+
 		dmginfo:ScaleDamage( 1.75 )
 
 	end
@@ -32,6 +34,8 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 		hitgroup == HITGROUP_RIGHTLEG ||
 		hitgroup == HITGROUP_GEAR ) then
 	 
+		ply.was_headshot = false
+
 		dmginfo:ScaleDamage( 1.25 )
 	 
 	end
@@ -166,6 +170,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 			net.WriteEntity( ply )
 			net.WriteString( inflictor:GetClass() )
 			net.WriteEntity( attacker )
+			net.WriteBit( ply.was_headshot )
 		
 		net.Broadcast()
 		
@@ -300,17 +305,17 @@ hook.Add( "PlayerDeath", "TDMAssistspt2", function( victim, inflictor, attacker 
 
 	if roundState == ROUND_IN_PROGRESS then
 
-		timer.Simple(0.25, function() 
+		timer.Simple(0.1, function() 
 
-			net.Start("PlayerDeathMessage")
+			net.Start( "PlayerDeathMessage" )
 				--send attacker
 				net.WriteEntity( attacker )
 				--send attacker team
-				net.WriteEntity( attacker:Team() )
+				--net.WriteEntity( attacker:Team() )
 				--send hits
 				net.WriteInt( victim.DamageTable[2], 8 )
 				--send damage
-				net.WriteInt( math.Round( victim.DamageTable[3] ), 1 6)
+				net.WriteInt( math.Round( victim.DamageTable[3] ), 16 )
 
 			net.Send( victim )
 

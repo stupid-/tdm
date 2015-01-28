@@ -5,7 +5,7 @@ GM.Author = "Stupid"
 GM.Email = "stupid@stupids-servers.com"
 GM.Website = "www.stupids-servers.com"
 GM.TeamBased = true
-GM.Version = "01-27-15"
+GM.Version = "01-28-15"
 
 include( "mapvote/mapvote.lua" )
 
@@ -87,11 +87,16 @@ if CLIENT then
 	hit = false
 	W = ScrW()/2
 	H = ScrH()/2
-	usermessage.Hook("HIT_MARK", function()
+	usermessage.Hook("HIT_MARK", function( was_headshot )
+		local headshot = was_headshot:ReadBool()
 		hit = true
 		opac = 150
 		--hitmarker sound
-		surface.PlaySound( "tdm/hitmarker.wav" )
+		if headshot then
+			surface.PlaySound( "tdm/headshot.wav" )
+		else
+			surface.PlaySound( "tdm/hitmarker.wav" )
+		end
 		timer.Simple(0.2, function()   
 			hook.Add("Think", "hit_fade", function()
 				opac = opac - 5
@@ -117,6 +122,7 @@ if SERVER then
 	hook.Add("PlayerHurt", "Hit", function(ply, attacker)
 		if IsValid(attacker) and attacker:IsPlayer() then
 			umsg.Start( "HIT_MARK", attacker )
+				umsg.Bool( ply.was_headshot )
 			umsg.End()
 		end
 	end)
