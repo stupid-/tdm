@@ -98,16 +98,6 @@ end )
 
 hook.Add( "KeyRelease", "StaminaBarOtherStuff", function( ply, key ) 
 
-	if ( ply.moveFoward == true or ply.moveBack == true or ply.moveLeft == true or ply.moveRight == true ) then
-
-		ply.moving = true
-
-	else 
-
-		ply.moving = false
-
-	end
-
 	if key == IN_FORWARD then
 
 		ply.moveFoward = false
@@ -123,6 +113,16 @@ hook.Add( "KeyRelease", "StaminaBarOtherStuff", function( ply, key )
 	elseif key == IN_MOVERIGHT then
 
 		ply.moveRight = false
+
+	end
+
+	if ( ply.moveFoward == true or ply.moveBack == true or ply.moveLeft == true or ply.moveRight == true ) then
+
+		ply.moving = true
+
+	else 
+
+		ply.moving = false
 
 	end
 
