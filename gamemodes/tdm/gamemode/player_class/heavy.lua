@@ -6,7 +6,7 @@ local PLAYER = {}
 
 PLAYER.DisplayName			= "Heavy"
 PLAYER.WalkSpeed 			= 200
-PLAYER.RunSpeed				= 260
+PLAYER.RunSpeed				= 290
 PLAYER.CrouchedWalkSpeed 	= 0.30		-- Multiply move speed by this when crouching
 PLAYER.DuckSpeed			= 0.3		-- How fast to go from not ducking, to ducking
 PLAYER.UnDuckSpeed			= 0.3		-- How fast to go from ducking, to not ducking

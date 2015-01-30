@@ -368,6 +368,12 @@ function GM:HUDPaint()
 			surface.SetTexture( self.Gradient );
 			surface.DrawTexturedRect( 57, ScrH() - 150, 306, 15 );
 
+            --Stamina Bar
+
+            local prec = ply:GetNWInt( "Stamina", 0 ) / 100 
+            prec = math.Clamp( prec, 0, 1 )
+            draw.RoundedBox( 0, 57, ScrH() - 135, 306 * prec, 3, Color( 255, 225, 75, 240) )
+
             --If weapon equipped, display box and weapon name
 			if ply:GetActiveWeapon() != NULL then
 

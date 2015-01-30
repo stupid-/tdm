@@ -6,7 +6,7 @@ local PLAYER = {}
 
 PLAYER.DisplayName			= "Sniper"
 PLAYER.WalkSpeed 			= 215
-PLAYER.RunSpeed				= 260
+PLAYER.RunSpeed				= 290
 PLAYER.CrouchedWalkSpeed 	= 0.32		-- Multiply move speed by this when crouching
 PLAYER.DuckSpeed			= 0.3		-- How fast to go from not ducking, to ducking
 PLAYER.UnDuckSpeed			= 0.3		-- How fast to go from ducking, to not ducking

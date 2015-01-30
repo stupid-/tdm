@@ -140,6 +140,8 @@ function GM:PlayerInitialSpawn ( ply )
 
 	ply.NextSwitchTime = 0
 
+	ply.Stamina = 100
+
 	-- IsBot() Is for testing gamemode features in private.
 	if ( ply:IsBot() ) then
 		-- Randomly Set Bot Team
@@ -210,7 +212,6 @@ function GM:PlayerSpawn ( ply )
 
         end )
         
-
     -- If no class, force class selection or else no spawn
 	elseif ( player_manager.GetPlayerClass( ply ) == "noclass" ) then
 
