@@ -1,6 +1,9 @@
 include( "shared.lua" )
 include( "player.lua" )
 include( "sv_rounds.lua" )
+include( "sv_stamina.lua" )
+include( "sv_levels.lua" )
+include( "sv_classselection.lua" )
 include( "ent_import.lua" )
 include( "config/config.lua" )
 
@@ -22,12 +25,14 @@ AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "cl_menus.lua" )
 AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile( "cl_welcome.lua" )
+AddCSLuaFile( "cl_welcome2.lua" )
 AddCSLuaFile( "cl_pickclass.lua" )
 AddCSLuaFile( "cl_voice.lua" )
 AddCSLuaFile( "cl_scoreboard.lua" )
 AddCSLuaFile( "cl_targetid.lua" )
 AddCSLuaFile( "cl_deathnotice.lua" )
 AddCSLuaFile( "cl_deathscreen.lua" )
+AddCSLuaFile( "cl_levels.lua" )
 AddCSLuaFile( "mapvote/cl_mapvote.lua" )
 
 --Classes For Client
@@ -40,6 +45,7 @@ AddCSLuaFile( "player_class/commando.lua" )
 
 --Network Strings
 util.AddNetworkString( "PlayerDeathMessage" )
+util.AddNetworkString( "PlayerLevelUp" )
 
 ------------------------------------------
 --				ConVars					--
@@ -70,10 +76,18 @@ function GM:ShowTeam( ply ) -- F2
 
 end
 
-function GM:ShowSpare2( ply ) -- F4
+function GM:ShowSpare1( ply ) -- F3
 
 	-- Coming soon --cl_help.lua
 	-- Help Menu
+	ply:ConCommand( "welcomePlayer2" )
+
+end
+
+function GM:ShowSpare2( ply ) -- F4
+
+	-- Coming soon --cl_stats.lua
+	-- Statistics / Leaderboards
 
 end
 
@@ -132,17 +146,17 @@ end
 
 function GM:PlayerInitialSpawn ( ply )
 
+	--Initialize some player stuff
 	ply.EnemyAttackers = {}
-
 	ply:SetNWInt( "Assists", 0 )
-
 	ply.SuicideCount = 0
-
 	ply.NextSwitchTime = 0
-
 	ply.Stamina = 100
+	ply:GetLevel()
+	ply:GetXP()
+	ply:GetReqXP()
 
-	-- IsBot() Is for testing gamemode features in private.
+	--Bots for private gamemode testing
 	if ( ply:IsBot() ) then
 		-- Randomly Set Bot Team
 		ply:SetTeam( math.random( TEAM_RED, TEAM_BLUE) )
@@ -220,6 +234,10 @@ function GM:PlayerSpawn ( ply )
 		ply:ConCommand("pickClass")
 
 	end
+
+	local ang = ply:GetAngles()
+	ang.r = 0
+	ply:SetEyeAngles( ang )
 
 end
 

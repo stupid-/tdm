@@ -332,23 +332,62 @@ function GM:HUDPaint()
 	draw.DrawText( round, "TimeLeftShadow", ScrW()-60 + 1, ScrH() - 155 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
 	draw.DrawText( round, "TimeLeft", ScrW()-60, ScrH() - 155 , Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
 
-	draw.DrawText( "Alpha " .. version, "AlphaFontShadow", x - 65 + 1, y/6 - 40 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
-	draw.DrawText( "Alpha " .. version, "AlphaFont", x - 65, y/6 - 40, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
+	--draw.DrawText( "Alpha " .. version, "AlphaFontShadow", x - 65 + 1, y/6 - 40 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
+	--draw.DrawText( "Alpha " .. version, "AlphaFont", x - 65, y/6 - 40, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
 
-	draw.DrawText( "Team Deathmatch", "AlphaFontShadowSmall", x - 65 + 1, y/6 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
-	draw.DrawText( "Team Deathmatch", "AlphaFontSmall", x - 65, y/6, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
+	--draw.DrawText( "Team Deathmatch", "AlphaFontShadowSmall", x - 65 + 1, y/6 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
+	--draw.DrawText( "Team Deathmatch", "AlphaFontSmall", x - 65, y/6, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
 
 	if LocalPlayer():Team() == TEAM_SPEC then 
 
         --Commands so Spectators don't get stuck
-        local commandText = "[F1] Switch Teams"
-        draw.DrawText( commandText, "CommandsShadow", 60 + 11, ScrH()-78 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
-        draw.DrawText( commandText, "Commands", 60 + 10, ScrH()-78 , Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+        --local commandText = "[F1] Switch Teams"
+        --draw.DrawText( commandText, "CommandsShadow", 60 + 11, ScrH()-78 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
+        --draw.DrawText( commandText, "Commands", 60 + 10, ScrH()-78 , Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
 
 	else
 
         --No Hud if dead
 		if (ply:Alive()) then
+
+
+            for i = 0, 10 do
+            
+                draw.RoundedBox( 0, 60 + ( (ScrW() - 122) /10 * i ) , ScrH() - 45, 2, 15, Color( 255, 255, 255, 60) )
+            
+            end     
+            
+            local count = 0
+            
+            for i = 0,40 do
+                count = count + 1
+            
+                if ( i != 0 && i != 4 && i != 8 && i!= 12 && i != 16 && i != 20 && i != 24 && i != 28 && i != 32 && i != 36 && i != 40) then
+            
+                    draw.RoundedBox( 0, 60 + ( (ScrW() - 121) /40 * i ) , ScrH() - 41, 2, 8, Color( 255, 255, 255, 20) )
+                    
+                end
+            
+            end     
+
+            local prec = ply:GetNWInt( "Level_xp", 0 ) / ply:GetNWInt("Level_xp_max", 100)
+            prec = math.Clamp( prec, 0, 1 )
+            
+            self.Gradient = surface.GetTextureID("vgui/gradient-r")
+            surface.SetDrawColor( 255, 225, 75, 140 );
+            surface.SetTexture( self.Gradient );
+            surface.DrawTexturedRect( 60, ScrH() - 43, (ScrW() - 120) * prec, 11);
+             
+            self.Gradient = surface.GetTextureID("gui/gradient_up")
+            surface.SetDrawColor( 255, 255, 255, 4 );
+            surface.SetTexture( self.Gradient );
+            surface.DrawTexturedRect( 60, ScrH() - 40, ScrW() - 120, 10);
+             
+            self.Gradient = surface.GetTextureID("gui/gradient_down")
+            surface.SetDrawColor( 0, 0, 0, 40 );
+            surface.SetTexture( self.Gradient );
+            surface.DrawTexturedRect( 60, ScrH() - 45, ScrW() - 120, 15 );
+
 
 	    	local playerTeam = team.GetName( ply:Team() )
 	    	local playerClass = player_manager.GetPlayerClass( ply )

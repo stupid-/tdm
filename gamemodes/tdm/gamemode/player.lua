@@ -113,9 +113,15 @@ util.AddNetworkString("PlayerKilled")
 
 function GM:PlayerDeath( ply, inflictor, attacker )
 
+	local roundState = GetGlobalInt( "TDM_RoundState" )
+
 	ply.NextSpawnTime = CurTime() + 3 -- 3 Seconds to respawn
-	
 	ply.DeathTime = CurTime()
+
+	if ( roundState == ROUND_IN_PROGRESS ) then
+		ply:SetPData( "tdm_stats_deaths", ( ply:GetPData( "tdm_stats_deaths", 0 ) + 1 ) )
+		MsgN( ply:Nick() .. "s deaths: " .. ply:GetPData( "tdm_stats_deaths", 0 ) )
+	end
 
    if ( !ply.was_headshot && attacker:IsPlayer() ) then
       PlayDeathSound(ply)
@@ -152,12 +158,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 		if (ply.SuicideCount >= 3) then
 
 			ply:Ban( 10, false)
-
-			if ply:Nick() == "Bugboydavis" then 
-				ply:Kick( "Banned for 10 minutes. Reason: The bug just got swatted." )
-			else 
-				ply:Kick( "Banned for 10 minutes. Reason: Forcing team loss." )
-			end
+			ply:Kick( "Banned for 10 minutes. Reason: Forcing team loss." )
 
 		end
 		
@@ -176,11 +177,23 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 		
 		MsgAll( attacker:Nick() .. " killed " .. ply:Nick() .. " using " .. inflictor:GetClass() .. "\n" )
 
-		if ply.was_headshot then
+		if ( roundState == ROUND_IN_PROGRESS ) then
+			attacker:SetPData( "tdm_stats_kills", ( attacker:GetPData( "tdm_stats_kills", 0 ) + 1 ) )
+			MsgN( attacker:Nick() .. "s kills: " .. attacker:GetPData( "tdm_stats_kills", 0 ) )
 
+			if ply.was_headshot then
+				attacker:AddXP( 150 )
+				attacker:SetPData( "tdm_stats_headshot", ( attacker:GetPData( "tdm_stats_headshot", 0 ) + 1 ) )
+				MsgN( attacker:Nick() .. "s headshots: " .. attacker:GetPData( "tdm_stats_headshot", 0 ) )
+			else
+				attacker:AddXP( 100 )
+			end
+			
+		end
+
+		if ply.was_headshot then
 			umsg.Start( "Headshot_Death", attacker )
 			umsg.End()
-
 		end
 		
 	return end
@@ -204,37 +217,40 @@ function GM:AllowPlayerPickup( ply, object )
 		
 end
 
+hook.Add( "PlayerDisconnected", "HealthRegenDestruction", function( ply ) 
+
+	timer.Destroy( ply.RegenDelay )
+	timer.Destroy( ply.RegenActive )
+	timer.Destroy( ply.ResetValues )
+
+end )
+
 --Health Regen
 hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply, attacker ) 
 
 	--Create unique id's for players who are hurt
 	ply.RegenDelay = "Delay_" .. ply:SteamID64()
-	
 	ply.RegenActive = "Active_" .. ply:SteamID64()
-
 	ply.ResetValues = "Values_" .. ply:SteamID64()
 
 	--Stop Healing if Hurt
 	timer.Destroy( ply.RegenDelay )
-
 	timer.Destroy( ply.RegenActive )
-
 	timer.Destroy( ply.ResetValues )
 
 	timer.Create( ply.ResetValues, 6, 1, function() 
 
 		--Reset Damage Table / Assists if no damage taken after 6 seconds.
 		ply.EnemyAttackers = {}
-
 		ply.DamageTable = nil
 
 	end )
 
-	--After 10 seconds of not being hurt
-	timer.Create( ply.RegenDelay, 10, 1, function() 
+	--After 7 seconds of not being hurt
+	timer.Create( ply.RegenDelay, 7, 1, function() 
 
 		--Start the healing over this interval
-		timer.Create( ply.RegenActive, 0.25, 0, function()
+		timer.Create( ply.RegenActive, 0.15, 0, function()
 
 			if ( ply:Alive() and ply:Health() < 100 ) then
 
@@ -245,7 +261,6 @@ hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply, attacker )
 			if ( !ply:Alive() or ply:Health() == 100 ) then
 
 				timer.Destroy( ply.RegenDelay )
-
 				timer.Destroy( ply.RegenActive )
 
 			end
@@ -270,16 +285,12 @@ hook.Add( "PlayerHurt", "TDMAssists", function( victim, attacker, damageTaken )
 		victim.DamageTable = victim.DamageTable or { null, 0, 0 }
 
 		if victim.DamageTable[1] == attacker then
-
 			victim.DamageTable[2] = victim.DamageTable[2] + 1
 			victim.DamageTable[3] = victim.DamageTable[3] + damageTaken
-
 		else
-
 			victim.DamageTable[1] = attacker
 			victim.DamageTable[2] = victim.DamageTable[2] + 1
 			victim.DamageTable[3] = victim.DamageTable[3] + damageTaken
-
 		end
 
 	end
@@ -294,11 +305,14 @@ hook.Add( "PlayerDeath", "TDMAssistspt2", function( victim, inflictor, attacker 
 	for k, v in pairs ( victim.EnemyAttackers ) do
 
 		if ( v:Nick() != attacker:Nick() && roundState == ROUND_IN_PROGRESS ) then
-
 			v:SetNWInt( "Assists", ( v:GetNWInt( "Assists", 0) + 1 ) )
-
 			table.RemoveByValue( victim.EnemyAttackers, v )
 
+			v:SetPData( "tdm_stats_assists", ( v:GetPData( "tdm_stats_assists", 0 ) + 1 ) )
+
+			MsgN( v:Nick() .. "s assists: " .. v:GetPData( "tdm_stats_assists", 0 ) )
+
+			v:AddXP( 25 )
 		end
 
 	end

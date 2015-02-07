@@ -10,67 +10,12 @@ SetGlobalInt( "TDM_RoundTime", 0 )
 SetGlobalInt( "TDM_RedKills", 0)
 SetGlobalInt( "TDM_BlueKills", 0 )
 
-local red_music = {
-	
-	"inno/africa.mp3",
-	"inno/brother.mp3",
-	"inno/hero.mp3",
-	"inno/lotr.mp3",
-	"inno/finalf.mp3",
-	"inno/joy.mp3",
-	"inno/oblivion.mp3",
-	"inno/park.mp3",
-	"inno/90s_v2.mp3",
-	"inno/gay_v2.mp3",
-	"inno/pirate.mp3",
-	"inno/victory_v2.mp3",
-	"inno/aot.mp3",
-	"inno/bf4.mp3",
-	"inno/rebel.mp3",
-	"inno/ru.mp3",
-	"inno/mother.mp3",
-	"inno/jack.mp3",
-	"inno/harder.mp3",
-	"inno/stepup.mp3",
-	"inno/careless.mp3",
-	"inno/men.mp3"
-
-}
-
-local blue_music = {
-	
-	"traitor/german.mp3",
-	"traitor/lotr2.mp3",
-	"traitor/march.mp3",
-	"traitor/septh.mp3",
-	"traitor/sad.mp3",
-	"traitor/mass.mp3",
-	"traitor/call.mp3",
-	"traitor/soviet.mp3",
-	"traitor/danger_v2.mp3",
-	"traitor/dropit_v2.mp3",
-	"traitor/jungle.mp3",
-	"traitor/saw_v2.mp3",
-	"traitor/died.mp3",
-	"traitor/kebab.mp3",
-	"traitor/lies.mp3",
-	"traitor/yns2.mp3",
-	"traitor/someone.mp3",
-	"traitor/sex.mp3",
-	"traitor/monster.mp3",
-	"traitor/shia.mp3",
-	"traitor/club.mp3",
-	"traitor/ussr.mp3"
-
-}
-
 --[[  Map Vote Code is by https://github.com/wiox/gmod-mapvote  ]]--
 
 mapSettings = {
 	Length = 15, -- How long does the vote last?
 	AllowCurrent = true, -- Allow voting for map that was just played
 	Limit = 18, -- Limit of maps able to vote between
-	--Prefix = {"de_dust_go", "de_dust2_go", "de_nuke_go", "de_inferno_go", "de_train_go", "de_lake_go", "cs_assault", "cs_office", "cs_militia", "de_dolls", "de_tides", "de_port"}, -- Map Prefix, chooses all maps with set presets
 }
 
 --[[  The way rounds were setup is inspired by Mr-Gash's Deathrun https://github.com/Mr-Gash/GMod-Deathrun  ]]--
@@ -94,8 +39,6 @@ GM.RoundFunctions = {
 		game.CleanUpMap()
 
 		gm:SetRoundTime( GetConVarNumber( "tdm_preparetime" ) or 15 )
-
-		--timer.Simple(5, SpawnEntities)
 
 		--Ticking sound, round about to begin
 		timer.Simple ( (GetConVarNumber( "tdm_preparetime" ) - 11.25), function()
@@ -153,11 +96,8 @@ GM.RoundFunctions = {
 		for k,v in pairs(player.GetAll()) do
 
 			if (v:Team() != TEAM_SPEC) then
-
 				v:KillSilent()
-
 				v:Spawn()
-
 			end
 
 		end
@@ -187,8 +127,13 @@ GM.RoundFunctions = {
 				v:ChatPrint( team.GetName(winner).." Team wins." )
 			end
 
+			--Award Red Players
+			for k,v in pairs(team.GetPlayers( TEAM_RED )) do
+				v:AddXP( 250 )
+			end
+
 			--Play RED MUSIC
-			local song = table.Random( red_music )
+			local song = table.Random( TDM_RedTeamMusic )
 			song = "surface.PlaySound(\""..song.."\")"
 
 			BroadcastLua( song )
@@ -201,8 +146,13 @@ GM.RoundFunctions = {
 				v:ChatPrint( team.GetName(winner).." Team wins." )
 			end
 
+			--Award Blue Players
+			for k,v in pairs(team.GetPlayers( TEAM_BLUE )) do
+				v:AddXP( 250 )
+			end
+
 			--Play BLUE MUSIC
-			local song = table.Random( blue_music )
+			local song = table.Random( TDM_BlueTeamMusic )
 			song = "surface.PlaySound(\""..song.."\")"
 
 			BroadcastLua( song )
@@ -214,6 +164,11 @@ GM.RoundFunctions = {
 				v:ConCommand("nobodyWins")
 				v:ChatPrint( "Congratulations, nobody wins!" )
 			end
+
+			local song = table.Random( TDM_DrawMusic )
+			song = "surface.PlaySound(\""..song.."\")"
+
+			BroadcastLua( song )
 
 		end
 

@@ -4,7 +4,7 @@ I was looking for a more competetive gamemode for my community, so I decided to 
 
 ## Current Version
 
-Alpha 01-30-15
+Alpha 02-06-15
 
 ## Installation
 

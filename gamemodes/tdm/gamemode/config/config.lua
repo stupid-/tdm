@@ -45,18 +45,18 @@ TDM_PlayableMaps = {
 ---
 TDM_RedTeamMusic = {
 	
-	"tdm/red/rwin1.mp3"
+	"tdm/red/red01.mp3"
 
 }
 
 TDM_BlueTeamMusic = {
 	
-	"tdm/blue/bwin1.mp3"
+	"tdm/blue/blue01.mp3"
 
 }
 
 TDM_DrawMusic = {
 	
-	"tdm/draw/draw1.mp3"
+	"tdm/draw/draw01.mp3"
 
 }

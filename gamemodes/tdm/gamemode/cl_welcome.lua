@@ -87,6 +87,24 @@ surface.CreateFont( "TeamMSGShadow",
     shadow = false
 })
 
+local blur = Material("pp/blurscreen")
+
+local function DrawBlur(panel, amount)
+	local x, y = panel:LocalToScreen(0, 0)
+	local scrW, scrH = ScrW(), ScrH()
+
+	surface.SetDrawColor(255, 255, 255)
+	surface.SetMaterial(blur)
+
+	for i = 1, 3 do
+		blur:SetFloat("$blur", (i / 3) * (amount or 6))
+		blur:Recompute()
+
+		render.UpdateScreenEffectTexture()
+		surface.DrawTexturedRect(x * -1, y * -1, scrW, scrH)
+	end
+end
+
 function welcomePlayer( ply )
 	local PlayerName = LocalPlayer():Nick()
 	local MapName = game.GetMap()
@@ -113,6 +131,7 @@ function welcomePlayer( ply )
 	ChooseTeamFrame:ShowCloseButton( false )
 	ChooseTeamFrame:MakePopup()
 	function ChooseTeamFrame:Paint( w, h, ply )
+		DrawBlur( ChooseTeamFrame, 4 )
 		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,25))
 		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(40,40,40,205))
 		draw.DrawText( "Welcome, " .. PlayerName .. ".", "WelcomeMSGShadow",  0 + w/2 + 1, 0 + (h/1.5)/3 - 31 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )
