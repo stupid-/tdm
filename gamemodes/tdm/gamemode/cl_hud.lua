@@ -1,249 +1,116 @@
---[[
+-- Fonts
+surface.CreateFont( "DebugFont", { font = "DefaultBold", size = 24, weight = 400, antialias = true, shadow = true })
+surface.CreateFont( "Team", { font = "CloseCaption_Bold", size = 20, weight = 700, antialias = true, blursize = 0.2, shadow = true })
+surface.CreateFont( "AlphaFont", { font = "Triomphe", size = 34, weight  = 400, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "AlphaFontShadow", { font = "Triomphe", size = 34, weight = 400, antialias = true, blursize = 2, shadow = false })
+surface.CreateFont( "AlphaFontSmall", { font = "Triomphe", size = 24, weight = 400, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "AlphaFontShadowSmall", { font = "Triomphe", size = 24, weight = 400, antialias = true, blursize = 2, shadow = false })
+surface.CreateFont( "TimeLeftShadow", { font = "CloseCaption_Normal", size = 26, weight = 400, antialias = true, blursize = 1.5, shadow = false })
+surface.CreateFont( "TimeLeft", { font = "CloseCaption_Normal", size = 26, weight = 400, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "MapShadow", { font = "CloseCaption_Normal", size = 22, weight = 400, antialias = true, blursize = 2, shadow = false })
+surface.CreateFont( "Map", { font = "CloseCaption_Normal", size = 22, weight = 400, antialias = true, blursize = 0.2, shadow = true })
+surface.CreateFont( "Score", { font = "CloseCaption_Normal", size = 24, weight = 400, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "ScoreShadow", { font = "CloseCaption_Normal", size = 24, weight = 400, antialias = true, blursize = 1.5, shadow = false })
+surface.CreateFont( "AmmoSmall", { font = "CloseCaption_Normal", size = 24, weight = 400, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "AmmoSmallShadow", { font = "CloseCaption_Normal", size = 24, weight = 400, antialias = true, blursize = 2, shadow = false })
+surface.CreateFont( "AmmoLarge", { font = "CloseCaption_Normal", size = 48, weight = 400, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "AmmoLargeShadow", { font = "CloseCaption_Normal", size = 48, weight = 400, antialias = true, blursize = 2, shadow = false })
+surface.CreateFont( "Weapon", { font = "CloseCaption_Normal", size = 30, weight = 400, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "WeaponShadow", { font = "CloseCaption_Normal", size = 30, weight  = 400, antialias = true, blursize = 2, shadow = false })
+surface.CreateFont( "CommandsBlur", { font = "CloseCaption_Bold", size = 13, weight = 600, antialias = true, blursize = 3.75, shadow = false })
+surface.CreateFont( "CommandsShadow", { font = "CloseCaption_Bold", size = 13, weight = 600, antialias = true, blursize = 1.5, shadow = false })
+surface.CreateFont( "Commands", { font = "CloseCaption_Bold", size = 13, weight = 600, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "HeadTextShadow2", { font = "CloseCaption_Bold", size = 124, weight = 600, antialias = true, blursize = 12, shadow = false })
+surface.CreateFont( "HeadTextShadow", { font = "CloseCaption_Bold", size = 124, weight = 600, antialias = true, blursize = 6, shadow = false })
+surface.CreateFont( "HeadText", { font = "CloseCaption_Bold", size = 124, weight = 600, antialias = true, blursize = 0, shadow = false })
 
-Heads up display. 
+-- Draw Teams and Scores on Bottom Right
+local function DrawTeams( ply )
 
-]]--
+    local round = self:GetRound()
 
-surface.CreateFont( "DebugFont",
-{
-    font    = "DefaultBold",
-    size    = 24,
-    weight  = 400,
-    antialias = true,
-    shadow = true
-})
+    if round == 0 then round = "Waiting"
+    elseif round == 1 then round = "Preparing"
+    elseif round == 2 then round = "In Progress"
+    elseif round == 3 then round = "Round Over"
+    end
 
-surface.CreateFont( "Team",
-{
-    font    = "CloseCaption_Bold", 
-    size    = 20,
-    weight  = 700,
-    antialias = true,
-    blursize = 0.2,
-    shadow = true
-})
+    local time = string.ToMinutesSeconds(self:GetRoundTime())
+    local rk = self:GetRedKills()
+    local bk = self:GetBlueKills()
+    local sl = self:GetScoreLimit()
+    local left = self:GetRoundsLeft()
 
-surface.CreateFont( "AlphaFont",
-{
-    font    = "Triomphe",
-    size    = 34,
-    weight  = 400,
-    antialias = true,
-    blursize = 0.2,
-    shadow = false
-})
+    local team1_deaths = bk * 10
+    local team2_deaths = rk * 10
 
-surface.CreateFont( "AlphaFontShadow",
-{
-    font    = "Triomphe", 
-    size    = 34,
-    weight  = 400,
-    antialias = true,
-    blursize = 2,
-    shadow = false
-})
+    local team1 = bk / sl
+    team1 = math.Clamp( team1, 0, 1 )
 
-surface.CreateFont( "AlphaFontSmall",
-{
-    font    = "Triomphe", 
-    size    = 24,
-    weight  = 400,
-    antialias = true,
-    blursize = 0.2,
-    shadow = false
-})
+    local team2 = rk / sl
+    team2 = math.Clamp( team2, 0, 1 )
 
-surface.CreateFont( "AlphaFontShadowSmall",
-{
-    font    = "Triomphe", 
-    size    = 24,
-    weight  = 400,
-    antialias = true,
-    blursize = 2,
-    shadow = false
-})
+    if round == "Waiting" or round == "Preparing" then
+        --Make it gray
+        draw.RoundedBox( 0 , ScrW()-292, ScrH() - 90, 30, 30, Color(60,60,60,220) )
+        draw.RoundedBox( 0 , ScrW()-292, ScrH()-125, 30, 30, Color(60,60,60,220) )
 
-surface.CreateFont( "TimeLeftShadow",
-{
-    font    = "CloseCaption_Normal", 
-    size    = 26,
-    weight  = 400,
-    antialias = true,
-    blursize = 1.5,
-    shadow = false
-})
+        draw.RoundedBox( 0 , ScrW()-260, ScrH() - 90, 200*team1, 30, Color(60,60,60,220) )
+        draw.RoundedBox( 0 , ScrW()-260, ScrH()-125, 200*team2, 30, Color(60,60,60,220) )
 
-surface.CreateFont( "TimeLeft",
-{
-    font    = "CloseCaption_Normal", 
-    size    = 26,
-    weight  = 400,
-    antialias = true,
-    blursize = 0.2,
-    shadow = false
-})
+    else 
+        draw.RoundedBox( 0 , ScrW()-292, ScrH() - 90, 30, 30, Color(20,20,175,250) )
+        draw.RoundedBox( 0 , ScrW()-292, ScrH()-125, 30, 30, Color(175,20,20,250) )
 
-surface.CreateFont( "MapShadow",
-{
-    font    = "CloseCaption_Normal", 
-    size    = 22,
-    weight  = 400,
-    antialias = true,
-    blursize = 2,
-    shadow = false
-})
+        draw.RoundedBox( 0 , ScrW()-260, ScrH() - 90, 200*team1, 30, Color(20,20,175,250) )
+        draw.RoundedBox( 0 , ScrW()-260, ScrH()-125, 200*team2, 30, Color(175,20,20,250) )
+    end
 
-surface.CreateFont( "Map",
-{
-    font    = "CloseCaption_Normal", 
-    size    = 22,
-    weight  = 400,
-    antialias = true,
-    blursize = 0.2,
-    shadow = true
-})
+    draw.DrawText( "B", "TimeLeft", ScrW()-279, ScrH() - 89 , Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+    draw.DrawText( "R", "TimeLeft", ScrW()-279, ScrH() - 124 , Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
 
-surface.CreateFont( "Score",
-{
-    font    = "CloseCaption_Normal",
-    size    = 24,
-    weight  = 400,
-    antialias = true,
-    blursize = 0.2,
-    shadow = false
-})
+    self.Gradient = surface.GetTextureID("gui/gradient_down")
+    surface.SetDrawColor( 0, 0, 0, 90 );
+    surface.SetTexture( self.Gradient );
+    surface.DrawTexturedRect( ScrW()-292, ScrH() - 90, 232, 30 );
 
-surface.CreateFont( "ScoreShadow",
-{
-    font    = "CloseCaption_Normal",
-    size    = 24,
-    weight  = 400,
-    antialias = true,
-    blursize = 1.5,
-    shadow = false
-})
+    self.Gradient = surface.GetTextureID("gui/gradient_down")
+    surface.SetDrawColor( 0, 0, 0, 90 );
+    surface.SetTexture( self.Gradient );
+    surface.DrawTexturedRect( ScrW()-292, ScrH() - 125, 232, 30 );
 
-surface.CreateFont( "AmmoSmall",
-{
-    font    = "CloseCaption_Normal",
-    size    = 24,
-    weight  = 400,
-    antialias = true,
-    blursize = 0.2,
-    shadow = false
-})
+    self.Gradient = surface.GetTextureID("gui/gradient_up")
+    surface.SetDrawColor(  255, 255, 255, 1  );
+    surface.SetTexture( self.Gradient );
+    surface.DrawTexturedRect( ScrW()-292, ScrH() - 75, 232, 15 );
 
-surface.CreateFont( "AmmoSmallShadow",
-{
-    font    = "CloseCaption_Normal", 
-    size    = 24,
-    weight  = 400,
-    antialias = true,
-    blursize = 2,
-    shadow = false
-})
+    self.Gradient = surface.GetTextureID("gui/gradient_up")
+    surface.SetDrawColor(  255, 255, 255, 1  );
+    surface.SetTexture( self.Gradient );
+    surface.DrawTexturedRect( ScrW()-292, ScrH() - 110, 232, 15 );  
 
-surface.CreateFont( "AmmoLarge",
-{
-    font    = "CloseCaption_Normal", 
-    size    = 48,
-    weight  = 400,
-    antialias = true,
-    blursize = 0.2,
-    shadow = false
-})
+    draw.DrawText( team1_deaths, "ScoreShadow", ScrW()-65 + 1, ScrH() - 87 + 1 , Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
+    draw.DrawText( team2_deaths, "ScoreShadow", ScrW()-65 + 1, ScrH() - 122 + 1 , Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
+    draw.DrawText( team1_deaths, "Score", ScrW()-65, ScrH() - 87 , Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
+    draw.DrawText( team2_deaths, "Score", ScrW()-65, ScrH() - 122 , Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
 
-surface.CreateFont( "AmmoLargeShadow",
-{
-    font    = "CloseCaption_Normal", 
-    size    = 48,
-    weight  = 400,
-    antialias = true,
-    blursize = 2,
-    shadow = false
-})
+    draw.DrawText( time, "TimeLeftShadow", ScrW()-290 + 1, ScrH() - 155 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
+    draw.DrawText( time, "TimeLeft", ScrW()-290, ScrH() - 155 , Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
 
-surface.CreateFont( "Weapon",
-{
-    font    = "CloseCaption_Normal", 
-    size    = 30,
-    weight  = 400,
-    antialias = true,
-    blursize = 0.2,
-    shadow = false
-})
+    draw.DrawText( round, "TimeLeftShadow", ScrW()-60 + 1, ScrH() - 155 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
+    draw.DrawText( round, "TimeLeft", ScrW()-60, ScrH() - 155 , Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
 
-surface.CreateFont( "WeaponShadow",
-{
-    font    = "CloseCaption_Normal", 
-    size    = 30,
-    weight  = 400,
-    antialias = true,
-    blursize = 2,
-    shadow = false
-})
+end
 
-surface.CreateFont( "CommandsBlur",
-{
-    font    = "CloseCaption_Bold", 
-    size    = 13,
-    weight  = 600,
-    antialias = true,
-    blursize = 3.75,
-    shadow = false
-})
+-- Draw XP Bar on the bottom of screen
+local function DrawXP()
 
-surface.CreateFont( "CommandsShadow",
-{
-    font    = "CloseCaption_Bold", 
-    size    = 13,
-    weight  = 600,
-    antialias = true,
-    blursize = 1.5,
-    shadow = false
-})
+end
 
-surface.CreateFont( "Commands",
-{
-    font    = "CloseCaption_Bold", 
-    size    = 13,
-    weight  = 600,
-    antialias = true,
-    blursize = 0.2,
-    shadow = false
-})
+-- Draw HUD health, stamina and ammo/weapon
+local function DrawHUD()
 
-surface.CreateFont( "HeadTextShadow2",
-{
-    font    = "CloseCaption_Bold", 
-    size    = 124,
-    weight  = 600,
-    antialias = true,
-    blursize = 12,
-    shadow = false
-})
-
-surface.CreateFont( "HeadTextShadow",
-{
-    font    = "CloseCaption_Bold", 
-    size    = 124,
-    weight  = 600,
-    antialias = true,
-    blursize = 6,
-    shadow = false
-})
-
-
-surface.CreateFont( "HeadText",
-{
-    font    = "CloseCaption_Bold", 
-    size    = 124,
-    weight  = 600,
-    antialias = true,
-    blursize = 0,
-    shadow = false
-})
-
+end
 
 function GM:HUDPaint()
 
@@ -254,83 +121,10 @@ function GM:HUDPaint()
 	local ply = LocalPlayer()
 	local x, y = ScrW(), ScrH()
 	local MapName = game.GetMap()
-	local round = self:GetRound()
 
-	if round == 0 then round = "Waiting"
-	elseif round == 1 then round = "Preparing"
-	elseif round == 2 then round = "In Progress"
-	elseif round == 3 then round = "Round Over"
-	end
-
-	local time = string.ToMinutesSeconds(self:GetRoundTime())
-	local rk = self:GetRedKills()
-	local bk = self:GetBlueKills()
-	local sl = self:GetScoreLimit()
-	local left = self:GetRoundsLeft()
     local version = GAMEMODE.Version
 
-	local team1_deaths = bk * 10
-
-	local team2_deaths = rk * 10
-
-	local team1 = bk / sl
-	team1 = math.Clamp( team1, 0, 1 )
-
-	local team2 = rk / sl
-	team2 = math.Clamp( team2, 0, 1 )
-
-
-    if round == "Waiting" or round == "Preparing" then
-        --Makes hud gray
-        draw.RoundedBox( 0 , ScrW()-292, ScrH() - 90, 30, 30, Color(60,60,60,220) )
-        draw.RoundedBox( 0 , ScrW()-292, ScrH()-125, 30, 30, Color(60,60,60,220) )
-
-        draw.RoundedBox( 0 , ScrW()-260, ScrH() - 90, 200*team1, 30, Color(60,60,60,220) )
-        draw.RoundedBox( 0 , ScrW()-260, ScrH()-125, 200*team2, 30, Color(60,60,60,220) )
-
-    else 
-        
-        draw.RoundedBox( 0 , ScrW()-292, ScrH() - 90, 30, 30, Color(20,20,175,250) )
-        draw.RoundedBox( 0 , ScrW()-292, ScrH()-125, 30, 30, Color(175,20,20,250) )
-
-        draw.RoundedBox( 0 , ScrW()-260, ScrH() - 90, 200*team1, 30, Color(20,20,175,250) )
-        draw.RoundedBox( 0 , ScrW()-260, ScrH()-125, 200*team2, 30, Color(175,20,20,250) )
-
-    end
-
-    draw.DrawText( "B", "TimeLeft", ScrW()-279, ScrH() - 89 , Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
-    draw.DrawText( "R", "TimeLeft", ScrW()-279, ScrH() - 124 , Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
-
-	self.Gradient = surface.GetTextureID("gui/gradient_down")
-	surface.SetDrawColor( 0, 0, 0, 90 );
-	surface.SetTexture( self.Gradient );
-	surface.DrawTexturedRect( ScrW()-292, ScrH() - 90, 232, 30 );
-
-	self.Gradient = surface.GetTextureID("gui/gradient_down")
-	surface.SetDrawColor( 0, 0, 0, 90 );
-	surface.SetTexture( self.Gradient );
-	surface.DrawTexturedRect( ScrW()-292, ScrH() - 125, 232, 30 );
-
-	self.Gradient = surface.GetTextureID("gui/gradient_up")
-	surface.SetDrawColor(  255, 255, 255, 1  );
-	surface.SetTexture( self.Gradient );
-	surface.DrawTexturedRect( ScrW()-292, ScrH() - 75, 232, 15 );
-
-	self.Gradient = surface.GetTextureID("gui/gradient_up")
-	surface.SetDrawColor(  255, 255, 255, 1  );
-	surface.SetTexture( self.Gradient );
-	surface.DrawTexturedRect( ScrW()-292, ScrH() - 110, 232, 15 );	
-
-	draw.DrawText( team1_deaths, "ScoreShadow", ScrW()-65 + 1, ScrH() - 87 + 1 , Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
-	draw.DrawText( team2_deaths, "ScoreShadow", ScrW()-65 + 1, ScrH() - 122 + 1 , Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
-	draw.DrawText( team1_deaths, "Score", ScrW()-65, ScrH() - 87 , Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
-	draw.DrawText( team2_deaths, "Score", ScrW()-65, ScrH() - 122 , Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
-
-	draw.DrawText( time, "TimeLeftShadow", ScrW()-290 + 1, ScrH() - 155 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
-	draw.DrawText( time, "TimeLeft", ScrW()-290, ScrH() - 155 , Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
-
-	draw.DrawText( round, "TimeLeftShadow", ScrW()-60 + 1, ScrH() - 155 + 1, Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
-	draw.DrawText( round, "TimeLeft", ScrW()-60, ScrH() - 155 , Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
+    DrawTeams( ply )
 
 	--draw.DrawText( "Alpha " .. version, "AlphaFontShadow", x - 65 + 1, y/6 - 40 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
 	--draw.DrawText( "Alpha " .. version, "AlphaFont", x - 65, y/6 - 40, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
@@ -349,7 +143,6 @@ function GM:HUDPaint()
 
         --No Hud if dead
 		if (ply:Alive()) then
-
 
             for i = 0, 10 do
             
@@ -452,7 +245,6 @@ function GM:HUDPaint()
                     surface.SetTexture( self.Gradient );
                     surface.DrawTexturedRect(0, -100, ScrW(), 200);
 
-
                     self.Gradient = surface.GetTextureID("gui/gradient_down")
                     surface.SetDrawColor( 20,20,175, 90 );
                     surface.SetTexture( self.Gradient );
@@ -505,9 +297,7 @@ end
 function GM:HUDShouldDraw( name )
 
     if ( name == "CHudHealth" or name == "CHudAmmo" or name == "CHudSecondaryAmmo") then
-
         return false
-
     end
 
     return true
