@@ -129,13 +129,9 @@ function GM:Initialize()
 	SetGlobalInt( "TDM_ScoreLimit", round_scorelimit:GetInt() )
 
 	timer.Create( "CheckTeamBalance", 30, 0, function() 
-
 		if ( GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS ) then
-
 			GAMEMODE:CheckTeamBalance() 
-
 		end
-
 	end )
 
 end
@@ -238,7 +234,6 @@ function GM:PlayerSpawn ( ply )
 	local ang = ply:GetAngles()
 	ang.r = 0
 	ply:SetEyeAngles( ang )
-
 end
 
 function GM:Think()
@@ -251,21 +246,17 @@ function GM:Think()
 
 	SetGlobalInt( "TDM_BlueTeamNum", team.NumPlayers( TEAM_BLUE ) )
 
-
 end
 
 ------------------------------------------
 --		Create extra spawn entities		--
 ------------------------------------------
-
 function SpawnEntities()
 
 	local import = ents.TDM.CanImportEntities( game.GetMap() )
 
 	if import then
-
 		ents.TDM.ProcessImportScript( game.GetMap() )
-
 	end
 
 end
@@ -282,23 +273,15 @@ function PlayerAdvancedSpawnSelection( ply, spawnpointent, enemy_team )
 	local Blockers = 0
 
 	for k, v in pairs( EnemyEnts ) do
-
 		if ( IsValid( v ) && v:GetClass() == "player" && v:Alive() && v:Team() == enemy_team ) then
-
 			Blockers = Blockers + 1
-
 		end
-
 	end
 
 	for k, v in pairs( FriendlyEnts ) do
-
 		if ( IsValid( v ) && v:GetClass() == "player" && v:Alive() ) then
-
 			Blockers = Blockers + 1
-
 		end
-
 	end
 
 	if ( Blockers > 0 ) then return false end
@@ -308,7 +291,6 @@ function PlayerAdvancedSpawnSelection( ply, spawnpointent, enemy_team )
 end
 
 local function GetThreeRandomTeammates( playerTeam )
-
 	--Find Random Alive Players on team
 	local teamAlivePlayers = team.GetPlayers( playerTeam )
 
@@ -316,19 +298,15 @@ local function GetThreeRandomTeammates( playerTeam )
 	for k, v in pairs( teamAlivePlayers ) do
 
 		if ( !v:Alive() ) then
-
 			table.RemoveByValue( teamAlivePlayers, v:Nick() )
-
 		end
 
 	end
 
 	p1 = table.Random( teamAlivePlayers )
-
 	table.RemoveByValue( teamAlivePlayers, p1:Nick() )
 
 	p2 = table.Random( teamAlivePlayers )
-
 	table.RemoveByValue( teamAlivePlayers, p2:Nick() )
 
 	p3 = table.Random( teamAlivePlayers )
@@ -359,15 +337,7 @@ function GM:PlayerSelectSpawn( ply )
 
     	local opposingTeam = nil
 
-    	if ( playerTeam == TEAM_RED ) then
-
-    		opposingTeam = TEAM_BLUE 
-
-    	else 
-
-    		opposingTeam = TEAM_RED 
-
-    	end
+    	if ( playerTeam == TEAM_RED ) then opposingTeam = TEAM_BLUE else opposingTeam = TEAM_RED end
 
 		local teamAlivePlayers = team.GetPlayers( playerTeam )
 
@@ -375,9 +345,7 @@ function GM:PlayerSelectSpawn( ply )
 		for k, v in pairs( teamAlivePlayers ) do
 
 			if ( !v:Alive() ) then
-
 				table.RemoveByValue( teamAlivePlayers, v:Nick() )
-
 			end
 
 		end
@@ -460,13 +428,9 @@ function GM:PlayerSelectSpawn( ply )
 				end
 
 				if not PlayerAdvancedSpawnSelection( ply, closest, opposingTeam ) then
-
 					PossibleSpawnPoint[ closestKey ] = nil
-
 				else
-
 					break -- Found what we want, stop the loop
-
 				end
 
 			end
@@ -476,11 +440,8 @@ function GM:PlayerSelectSpawn( ply )
 				closest:IsInWorld() ) then 
 
 				return closest
-
 			else 
-
 				for i=0, SpawnPointCount do
-
 					randomTeamSpawnPoint = table.Random( Spawnpoints[ playerTeam ] )
 
 					
@@ -551,55 +512,35 @@ end
 
 --Player takes damage only if hurt by a member of the opposite team
 function GM:PlayerShouldTakeDamage( ply, attacker )
-
 	if ( IsValid( attacker ) ) then
-
 		if ( attacker.Team && ply:Team() == attacker:Team() && ply != attacker ) then return false end
-
 	end
 	
 	return true
-
 end
 
 function GM:DoPlayerDeath( victim, attacker, dmginfo )
-
 	victim:CreateRagdoll()
 
 	if ( GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS or GetGlobalInt( "TDM_RoundState" ) == ROUND_OVER ) then
-
 		victim:AddDeaths( 1 )
 
 		if ( attacker:IsValid() && attacker:IsPlayer() ) then
-		
 			if ( attacker == victim ) then
-
 				attacker:AddFrags( -1 )
-
 			else
-
 				attacker:AddFrags( 1 )
-
 			end
-			
 		end
 
 		if victim:Team() == TEAM_RED then
-
 			local blueKills = GetGlobalInt( "TDM_BlueKills" )
-
 			SetGlobalInt( "TDM_BlueKills", blueKills + 1 )
-
 		elseif victim:Team() == TEAM_BLUE then
-
 			local redKills = GetGlobalInt( "TDM_RedKills" )
-
 			SetGlobalInt( "TDM_RedKills", redKills + 1 )
-
 		end
-
 	end
-
 end
 ------------------------------------------
 --			Team Switching				--
@@ -672,7 +613,6 @@ concommand.Add( "stTeamCT", stTeamCT )
 --Class system will be overhauled.
 
 function assaultClass( ply )
-
 	if (player_manager.GetPlayerClass( ply ) == "assault" || (ply:Team() == TEAM_SPEC) ) then return end
 
 	player_manager.SetPlayerClass( ply, "assault" )
@@ -685,12 +625,10 @@ function assaultClass( ply )
 		ply:StripWeapons()
 		ply:Spawn()		
 	end
-
 end
 concommand.Add( "assaultClass", assaultClass )
 
 function infantryClass( ply )
-
 	if (player_manager.GetPlayerClass( ply ) == "infantry" || (ply:Team() == TEAM_SPEC) ) then return end
 
 	player_manager.SetPlayerClass( ply, "infantry" )
@@ -703,12 +641,10 @@ function infantryClass( ply )
 		ply:StripWeapons()
 		ply:Spawn()		
 	end
-
 end
 concommand.Add( "infantryClass", infantryClass )
 
 function heavyClass( ply )
-
 	if (player_manager.GetPlayerClass( ply ) == "heavy" || (ply:Team() == TEAM_SPEC) ) then return end
 
 	player_manager.SetPlayerClass( ply, "heavy" )
@@ -721,12 +657,10 @@ function heavyClass( ply )
 		ply:StripWeapons()
 		ply:Spawn()		
 	end
-
 end
 concommand.Add( "heavyClass", heavyClass )
 
 function sniperClass( ply )
-
 	if (player_manager.GetPlayerClass( ply ) == "sniper" || (ply:Team() == TEAM_SPEC) ) then return end
 
 	player_manager.SetPlayerClass( ply, "sniper" )
@@ -739,12 +673,10 @@ function sniperClass( ply )
 		ply:StripWeapons()
 		ply:Spawn()		
 	end
-
 end
 concommand.Add( "sniperClass", sniperClass )
 
 function commandoClass( ply )
-
 	if (player_manager.GetPlayerClass( ply ) == "commando" || (ply:Team() == TEAM_SPEC) ) then return end
 
 	player_manager.SetPlayerClass( ply, "commando" )
@@ -757,17 +689,15 @@ function commandoClass( ply )
 		ply:StripWeapons()
 		ply:Spawn()		
 	end
-
 end
 concommand.Add( "commandoClass", commandoClass )
 
 -- Inspired by Fretta13
 function GM:CheckTeamBalance()
-	local CurrentRedPlayers = GetGlobalInt( "TDM_RedTeamNum" ) -- Team 0
-	local CurrentBluePlayers = GetGlobalInt( "TDM_BlueTeamNum" ) -- Team 1
+	local CurrentRedPlayers = GetGlobalInt( "TDM_RedTeamNum" )
+	local CurrentBluePlayers = GetGlobalInt( "TDM_BlueTeamNum" )
 
 	if ( CurrentRedPlayers > ( CurrentBluePlayers + 1) ) then
-
 		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( TEAM_RED )
 
 		player_manager.SetPlayerClass( ply, "noclass" )
@@ -785,19 +715,14 @@ function GM:CheckTeamBalance()
 	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
 	    else
-
 			ply:ConCommand("pickClass")
-
 		end
 
 		for k,v in pairs(player.GetAll()) do
-
 			v:ChatPrint( "Player "..ply:GetName().." has been automatically switched to the " .. team.GetName( ply:Team() ) .. " Team." )
-
 		end
 
 	elseif ( CurrentBluePlayers > ( CurrentRedPlayers + 1) ) then
-
 		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( TEAM_BLUE )
 
 		player_manager.SetPlayerClass( ply, "noclass" )
@@ -815,15 +740,11 @@ function GM:CheckTeamBalance()
 	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
 	    else
-
 			ply:ConCommand("pickClass")
-
 		end
 
 		for k,v in pairs(player.GetAll()) do
-
 			v:ChatPrint( "Player "..ply:GetName().." has been automatically switched to the " .. team.GetName( ply:Team() ) .. " Team." )
-
 		end
 
 	end
@@ -832,18 +753,12 @@ end
 
 function GM:FindLeastCommittedPlayerOnTeam( teamid )
 
-	local worst
+	local randomPlayer
 
-	for k,v in pairs( team.GetPlayers( teamid ) ) do
+	local teamPlaters = team.GetPlayers( teamid )
 
-		if ( !worst || v:Frags() < worst:Frags() ) then
+	randomPlayer = table.Random( teamPlaters )
 
-			worst = v
-
-		end
-
-	end
-
-	return worst
+	return randomPlayer
 
 end

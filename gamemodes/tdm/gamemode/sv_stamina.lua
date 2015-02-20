@@ -83,7 +83,7 @@ hook.Add( "KeyRelease", "StaminaBarOtherStuff", function( ply, key )
 
 		timer.Create( ply.StaminaDelay, 2, 1, function()
 
-			timer.Create( ply.StaminaRegen, 0.07, 0, function() 
+			timer.Create( ply.StaminaRegen, 0.065, 0, function() 
 
 				if ( ply.Stamina != 100 ) then
 

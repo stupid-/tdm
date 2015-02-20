@@ -45,7 +45,7 @@ end
 ------------------------------------------
 --	Death Sounds						--
 ------------------------------------------
-
+-- Thank you TTT
 local deathsounds = {
    Sound("player/death1.wav"),
    Sound("player/death2.wav"),
@@ -253,16 +253,12 @@ hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply, attacker )
 		timer.Create( ply.RegenActive, 0.10, 0, function()
 
 			if ( ply:Alive() and ply:Health() < 100 ) then
-
 				ply:SetHealth( ply:Health() + 1 )
-
 			end
 
 			if ( !ply:Alive() or ply:Health() == 100 ) then
-
 				timer.Destroy( ply.RegenDelay )
 				timer.Destroy( ply.RegenActive )
-
 			end
 
 		end )
@@ -275,9 +271,7 @@ end )
 hook.Add( "PlayerHurt", "TDMAssists", function( victim, attacker, damageTaken ) 
 
 	if ( attacker:IsPlayer() && !table.HasValue( victim.EnemyAttackers, attacker ) ) then
-
 		table.insert( victim.EnemyAttackers, attacker )
-
 	end
 
 	if attacker:IsPlayer() then
@@ -325,6 +319,7 @@ hook.Add( "PlayerDeath", "TDMAssistspt2", function( victim, inflictor, attacker 
 	end
 
 	if roundState == ROUND_IN_PROGRESS then
+		/*
 
 		timer.Simple(0.1, function() 
 
@@ -343,6 +338,8 @@ hook.Add( "PlayerDeath", "TDMAssistspt2", function( victim, inflictor, attacker 
 			victim.DamageTable = nil
 
 		end )
+
+		*/
 
 	end
 

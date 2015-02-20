@@ -233,11 +233,22 @@ function GM:GetBlueKills()
 
 end
 
+function GM:GetTeamPlayers()
+	local redPlayers = team.GetPlayers( TEAM_RED )
+	local bluePlayers = team.GetPlayers( TEAM_BLUE )
+
+	if #redPlayers > 0 and #bluePlayers > 0 then
+		return true
+	else
+		return false
+	end
+end
+
 GM.ThinkRoundFunctions = {
 
 	[ROUND_WAITING] = function( gm )
 
-		if #player.GetAll() < 2 then return end
+		if not gm:GetTeamPlayers() then return end
 
 		gm:SetRound( ROUND_PREPARING )
 
