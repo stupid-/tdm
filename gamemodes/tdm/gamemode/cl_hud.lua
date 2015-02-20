@@ -24,15 +24,27 @@ surface.CreateFont( "HeadTextShadow2", { font = "CloseCaption_Bold", size = 124,
 surface.CreateFont( "HeadTextShadow", { font = "CloseCaption_Bold", size = 124, weight = 600, antialias = true, blursize = 6, shadow = false })
 surface.CreateFont( "HeadText", { font = "CloseCaption_Bold", size = 124, weight = 600, antialias = true, blursize = 0, shadow = false })
 
-/*
-local health_colors = {
-    
-}
+local name_colors = {
+    mainText = {
+        [TEAM_RED] = Color( 255, 255, 255, 255 ),
+        [TEAM_BLUE] = Color( 255, 255, 255, 255 )
+    },
 
-local team_colors = {
-    
+    shadowText1 = {
+        [TEAM_RED] = Color( 0, 0, 0, 245 ),
+        [TEAM_BLUE] = Color( 0, 0, 0, 245 )
+    },
+
+    shadowText2 = {
+        [TEAM_RED] = Color( 0, 0, 0, 145 ),
+        [TEAM_BLUE] = Color( 0, 0, 0, 145 )
+    },
+
+    shadowText3 = {
+        [TEAM_RED] = Color( 210, 60, 60, 185 ),
+        [TEAM_BLUE] = Color( 60, 60, 210, 185 )
+    }
 }
-*/
 
 -- Blur Function for BG Blurs
 local blur = Material("pp/blurscreen")
@@ -56,6 +68,10 @@ local gradient = surface.GetTextureID("gui/gradient_up")
 local gradient2 = surface.GetTextureID("gui/gradient_down")
 local gradient3 = surface.GetTextureID("gui/gradient")
 local gradient4 = surface.GetTextureID("vgui/gradient-r")
+
+-- Initialize Variables
+local currentHealth = 0
+local currentStamina = 0
 
 -- Draw Teams and Scores on Bottom Right
 local function DrawTeams( ply, roundState, roundTime, redKills, blueKills, scoreLimit, roundsLeft )
@@ -167,7 +183,7 @@ local function DrawHUD( ply )
     local playerTeam = team.GetName( ply:Team() )
     local playerClass = player_manager.GetPlayerClass( ply )
 
-    local prec = ply:Health() / ply:GetMaxHealth()
+    local prec = currentHealth / ply:GetMaxHealth()
     prec = math.Clamp( prec, 0, 1 )
     draw.RoundedBox( 0, 57, ScrH() - 150, 306 * prec, 15, Color(210,50,50,240) )
 
@@ -180,7 +196,7 @@ local function DrawHUD( ply )
     surface.DrawTexturedRect( 57, ScrH() - 150, 306, 15 );
 
     --Stamina Bar
-    local prec = ply:GetNWInt( "Stamina", 0 ) / 100 
+    local prec = currentStamina / 100 
     prec = math.Clamp( prec, 0, 1 )
     draw.RoundedBox( 0, 57, ScrH() - 135, 306 * prec, 3, Color( 255, 225, 75, 240) )
 
@@ -276,7 +292,6 @@ function NamesOverPlayers()
 end
 
 function GM:HUDPaint()
-
 	hook.Run( "HUDDrawTargetID" )
 	hook.Run( "HUDDrawPickupHistory" )
 	hook.Run( "DrawDeathNotice", 0.85, 0.04 )
@@ -298,12 +313,6 @@ function GM:HUDPaint()
 
     DrawTeams( ply, round, time, rk, bk, sl, left )
 
-	--draw.DrawText( "Alpha " .. version, "AlphaFontShadow", x - 65 + 1, y/6 - 40 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
-	--draw.DrawText( "Alpha " .. version, "AlphaFont", x - 65, y/6 - 40, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
-
-	--draw.DrawText( "Team Deathmatch", "AlphaFontShadowSmall", x - 65 + 1, y/6 + 1, Color(10, 10, 10, 210), TEXT_ALIGN_RIGHT ) 
-	--draw.DrawText( "Team Deathmatch", "AlphaFontSmall", x - 65, y/6, Color(255, 255, 255, 235), TEXT_ALIGN_RIGHT ) 
-
 	if LocalPlayer():Team() == TEAM_SPEC then 
 
         --Hud for Spectators
@@ -324,112 +333,74 @@ function GM:HUDPaint()
 		end
 
 	end
+
 end
 
 function GM:HUDShouldDraw( name )
-
     if ( name == "CHudHealth" or name == "CHudAmmo" or name == "CHudSecondaryAmmo") then
         return false
     end
 
     return true
-
 end
 
 hook.Add( "PostDrawOpaqueRenderables", "PlayerNamesOverHeadsYeah", function()
+    local playerTeam = LocalPlayer():Team()
+    local opposingTeam = nil
+    if ( playerTeam == TEAM_RED ) then opposingTeam = TEAM_BLUE else opposingTeam = TEAM_RED end
 
-    if LocalPlayer():Team() == TEAM_RED then
+    -- Display Teammates Names over their heads
+    for k, v in pairs(player.GetAll()) do
 
-        --Display Teammates Names over their heads
-        for k, v in pairs(player.GetAll()) do
+        if (v:IsValid() && v:Alive() && ( v:Team() != TEAM_SPEC ) && ( v:Team() != opposingTeam ) && (v != LocalPlayer()) ) then
+            local Pos = v:GetPos()+Vector(0,0,78)
+            local Ang = (Pos - (LocalPlayer():EyePos())):Angle()
 
-            if (v:IsValid() && v:Alive() && ( v:Team() != TEAM_SPEC ) && ( v:Team() != TEAM_BLUE ) && (v != LocalPlayer()) ) then
-
-                local Pos = v:GetPos()+Vector(0,0,78)
-                local Ang = (Pos - (LocalPlayer():EyePos())):Angle()
-
-                cam.Start3D2D(Pos, Angle(0, Ang.y-90, 90), 0.065) 
-                    draw.SimpleText( v:Nick(), "HeadTextShadow2", 3, 3, Color( 210, 60, 60, 185 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )   
-                    draw.SimpleText( v:Nick(), "HeadTextShadow", 6, 6, Color( 0, 0, 0, 145 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )      
-                    draw.SimpleText( v:Nick(), "HeadTextShadow", 3, 3, Color( 0, 0, 0, 245 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )    
-                    draw.SimpleText( v:Nick(), "HeadText", 0, 0 , Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )     
-                cam.End3D2D()
-                
-            end
-
-        end
-
-        --Display enemies names over their head if you are looking at them
-        local tr = util.GetPlayerTrace( LocalPlayer() )
-        local trace = util.TraceLine( tr )
-        if (!trace.Hit) then return end
-        if (!trace.HitNonWorld) then return end
-
-        for k, v in pairs(player.GetAll()) do
-
-            if (v:IsValid() && v:Alive() && ( v:Team() == TEAM_BLUE ) && ( trace.Entity:IsPlayer() ) && (v:Nick() == trace.Entity:Nick()) ) then
-
-                local Pos = v:GetPos()+Vector(0,0,78)
-                local Ang = (Pos - (LocalPlayer():EyePos())):Angle()
-
-                cam.Start3D2D(Pos, Angle(0, Ang.y-90, 90), 0.065) 
-                    draw.SimpleText( v:Nick(), "HeadTextShadow2", 3, 3, Color( 60, 60, 210, 185 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )   
-                    draw.SimpleText( v:Nick(), "HeadTextShadow", 6, 6, Color( 0, 0, 0, 145 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )      
-                    draw.SimpleText( v:Nick(), "HeadTextShadow", 3, 3, Color( 0, 0, 0, 245 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-                    draw.SimpleText( v:Nick(), "HeadText", 0, 0, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )     
-                cam.End3D2D()
-
-            end
-
+            cam.Start3D2D(Pos, Angle(0, Ang.y-90, 90), 0.065) 
+                draw.SimpleText( v:Nick(), "HeadTextShadow2", 3, 3, name_colors.shadowText3[ playerTeam ], TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )   
+                draw.SimpleText( v:Nick(), "HeadTextShadow", 6, 6, name_colors.shadowText2[ playerTeam ], TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )      
+                draw.SimpleText( v:Nick(), "HeadTextShadow", 3, 3, name_colors.shadowText1[ playerTeam ], TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )    
+                draw.SimpleText( v:Nick(), "HeadText", 0, 0 , name_colors.mainText[ playerTeam ], TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )     
+            cam.End3D2D()   
         end
 
     end
 
-    if LocalPlayer():Team() == TEAM_BLUE then
-        
-        --Display Teammates Names over their heads
-        for k, v in pairs(player.GetAll()) do
+    -- Display enemies names over their head if you are looking at them
+    local tr = util.GetPlayerTrace( LocalPlayer() )
+    local trace = util.TraceLine( tr )
+    if (!trace.Hit) then return end
+    if (!trace.HitNonWorld) then return end
 
-            if (v:IsValid() && v:Alive() && ( v:Team() != TEAM_SPEC ) && ( v:Team() != TEAM_RED ) && (v != LocalPlayer()) ) then
+    for k, v in pairs(player.GetAll()) do
 
-                local Pos = v:GetPos()+Vector(0,0,78)
-                local Ang = (Pos - (LocalPlayer():EyePos())):Angle()
+        if (v:IsValid() && v:Alive() && ( v:Team() == opposingTeam ) && ( trace.Entity:IsPlayer() ) && (v:Nick() == trace.Entity:Nick()) ) then
+            local Pos = v:GetPos()+Vector(0,0,78)
+            local Ang = (Pos - (LocalPlayer():EyePos())):Angle()
 
-                cam.Start3D2D(Pos, Angle(0, Ang.y-90, 90), 0.065) 
-                    draw.SimpleText( v:Nick(), "HeadTextShadow2", 3, 3, Color( 60, 60, 210, 185 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )   
-                    draw.SimpleText( v:Nick(), "HeadTextShadow", 6, 6, Color( 0, 0, 0, 145 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )      
-                    draw.SimpleText( v:Nick(), "HeadTextShadow", 3, 3, Color( 0, 0, 0, 245 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )    
-                    draw.SimpleText( v:Nick(), "HeadText", 0, 0, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )     
-                cam.End3D2D()
-                
-            end
-
-        end
-
-        --Display enemies names over their head if you are looking at them
-        local tr = util.GetPlayerTrace( LocalPlayer() )
-        local trace = util.TraceLine( tr )
-        if (!trace.Hit) then return end
-        if (!trace.HitNonWorld) then return end
-
-        for k, v in pairs(player.GetAll()) do
-
-            if (v:IsValid() && v:Alive() && ( v:Team() == TEAM_RED ) && ( trace.Entity:IsPlayer() ) && (v:Nick() == trace.Entity:Nick()) ) then
-
-                local Pos = v:GetPos()+Vector(0,0,78)
-                local Ang = (Pos - (LocalPlayer():EyePos())):Angle()
-
-                cam.Start3D2D(Pos, Angle(0, Ang.y-90, 90), 0.065) 
-                    draw.SimpleText( v:Nick(), "HeadTextShadow2", 3, 3, Color( 210, 60, 60, 185 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )   
-                    draw.SimpleText( v:Nick(), "HeadTextShadow", 6, 6, Color( 0, 0, 0, 145 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )      
-                    draw.SimpleText( v:Nick(), "HeadTextShadow", 3, 3, Color( 0, 0, 0, 245 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )    
-                    draw.SimpleText( v:Nick(), "HeadText", 0, 0, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )     
-                cam.End3D2D()
-                
-            end
-
+            cam.Start3D2D(Pos, Angle(0, Ang.y-90, 90), 0.065) 
+                draw.SimpleText( v:Nick(), "HeadTextShadow2", 3, 3, name_colors.shadowText3[ opposingTeam ], TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )   
+                draw.SimpleText( v:Nick(), "HeadTextShadow", 6, 6, name_colors.shadowText2[ opposingTeam ], TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )      
+                draw.SimpleText( v:Nick(), "HeadTextShadow", 3, 3, name_colors.shadowText1[ opposingTeam ], TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+                draw.SimpleText( v:Nick(), "HeadText", 0, 0, name_colors.mainText[ opposingTeam ], TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )     
+            cam.End3D2D()
         end
 
     end
+end )
+
+hook.Add( "Initialize", "Interp", function() 
+
+    hook.Add( "Think", "InterpThink", function() 
+
+        if LocalPlayer():Health() != currentHealth then
+            currentHealth = Lerp( 0.10, currentHealth, LocalPlayer():Health() )
+        end
+
+        if LocalPlayer():GetNWInt( "Stamina", 0 ) != currentStamina then
+            currentStamina = Lerp( 0.10, currentStamina, LocalPlayer():GetNWInt( "Stamina", 0 ) )
+        end
+
+    end )
 
 end )

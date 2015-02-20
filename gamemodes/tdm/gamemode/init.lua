@@ -205,22 +205,22 @@ function GM:PlayerSpawn ( ply )
         --Most Basic Spawn Protection, 2 Seconds of God Mode.
         ply:GodEnable()
 
-        local function unprotect()
+        local function unprotect( player )
 
-        	if IsValid(ply) then
+        	if IsValid( player ) then
 
-        		ply:GodDisable()
+        		player:GodDisable()
 
         	end
 
         end
-        timer.Simple( 2.5, unprotect )
+        timer.Simple( 2.5, function() unprotect( ply ) end )
 
         hook.Add( "KeyPress", "RemoveSpawnProtection", function( ply, key ) 
 
         	if ( key == IN_ATTACK && ply:HasGodMode() && ply:Alive() ) then
 
-        		unprotect()
+        		unprotect( ply )
 
         	end
 

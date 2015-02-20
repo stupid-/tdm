@@ -250,7 +250,7 @@ hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply, attacker )
 	timer.Create( ply.RegenDelay, 7, 1, function() 
 
 		--Start the healing over this interval
-		timer.Create( ply.RegenActive, 0.15, 0, function()
+		timer.Create( ply.RegenActive, 0.10, 0, function()
 
 			if ( ply:Alive() and ply:Health() < 100 ) then
 
