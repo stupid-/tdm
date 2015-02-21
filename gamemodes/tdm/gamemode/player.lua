@@ -188,6 +188,10 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 			else
 				attacker:AddXP( 100 )
 			end
+
+			local deathPos = ply:GetPos()
+			local deathAng = ply:GetAngles()
+			CreateAmmoOnDeath( deathPos, deathAng )
 			
 		end
 
@@ -208,6 +212,27 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 	
 	MsgAll( ply:Nick() .. " was killed by " .. attacker:GetClass() .. "\n" )
 	
+end
+
+function CreateAmmoOnDeath( pos, ang )
+
+	local ammo_types = {
+		"item_ammo_357_ttt",
+		"item_ammo_pistol_ttt",
+		"item_ammo_smg1_ttt",
+		"item_box_buckshot_ttt",
+		"item_ammo_revolver_ttt"
+	}
+
+	pos = pos + Vector( 0, 0, 20 )
+
+	local ent = ents.Create( table.Random( ammo_types ) )
+	if not IsValid( ent ) then return end
+	ent:SetPos( pos )
+	ent:SetAngles( ang )
+
+	ent:Spawn()
+	ent:PhysWake()
 end
 
 --Stop the pickup of props

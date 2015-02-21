@@ -8,6 +8,7 @@ GM.TeamBased = true
 GM.Version = "02-06-15"
 
 include( "mapvote/mapvote.lua" )
+include( "weaponry_shd.lua" )
 
 --Classes
 include( "player_class/noclass.lua" )

@@ -6,6 +6,7 @@ include( "sv_levels.lua" )
 include( "sv_classselection.lua" )
 include( "ent_import.lua" )
 include( "config/config.lua" )
+include( "weaponry_shd.lua" )
 
 --Classes  
 include( "player_class/noclass.lua" )
@@ -34,6 +35,7 @@ AddCSLuaFile( "cl_deathnotice.lua" )
 AddCSLuaFile( "cl_deathscreen.lua" )
 AddCSLuaFile( "cl_levels.lua" )
 AddCSLuaFile( "mapvote/cl_mapvote.lua" )
+AddCSLuaFile( "weaponry_shd.lua" )
 
 --Classes For Client
 AddCSLuaFile( "player_class/noclass.lua" )
@@ -227,7 +229,7 @@ function GM:PlayerSpawn ( ply )
 
 		ply:KillSilent()
 
-		ply:ConCommand("pickClass")
+		--ply:ConCommand("pickClass")
 
 	end
 
