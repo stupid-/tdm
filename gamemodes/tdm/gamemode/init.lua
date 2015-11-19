@@ -8,13 +8,8 @@ include( "ent_import.lua" )
 include( "config/config.lua" )
 include( "weaponry_shd.lua" )
 
---Classes  
-include( "player_class/noclass.lua" )
-include( "player_class/assault.lua" )
-include( "player_class/infantry.lua" )
-include( "player_class/heavy.lua" )
-include( "player_class/sniper.lua" )
-include( "player_class/commando.lua" )
+--Class Config
+include( "config/loadout_config.lua" )
 
 --Map Voting (Not My Code), By https://github.com/wiox/gmod-mapvote
 include( "mapvote/mapvote.lua" )
@@ -37,17 +32,12 @@ AddCSLuaFile( "cl_levels.lua" )
 AddCSLuaFile( "mapvote/cl_mapvote.lua" )
 AddCSLuaFile( "weaponry_shd.lua" )
 
---Classes For Client
-AddCSLuaFile( "player_class/noclass.lua" )
-AddCSLuaFile( "player_class/assault.lua" )
-AddCSLuaFile( "player_class/infantry.lua" )
-AddCSLuaFile( "player_class/heavy.lua" )
-AddCSLuaFile( "player_class/sniper.lua" )
-AddCSLuaFile( "player_class/commando.lua" )
+AddCSLuaFile( "config/loadout_config.lua" )
 
 --Network Strings
 util.AddNetworkString( "PlayerDeathMessage" )
 util.AddNetworkString( "PlayerLevelUp" )
+util.AddNetworkString( "PickLoadout" )
 
 ------------------------------------------
 --				ConVars					--
@@ -82,7 +72,7 @@ function GM:ShowSpare1( ply ) -- F3
 
 	-- Coming soon --cl_help.lua
 	-- Help Menu
-	ply:ConCommand( "welcomePlayer2" )
+	 --ply:ConCommand( "welcomePlayer2" )
 
 end
 
@@ -130,11 +120,14 @@ function GM:Initialize()
 
 	SetGlobalInt( "TDM_ScoreLimit", round_scorelimit:GetInt() )
 
-	timer.Create( "CheckTeamBalance", 30, 0, function() 
-		if ( GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS ) then
-			GAMEMODE:CheckTeamBalance() 
-		end
-	end )
+
+	if ( TDM_TeamAutoBalance == true ) then 
+		timer.Create( "CheckTeamBalance", TDM_TeamBalanceCheckTime, 0, function() 
+			if ( GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS ) then
+				GAMEMODE:CheckTeamBalance() 
+			end
+		end )
+	end
 
 end
 
@@ -154,14 +147,16 @@ function GM:PlayerInitialSpawn ( ply )
 	ply:GetXP()
 	ply:GetReqXP()
 
+	classReset( ply )
+
 	--Bots for private gamemode testing
 	if ( ply:IsBot() ) then
 		-- Randomly Set Bot Team
-		ply:SetTeam( math.random( TEAM_RED, TEAM_BLUE) )
+		ply:SetTeam( math.random( TEAM_RED, TEAM_BLUE ) )
 
-		player_manager.OnPlayerSpawn( ply )
-		player_manager.SetPlayerClass( ply, "infantry" )
-		player_manager.RunClass( ply, "Spawn" )
+		ply:SetPData("Player_Class", "infantry" )
+		ply:SetPData("Player_PickedClass", "infantry" )
+
 		hook.Call( "PlayerLoadout", GAMEMODE, ply )
 		hook.Call( "PlayerSetModel", GAMEMODE, ply )
 		ply:KillSilent()
@@ -171,34 +166,40 @@ function GM:PlayerInitialSpawn ( ply )
 		ply:SetTeam( TEAM_SPEC )
 		ply:Spectate( OBS_MODE_ROAMING )
 
-		player_manager.OnPlayerSpawn( ply )
-		player_manager.SetPlayerClass( ply, "noclass" )
-		player_manager.RunClass( ply, "Spawn" )
-		hook.Call( "PlayerLoadout", GAMEMODE, ply )
-		hook.Call( "PlayerSetModel", GAMEMODE, ply )
+		--hook.Call( "PlayerLoadout", GAMEMODE, ply )
+		--hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
-		timer.Simple( 2, function() ply:ConCommand( "welcomePlayer" ) end )
+		timer.Simple( 3, function() ply:ConCommand( "welcomePlayer" ) end )
 	end
 end
 
 function GM:PlayerSpawn ( ply )
+
+	if ( ply:GetPData( "Player_Class", "noclass" ) != ply:GetPData( "Player_PickedClass", "noclass" ) ) then
+
+		ply:SetPData( "Player_Class", ply:GetPData( "Player_PickedClass", "noclass" ) )
+
+	end
+
 	if ply:Team() == TEAM_SPEC then 
 
 		ply:Spectate( OBS_MODE_ROAMING )
 
 	--Make sure the player has a class before spawned
-	elseif ( ply:Team() == TEAM_RED && player_manager.GetPlayerClass( ply ) != "noclass" || ply:Team() == TEAM_BLUE && player_manager.GetPlayerClass( ply ) != "noclass" ) then
+	elseif ( ply:Team() == TEAM_RED && ply:GetPData( "Player_Class", "noclass" ) != "noclass" || ply:Team() == TEAM_BLUE && ply:GetPData( "Player_Class", "noclass" ) != "noclass" ) then
 
 		local color = team.GetColor( ply:Team() )
 
 		ply:SetPlayerColor( Vector( color.r/255, color.g/255, color.b/255 ) )
 
 		ply:SetupHands()
-		player_manager.OnPlayerSpawn( ply )
-        player_manager.RunClass( ply, "Spawn" )
+
+        if ( ply:GetPData("Player_Class") != ply:GetPData("Player_PickedClass") ) then
+        	classUpdate( ply, ply:GetPData("Player_PickedClass") )
+        end
+
         hook.Call( "PlayerLoadout", GAMEMODE, ply )
         hook.Call( "PlayerSetModel", GAMEMODE, ply )
-
 
         --Most Basic Spawn Protection, 2 Seconds of God Mode.
         ply:GodEnable()
@@ -212,7 +213,7 @@ function GM:PlayerSpawn ( ply )
         	end
 
         end
-        timer.Simple( 2.5, function() unprotect( ply ) end )
+        timer.Simple( TDM_SpawnProtectionTime, function() unprotect( ply ) end )
 
         hook.Add( "KeyPress", "RemoveSpawnProtection", function( ply, key ) 
 
@@ -225,7 +226,7 @@ function GM:PlayerSpawn ( ply )
         end )
         
     -- If no class, force class selection or else no spawn
-	elseif ( player_manager.GetPlayerClass( ply ) == "noclass" ) then
+	elseif ( ply:GetPData( "Player_Class", "noclass" ) == "noclass" ) then
 
 		ply:KillSilent()
 
@@ -236,6 +237,21 @@ function GM:PlayerSpawn ( ply )
 	local ang = ply:GetAngles()
 	ang.r = 0
 	ply:SetEyeAngles( ang )
+	
+end
+
+function GM:PlayerSetModel( ply )
+
+	currentClass = ply:GetPData( "Player_Class" )
+
+	if currentClass == "noclass" then return end 
+
+	for k, class in pairs( PlayerClasses ) do
+		if class.name == currentClass then
+			ply:SetModel( class.playerModel )
+		end
+	end
+
 end
 
 function GM:Think()
@@ -484,7 +500,23 @@ function GM:PlayerLoadout( ply )
 
 	if ply:Team() == TEAM_SPEC then return false end
 
-	player_manager.RunClass( ply, "Loadout" )
+	if ply:GetPData( "Player_PickedClass", "noclass" ) == "noclass" then return false end
+
+	pPrimary = ply:GetPData( "Player_Primary", "weapon_ttt_m16" )
+	pPrimaryAmmo = ply:GetPData( "Player_Primary_Ammo", 120)
+	pPrimaryAmmoType = ply:GetPData( "Player_Primary_Ammo_Type", "item_ammo_pistol_ttt" )
+	pSecondary = ply:GetPData( "Player_Secondary", "weapon_zm_pistol" )
+	pSecondaryAmmo = ply:GetPData( "Player_Secondary_Ammo", 60)
+	pSecondaryAmmoType = ply:GetPData( "Player_Secondary_Ammo_Type", "item_ammo_pistol_ttt")
+	pGrenade = ply:GetPData( "Player_Grenade", "weapon_ttt_smokegrenade" )
+
+	ply:GiveAmmo( pPrimaryAmmo,	pPrimaryAmmoType, 		true )
+	ply:GiveAmmo( pSecondaryAmmo,	pSecondaryAmmoType, 		true )
+
+	ply:Give( pPrimary )
+	ply:Give( "weapon_zm_improvised" )
+	ply:Give( pSecondary )
+	ply:Give( pGrenade )
 	
 	return true
 
@@ -501,6 +533,8 @@ function GM:CanPlayerSuicide( ply )
 
 	if ply:IsAdmin() then return true end
 
+	if ( TDM_EnableSuicide == true ) then return true end
+
 	return false
 
 end
@@ -515,7 +549,11 @@ end
 --Player takes damage only if hurt by a member of the opposite team
 function GM:PlayerShouldTakeDamage( ply, attacker )
 	if ( IsValid( attacker ) ) then
-		if ( attacker.Team && ply:Team() == attacker:Team() && ply != attacker ) then return false end
+		if ( attacker.Team && ply:Team() == attacker:Team() && ply != attacker && TDM_FriendlyFire == false ) then 
+			return false
+		elseif ( attacker.Team && ply:Team() == attacker:Team() && ply != attacker && TDM_FriendlyFire == true ) then
+			return true
+		end 
 	end
 	
 	return true
@@ -551,10 +589,10 @@ end
 function stTeamSpec( ply )
 	if ( ply:Team() == TEAM_SPEC || ply.NextSwitchTime > CurTime() ) then return end
 
-	ply.NextSwitchTime = CurTime() + 15
+	ply.NextSwitchTime = CurTime() + (TDM_SwitchTeamCooldown / 2)
 
 	ply:KillSilent()
-	player_manager.SetPlayerClass( ply, "noclass" )
+	classReset( ply )
 	ply:UnSpectate()
 	ply:SetTeam( TEAM_SPEC )
 	ply:StripWeapons()
@@ -575,9 +613,9 @@ function stTeamT( ply )
 	--Protection against swapping and forcing an autobalance
 	if ( ply:Team() == TEAM_BLUE && RedPlayers == BluePlayers) then return end
 
-	ply.NextSwitchTime = CurTime() + 30
+	ply.NextSwitchTime = CurTime() + TDM_SwitchTeamCooldown
 
-	player_manager.SetPlayerClass( ply, "noclass" )
+	classReset( ply )
 	ply:UnSpectate()
 	ply:StripWeapons()
 	ply:SetTeam( TEAM_RED )
@@ -595,9 +633,9 @@ function stTeamCT( ply )
 	--Protection against swapping and forcing an autobalance
 	if ( ply:Team() == TEAM_RED && RedPlayers == BluePlayers) then return end
 
-	ply.NextSwitchTime = CurTime() + 30
+	ply.NextSwitchTime = CurTime() + TDM_SwitchTeamCooldown
 
-	player_manager.SetPlayerClass( ply, "noclass" )
+	classReset( ply )
 	ply:UnSpectate()
 	ply:StripWeapons()
 	ply:SetTeam( TEAM_BLUE )
@@ -609,91 +647,6 @@ function stTeamCT( ply )
 end
 concommand.Add( "stTeamCT", stTeamCT )
 
-------------------------------------------
---			Class Switching				--
-------------------------------------------
---Class system will be overhauled.
-
-function assaultClass( ply )
-	if (player_manager.GetPlayerClass( ply ) == "assault" || (ply:Team() == TEAM_SPEC) ) then return end
-
-	player_manager.SetPlayerClass( ply, "assault" )
-
-	if (player_manager.GetPlayerClass( ply ) == "noclass" ) then
-		if ply:Alive() then 
-			ply:Kill() 
-		end
-
-		ply:StripWeapons()
-		ply:Spawn()		
-	end
-end
-concommand.Add( "assaultClass", assaultClass )
-
-function infantryClass( ply )
-	if (player_manager.GetPlayerClass( ply ) == "infantry" || (ply:Team() == TEAM_SPEC) ) then return end
-
-	player_manager.SetPlayerClass( ply, "infantry" )
-
-	if (player_manager.GetPlayerClass( ply ) == "noclass") then
-		if ply:Alive() then 
-			ply:Kill() 
-		end
-
-		ply:StripWeapons()
-		ply:Spawn()		
-	end
-end
-concommand.Add( "infantryClass", infantryClass )
-
-function heavyClass( ply )
-	if (player_manager.GetPlayerClass( ply ) == "heavy" || (ply:Team() == TEAM_SPEC) ) then return end
-
-	player_manager.SetPlayerClass( ply, "heavy" )
-
-	if (player_manager.GetPlayerClass( ply ) == "noclass") then
-		if ply:Alive() then 
-			ply:Kill() 
-		end
-
-		ply:StripWeapons()
-		ply:Spawn()		
-	end
-end
-concommand.Add( "heavyClass", heavyClass )
-
-function sniperClass( ply )
-	if (player_manager.GetPlayerClass( ply ) == "sniper" || (ply:Team() == TEAM_SPEC) ) then return end
-
-	player_manager.SetPlayerClass( ply, "sniper" )
-
-	if (player_manager.GetPlayerClass( ply ) == "noclass") then
-		if ply:Alive() then 
-			ply:Kill() 
-		end
-
-		ply:StripWeapons()
-		ply:Spawn()		
-	end
-end
-concommand.Add( "sniperClass", sniperClass )
-
-function commandoClass( ply )
-	if (player_manager.GetPlayerClass( ply ) == "commando" || (ply:Team() == TEAM_SPEC) ) then return end
-
-	player_manager.SetPlayerClass( ply, "commando" )
-
-	if (player_manager.GetPlayerClass( ply ) == "noclass") then
-		if ply:Alive() then 
-			ply:Kill() 
-		end
-
-		ply:StripWeapons()
-		ply:Spawn()		
-	end
-end
-concommand.Add( "commandoClass", commandoClass )
-
 -- Inspired by Fretta13
 function GM:CheckTeamBalance()
 	local CurrentRedPlayers = GetGlobalInt( "TDM_RedTeamNum" )
@@ -702,7 +655,7 @@ function GM:CheckTeamBalance()
 	if ( CurrentRedPlayers > ( CurrentBluePlayers + 1) ) then
 		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( TEAM_RED )
 
-		player_manager.SetPlayerClass( ply, "noclass" )
+		classReset( ply )
 		ply:UnSpectate()
 		ply:StripWeapons()
 		ply:SetTeam( TEAM_BLUE )
@@ -710,9 +663,8 @@ function GM:CheckTeamBalance()
 		
 		if (ply:IsBot()) then
 
-			player_manager.OnPlayerSpawn( ply )
-			player_manager.SetPlayerClass( ply, "infantry" )
-	        player_manager.RunClass( ply, "Spawn" )
+			ply:SetPData("Player_Class", "infantry" )
+			ply:SetPData("Player_PickedClass", "infantry" )
 	        hook.Call( "PlayerLoadout", GAMEMODE, ply )
 	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
@@ -727,7 +679,7 @@ function GM:CheckTeamBalance()
 	elseif ( CurrentBluePlayers > ( CurrentRedPlayers + 1) ) then
 		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( TEAM_BLUE )
 
-		player_manager.SetPlayerClass( ply, "noclass" )
+		classReset( ply )
 		ply:UnSpectate()
 		ply:StripWeapons()
 		ply:SetTeam( TEAM_RED )
@@ -735,9 +687,8 @@ function GM:CheckTeamBalance()
 
 		if (ply:IsBot()) then
 
-			player_manager.OnPlayerSpawn( ply )
-			player_manager.SetPlayerClass( ply, "infantry" )
-	        player_manager.RunClass( ply, "Spawn" )
+			ply:SetPData("Player_Class", "infantry" )
+			ply:SetPData("Player_PickedClass", "infantry" )
 	        hook.Call( "PlayerLoadout", GAMEMODE, ply )
 	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
 

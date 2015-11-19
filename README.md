@@ -4,20 +4,24 @@ I was looking for a more competetive gamemode for my community, so I decided to 
 
 ## Current Version
 
-Alpha 02-06-15
+Alpha 11-19-15
 
 ## Installation
 
 Drop the /tdm/ folder into the garrysmod/gamemodes folder and you are done. On your server, set your gamemode to tdm.
 
-Add any content files to your fastdl server.
+Add any content files in the content folder to your fastdl server.
 
 ## To-do List
 
-* Settings and Customization
-* More Classes/Weapons/Class Balancing
-* Update Class Selection GUI
-* Update Advanced Spawning System
+* Customizable Team Names & Colors 
+* Possible Ranks to coincide with the leveling system
+* Polish gameplay
+
+## Known Issues
+
+* Issues with sound ticking countdown
+* Stamina issues in Single Player
 
 ## Special Thanks / Credits
 
@@ -29,7 +33,6 @@ Add any content files to your fastdl server.
 ## Author
 
 **Stupid**
-* [http://stupids-servers.com/](http://stupids-servers.com/)
 * [http://steamcommunity.com/profiles/76561198064742900](http://steamcommunity.com/profiles/76561198064742900)
 
 ## Copyright and License

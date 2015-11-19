@@ -43,7 +43,7 @@ function ply:AddXP( amount )
 
 	local newXP = savedXP + amount
 
-	if ( newXP >= maxXP && tonumber( playerLevel ) < 5 ) then
+	if ( newXP >= maxXP && tonumber( playerLevel ) < 56 ) then
 
 		local carryOverXP = newXP - maxXP
 
@@ -71,7 +71,7 @@ function ply:AddXP( amount )
 
 		end
 
-	elseif ( tonumber( playerLevel ) >= 5 ) then
+	elseif ( tonumber( playerLevel ) >= 55 ) then
 
 		--Nothing for now
 

@@ -1,6 +1,9 @@
 hook.Add( "KeyPress", "StaminaBarStuff", function( ply, key ) 
 
-	if ( ply.moveFoward == true or ply.moveBack == true or ply.moveLeft == true or ply.moveRight == true ) then
+	if ( ply.moveFoward == true or 
+		ply.moveBack == true or 
+		ply.moveLeft == true or 
+		ply.moveRight == true ) then
 		ply.moving = true
 	else 
 		ply.moving = false
@@ -21,7 +24,10 @@ hook.Add( "KeyPress", "StaminaBarStuff", function( ply, key )
 
 		timer.Create ( ply.StaminaActive, 0.05, 0, function() 
 
-			if ( ply.moveFoward == true or ply.moveBack == true or ply.moveLeft == true or ply.moveRight == true ) then
+			if ( ply.moveFoward == true or 
+				ply.moveBack == true or 
+				ply.moveLeft == true or 
+				ply.moveRight == true ) then
 				ply.moving = true
 			else 
 				ply.moving = false
@@ -71,7 +77,10 @@ hook.Add( "KeyRelease", "StaminaBarOtherStuff", function( ply, key )
 	elseif key == IN_MOVELEFT then ply.moveLeft = false
 	elseif key == IN_MOVERIGHT then ply.moveRight = false end
 
-	if ( ply.moveFoward == true or ply.moveBack == true or ply.moveLeft == true or ply.moveRight == true ) then
+	if ( ply.moveFoward == true or 
+		ply.moveBack == true or 
+		ply.moveLeft == true or 
+		ply.moveRight == true ) then
 		ply.moving = true
 	else 
 		ply.moving = false

@@ -1,12 +1,10 @@
 AddCSLuaFile()
 
 if CLIENT then
-   SWEP.PrintName = "SG552"
-   SWEP.Icon = "tflippy/vgui/ttt/icon_sg552"
+   SWEP.PrintName = "SG550-C"
+   SWEP.Slot = 2
+   SWEP.Icon = "vgui/ttt/icon_sg550c"
 end
-
-SWEP.Slot        = 2
-SWEP.SlotPos     = 1
 
 -- Always derive from weapon_tttbase
 SWEP.Base = "weapon_tttbase"
@@ -14,26 +12,27 @@ SWEP.Base = "weapon_tttbase"
 -- Standard GMod values
 SWEP.HoldType = "ar2"
 
-SWEP.Primary.Ammo = "SMG1"
-SWEP.Primary.Delay = 0.11
-SWEP.Primary.Recoil = 1.04
-SWEP.Primary.Cone = 0.025
-SWEP.Primary.Damage = 18
-SWEP.Primary.Automatic = true
-SWEP.Primary.ClipSize = 30
-SWEP.Primary.ClipMax = 60
-SWEP.Primary.DefaultClip = 30
-SWEP.Primary.Sound = Sound( "Weapon_SG552.Single" )
+SWEP.Primary.Ammo = "Pistol"
+SWEP.Primary.Delay = 0.6
+SWEP.Primary.Recoil = 1.25
+SWEP.Primary.Cone = 0.003
+SWEP.Primary.Damage = 42
+SWEP.Primary.Automatic = false
+SWEP.Primary.ClipSize = 5
+SWEP.Primary.ClipMax = 40
+SWEP.Primary.DefaultClip = 5
+SWEP.Primary.Sound = Sound( "Weapon_SG550.Single" )
 SWEP.Secondary.Sound = Sound( "Default.Zoom" )
+SWEP.HeadshotMultiplier = 3
 
--- Model settings
+--- Model properties
 SWEP.UseHands = true
-SWEP.ViewModelFlip = false
-SWEP.ViewModelFOV = 59
-SWEP.ViewModel = "models/weapons/cstrike/c_rif_sg552.mdl"
-SWEP.WorldModel = "models/weapons/w_rif_sg552.mdl"
+SWEP.ViewModelFlip = true
+SWEP.ViewModelFOV = 64
+SWEP.ViewModel = Model( "models/weapons/v_snip_sg550.mdl" )
+SWEP.WorldModel = Model( "models/weapons/w_snip_sg550.mdl" )
 
-SWEP.IronSightsPos = Vector( 5, -15, -2 )
+SWEP.IronSightsPos = Vector( 5, -5, -2 )
 SWEP.IronSightsAng = Vector( 2.6, 1.37, 3.5 )
 
 --- TTT config values
@@ -48,11 +47,18 @@ SWEP.Kind = WEAPON_HEAVY
 SWEP.AutoSpawnable = true
 
 -- The AmmoEnt is the ammo entity that can be picked up when carrying this gun.
-SWEP.AmmoEnt = "item_ammo_smg1_ttt"
+SWEP.AmmoEnt = "item_ammo_pistol_ttt"
+
+-- CanBuy is a table of ROLE_* entries like ROLE_TRAITOR and ROLE_DETECTIVE. If
+-- a role is in this table, those players can buy this.
+SWEP.CanBuy = { nil }
 
 -- InLoadoutFor is a table of ROLE_* entries that specifies which roles should
 -- receive this weapon as soon as the round starts. In this case, none.
 SWEP.InLoadoutFor = { nil }
+
+-- If LimitedStock is true, you can only buy one per round.
+SWEP.LimitedStock = false
 
 -- If AllowDrop is false, players can't manually drop the gun with Q
 SWEP.AllowDrop = true
@@ -64,7 +70,7 @@ SWEP.IsSilent = false
 SWEP.NoSights = false
 
 function SWEP:SetZoom( state )
-   if CLIENT then 
+   if CLIENT then
       return
    elseif IsValid( self.Owner ) and self.Owner:IsPlayer() then
       if state then
@@ -79,18 +85,18 @@ end
 function SWEP:SecondaryAttack()
    if not self.IronSightsPos then return end
    if self:GetNextSecondaryFire() > CurTime() then return end
-   
+
    bIronsights = not self:GetIronsights()
-   
+
    self:SetIronsights( bIronsights )
-   
+
    if SERVER then
       self:SetZoom( bIronsights )
    else
       self:EmitSound( self.Secondary.Sound )
    end
-   
-   self:SetNextSecondaryFire( CurTime() + 0.3 )
+
+   self:SetNextSecondaryFire( CurTime() + 0.15 )
 end
 
 function SWEP:PreDrop()
@@ -117,47 +123,46 @@ if CLIENT then
    function SWEP:DrawHUD()
       if self:GetIronsights() then
          surface.SetDrawColor( 0, 0, 0, 255 )
-         
+
          local x = ScrW() / 2.0
          local y = ScrH() / 2.0
          local scope_size = ScrH()
-         
-         -- crosshair
+
+         -- Crosshair
          local gap = 80
          local length = scope_size
          surface.DrawLine( x - length, y, x - gap, y )
          surface.DrawLine( x + length, y, x + gap, y )
          surface.DrawLine( x, y - length, x, y - gap )
          surface.DrawLine( x, y + length, x, y + gap )
-         
+
          gap = 0
          length = 50
          surface.DrawLine( x - length, y, x - gap, y )
          surface.DrawLine( x + length, y, x + gap, y )
          surface.DrawLine( x, y - length, x, y - gap )
          surface.DrawLine( x, y + length, x, y + gap )
-         
-         
-         -- cover edges
+
+         -- Cover edges
          local sh = scope_size / 2
          local w = ( x - sh ) + 2
          surface.DrawRect( 0, 0, w, scope_size )
          surface.DrawRect( x + sh - 2, 0, w, scope_size )
-         
+
          surface.SetDrawColor( 255, 0, 0, 255 )
          surface.DrawLine( x, y, x + 1, y + 1 )
-         
-         -- scope
+
+         -- Scope
          surface.SetTexture( scope )
          surface.SetDrawColor( 255, 255, 255, 255 )
-         
+
          surface.DrawTexturedRectRotated( x, y, scope_size, scope_size, 0 )
-         
+
       else
          return self.BaseClass.DrawHUD( self )
       end
    end
-   
+
    function SWEP:AdjustMouseSensitivity()
       return ( self:GetIronsights() and 0.2 ) or nil
    end

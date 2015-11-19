@@ -313,6 +313,8 @@ function GM:HUDPaint()
 
     DrawTeams( ply, round, time, rk, bk, sl, left )
 
+    DrawXP( ply )
+
 	if LocalPlayer():Team() == TEAM_SPEC then 
 
         --Hud for Spectators
@@ -322,8 +324,6 @@ function GM:HUDPaint()
         --draw.DrawText( commandText, "Commands", 60 + 10, ScrH()-78 , Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
 
 	else
-
-        DrawXP( ply )
 
         --No Hud if dead
 		if (ply:Alive()) then

@@ -23,7 +23,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 
 		ply.was_headshot = false
 
-		dmginfo:ScaleDamage( 1.75 )
+		dmginfo:ScaleDamage( 1.5 )
 
 	end
 
@@ -36,7 +36,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	 
 		ply.was_headshot = false
 
-		dmginfo:ScaleDamage( 1.25 )
+		dmginfo:ScaleDamage( 1 )
 	 
 	end
 
@@ -93,13 +93,14 @@ function GM:PlayerDeathThink( ply )
 
 	if ( ply.NextSpawnTime && ply.NextSpawnTime > CurTime() ) then return end
 
-	if ( ply:KeyPressed( IN_ATTACK ) || ply:KeyPressed( IN_ATTACK2 ) || ply:KeyPressed( IN_JUMP ) && (player_manager.GetPlayerClass( ply ) == "noclass") ) then
+	if ( ply:KeyPressed( IN_ATTACK ) || ply:KeyPressed( IN_ATTACK2 ) || ply:KeyPressed( IN_JUMP ) && ( ply:GetPData( "Player_Class", "noclass" ) != "noclass") ) then
 	
 		ply:Spawn()
 		
 	end
 
-	if ( !ply:Alive() && (ply.NextSpawnTime + 4) < CurTime() && (player_manager.GetPlayerClass( ply ) != "noclass")) then
+	-- Forced Player Respawn, Can't afk dead
+	if ( !ply:Alive() && (ply.NextSpawnTime + TDM_ForceRespawnDelay) < CurTime() && (ply:GetPData( "Player_Class", "noclass" ) != "noclass")) then
 
 		ply:Spawn()
 
@@ -115,7 +116,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 
 	local roundState = GetGlobalInt( "TDM_RoundState" )
 
-	ply.NextSpawnTime = CurTime() + 3 -- 3 Seconds to respawn
+	ply.NextSpawnTime = CurTime() + TDM_RespawnDelay -- Default 3 Seconds to respawn
 	ply.DeathTime = CurTime()
 
 	if ( roundState == ROUND_IN_PROGRESS ) then
@@ -233,6 +234,13 @@ function CreateAmmoOnDeath( pos, ang )
 
 	ent:Spawn()
 	ent:PhysWake()
+
+	timer.Simple( 45, function()
+
+		if ent:IsValid() then ent:Remove() end
+
+	end )
+
 end
 
 --Stop the pickup of props

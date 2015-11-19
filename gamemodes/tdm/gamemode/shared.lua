@@ -5,18 +5,13 @@ GM.Author = "Stupid"
 GM.Email = "stupid@stupids-servers.com"
 GM.Website = "www.stupids-servers.com"
 GM.TeamBased = true
-GM.Version = "02-06-15"
+GM.Version = "11-19-15"
 
 include( "mapvote/mapvote.lua" )
 include( "weaponry_shd.lua" )
 
---Classes
-include( "player_class/noclass.lua" )
-include( "player_class/assault.lua" )
-include( "player_class/infantry.lua" )
-include( "player_class/heavy.lua" )
-include( "player_class/sniper.lua" )
-include( "player_class/commando.lua" )
+--Class Config
+include( "config/loadout_config.lua" )
 
 TEAM_RED = 1
 TEAM_BLUE = 2
@@ -105,9 +100,6 @@ surface.CreateFont( "LevelUpLargeShadow",
     blursize = 2,
     shadow = false
 })
-
-
-
 
 	hit = false
 	W = ScrW()/2

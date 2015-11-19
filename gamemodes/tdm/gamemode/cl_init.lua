@@ -14,10 +14,5 @@ include("cl_deathscreen.lua")
 include("cl_levels.lua")
 include("mapvote/cl_mapvote.lua")
 
---Classes
-include("player_class/noclass.lua")
-include("player_class/assault.lua")
-include("player_class/infantry.lua")
-include("player_class/heavy.lua")
-include("player_class/sniper.lua")
-include("player_class/commando.lua")
+--Class Config
+include("config/loadout_config.lua")

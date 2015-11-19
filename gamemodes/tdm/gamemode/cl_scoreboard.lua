@@ -44,6 +44,15 @@ surface.CreateFont( "ScoreboardDefaultTitle", {
 local PLAYER_LINE = {
 	Init = function( self )
 
+		self.Level = self:Add( "DLabel" )
+		self.Level:Dock( LEFT )
+		self.Level:SetWidth( 20 )
+		self.Level:SetFont( "ScoreboardDefault" )
+		self.Level:SetDark( false )
+		self.Level:SetTextColor( Color( 255, 255, 255, 255 ) )
+		self.Level:DockMargin( 8, 0, 12, 0 )
+		self.Level:SetContentAlignment( 5 )
+
 		self.AvatarButton = self:Add( "DButton" )
 		self.AvatarButton:Dock( LEFT )
 		self.AvatarButton:SetSize( 22, 22 )
@@ -122,6 +131,11 @@ local PLAYER_LINE = {
 			return
 		end
 
+		if ( self.NumLevel == nil || self.NumLevel != self.Player:GetNWInt( "Level", 1 ) ) then
+			self.NumLevel = self.Player:GetNWInt( "Level", 1 )
+			self.Level:SetText( self.NumLevel )
+		end
+
 		if ( self.PName == nil || self.PName != self.Player:Nick() ) then
 			self.PName = self.Player:Nick()
 			self.Name:SetText( self.PName )
@@ -154,9 +168,9 @@ local PLAYER_LINE = {
 
 			self.Muted = self.Player:IsMuted()
 			if ( self.Muted ) then
-				self.Mute:SetImage( "icon32/muted.png" )
+				self.Mute:SetImage( "vgui/tdm/muted.png" )
 			else
-				self.Mute:SetImage( "icon32/unmuted.png" )
+				self.Mute:SetImage( "vgui/tdm/unmuted.png" )
 			end
 
 			self.Mute.DoClick = function() self.Player:SetMuted( !self.Muted ) end
