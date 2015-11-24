@@ -18,9 +18,20 @@ hook.Add( "KeyPress", "StaminaBarStuff", function( ply, key )
 
 		ply.RunSpeed = ply:GetRunSpeed()
 		ply.LocalWalkSpeed = ply:GetWalkSpeed()
-		ply.StaminaDelay = "StamDelay_" .. ply:SteamID64()
-		ply.StaminaActive = "StamActive_" .. ply:SteamID64()
-		ply.StaminaRegen = "StamRegen_" .. ply:SteamID64()
+
+		if ( ply:SteamID64() == nil ) then
+
+			ply.StaminaDelay = "StamDelay_" .. ply:Nick()
+			ply.StaminaActive = "StamActive_" .. ply:Nick()
+			ply.StaminaRegen = "StamRegen_" .. ply:Nick()
+
+		else 
+
+			ply.StaminaDelay = "StamDelay_" .. ply:SteamID64()
+			ply.StaminaActive = "StamActive_" .. ply:SteamID64()
+			ply.StaminaRegen = "StamRegen_" .. ply:SteamID64()
+
+		end
 
 		timer.Create ( ply.StaminaActive, 0.05, 0, function() 
 

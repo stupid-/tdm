@@ -7,6 +7,14 @@ surface.CreateFont( "ScoreboardDefault", {
     blursize = 0.1
 })
 
+surface.CreateFont( "ScoreboardDefaultRank", {
+	font		= "Helvetica",
+	size		= 14,
+	weight		= 800,
+    antialias = true,
+    blursize = 0.1
+})
+
 surface.CreateFont( "ScoreboardHeading", {
 	font		= "Helvetica",
 	size		= 18,
@@ -63,11 +71,20 @@ local PLAYER_LINE = {
 		self.Avatar:SetMouseInputEnabled( false )
 
 		self.Name = self:Add( "DLabel" )
-		self.Name:Dock( FILL )
+		self.Name:Dock( LEFT )
+		self.Name:SetWidth( 120 )
 		self.Name:SetFont( "ScoreboardDefault" )
 		self.Name:SetDark( false )
 		self.Name:SetTextColor( Color( 255, 255, 255, 255 ) )
 		self.Name:DockMargin( 8, 0, 0, 0 )
+
+		self.Rank = self:Add( "DLabel" )
+		self.Rank:Dock( LEFT )
+		self.Rank:SetWidth( 120 )
+		self.Rank:SetFont( "ScoreboardDefaultRank" )
+		self.Rank:SetDark( false )
+		self.Rank:SetTextColor( Color( 255, 255, 255, 255 ) )
+		self.Rank:DockMargin( 8, 0, 0, 0 )
 
 		self.Mute = self:Add( "DImageButton" )
 		self.Mute:SetSize( 22, 22 )
@@ -124,8 +141,6 @@ local PLAYER_LINE = {
 
 	Think = function( self )
 
-		--local pl = self.GetPlayer()
-
 		if ( !IsValid( self.Player ) ) then
 			self:Remove()
 			return
@@ -139,6 +154,21 @@ local PLAYER_LINE = {
 		if ( self.PName == nil || self.PName != self.Player:Nick() ) then
 			self.PName = self.Player:Nick()
 			self.Name:SetText( self.PName )
+		end
+
+		self.findRank = nil
+		self.findRankLevel = nil
+
+		for k, v in pairs( PlayerRanks ) do
+			if ( !self.findRank || ( tonumber(v.level) >= tonumber(self.findRankLevel)) && (tonumber(v.level) <= tonumber(self.NumLevel)) ) then
+				self.findRankLevel = v.level
+				self.findRank = v.rank
+			end
+		end
+
+		if ( self.PRank == nil || self.PRank != self.findRank ) then
+			self.PRank = self.findRank
+			self.Rank:SetText( self.PRank )
 		end
 		
 		if ( self.NumKills == nil || self.NumKills != self.Player:Frags() ) then
@@ -295,13 +325,13 @@ local SCORE_BOARD = {
 			local scorePing = "Ping"
 
 			--DropShadows
-			draw.DrawText( scoreName, "ScoreboardHeadingShadow", 34 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_LEFT ) 
+			draw.DrawText( scoreName, "ScoreboardHeadingShadow", 44 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_LEFT ) 
 			draw.DrawText( scoreKills, "ScoreboardHeadingShadow", 393 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scoreAssists, "ScoreboardHeadingShadow", 473 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scoreDeaths, "ScoreboardHeadingShadow", 552 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scorePing, "ScoreboardHeadingShadow", 632 + 1, 11, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER ) 
 
-			draw.DrawText( scoreName, "ScoreboardHeading", 34, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+			draw.DrawText( scoreName, "ScoreboardHeading", 44, 10, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
 			draw.DrawText( scoreKills, "ScoreboardHeading", 393, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scoreAssists, "ScoreboardHeading", 473, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
 			draw.DrawText( scoreDeaths, "ScoreboardHeading", 552, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 

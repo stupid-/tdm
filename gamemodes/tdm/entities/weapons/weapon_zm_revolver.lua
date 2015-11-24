@@ -6,12 +6,11 @@ SWEP.HoldType			= "pistol"
 if CLIENT then
    SWEP.PrintName			= "Deagle"			
    SWEP.Author				= "TTT"
-
-   SWEP.Slot				= 1
-   SWEP.SlotPos			= 1
-
-   SWEP.Icon = "vgui/ttt/icon_deagle"
 end
+
+SWEP.Slot        = 1
+SWEP.SlotPos     = 1
+
 
 SWEP.Base				= "weapon_tttbase"
 

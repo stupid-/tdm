@@ -2,8 +2,10 @@ AddCSLuaFile()
 
 if CLIENT then
    SWEP.PrintName = "Silenced M4A1"
-   SWEP.Slot = 6
 end
+
+SWEP.Slot        = 2
+SWEP.SlotPos     = 1
 
 -- Always derive from weapon_tttbase
 SWEP.Base = "weapon_tttbase"

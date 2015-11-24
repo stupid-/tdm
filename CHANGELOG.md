@@ -1,6 +1,29 @@
 ## Current Version
 
-Alpha 11-19-15
+Alpha 11-23-15
+
+## To-Do List
+
+* Customizable Team Names
+* Customizable Team Colours
+* Sprinting While Crouched
+* Fix broken flashlight
+* Fix Run/Walk Speed w/ Classes
+* Overwatch style defeat screen / End game stats
+* In game admin menu for admins only, featuring force team switching and round restarting
+* Save players' custom class decisions
+
+## Alpha Changes 11-23-15
+
+* Added player Ranks that coincide with the leveling system
+* Slightly increased overall xp recieved
+* Modified class loadouts
+* Added support to limit teamswitching and autobalance once a team is close to winning
+* Added resources.lua, for default tdm content. Server owners still need to add the content of the /content/ folder to their fastdl
+* Added the support of multiple player models per class
+* Added support for team blaced player models in config.lua
+* Added support for removing colored player models in config.lua
+* Weapon unlocks now happen sooner to test overall balance
 
 ## Alpha Changes 11-19-15
 

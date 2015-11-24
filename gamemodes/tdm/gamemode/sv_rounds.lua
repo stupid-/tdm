@@ -111,7 +111,7 @@ GM.RoundFunctions = {
 
 	end,
 
-	[ROUND_OVER] = function( gm, winner) 
+	[ROUND_OVER] = function( gm, winner ) 
 
 		gm:SetRoundTime( GetConVarNumber( "tdm_endtime" ) or 20 ) 
 
@@ -129,7 +129,30 @@ GM.RoundFunctions = {
 
 			--Award Red Players
 			for k,v in pairs(team.GetPlayers( TEAM_RED )) do
-				v:AddXP( 250 )
+				local vLevel = v:GetPData( "tdm_player_level", 1 )
+				local xpToGive = (vLevel * 100) * 0.75
+				v:AddXP( 450 + xpToGive )
+
+				v:SetPData( "tdm_stats_wins", ( v:GetPData( "tdm_stats_wins", 0 ) + 1 ) )
+				MsgN( v:Nick() .. "s wins: " .. v:GetPData( "tdm_stats_wins", 0 ) )
+				MsgN( v:Nick() .. "s losses: " .. v:GetPData( "tdm_stats_losses", 0 ) )
+				MsgN( v:Nick() .. "s kills: " .. v:GetPData( "tdm_stats_kills", 0 ) )
+				MsgN( v:Nick() .. "s deaths: " .. v:GetPData( "tdm_stats_deaths", 0 ) )
+
+				v:SetPData( "tdm_stats_games_played", ( v:GetPData( "tdm_stats_games_played", 0 ) + 1 ) )
+				MsgN( v:Nick() .. "s Games Played: " .. v:GetPData( "tdm_stats_games_played", 0 ) )
+			end
+
+			--Blue Players Loss Statistics
+			for k,v in pairs(team.GetPlayers( TEAM_BLUE )) do
+				v:SetPData( "tdm_stats_losses", ( v:GetPData( "tdm_stats_losses", 0 ) + 1 ) )
+				MsgN( v:Nick() .. "s wins: " .. v:GetPData( "tdm_stats_wins", 0 ) )
+				MsgN( v:Nick() .. "s losses: " .. v:GetPData( "tdm_stats_losses", 0 ) )
+				MsgN( v:Nick() .. "s kills: " .. v:GetPData( "tdm_stats_kills", 0 ) )
+				MsgN( v:Nick() .. "s deaths: " .. v:GetPData( "tdm_stats_deaths", 0 ) )
+
+				v:SetPData( "tdm_stats_games_played", ( v:GetPData( "tdm_stats_games_played", 0 ) + 1 ) )
+				MsgN( v:Nick() .. "s Games Played: " .. v:GetPData( "tdm_stats_games_played", 0 ) )
 			end
 
 			--Play RED MUSIC
@@ -148,7 +171,25 @@ GM.RoundFunctions = {
 
 			--Award Blue Players
 			for k,v in pairs(team.GetPlayers( TEAM_BLUE )) do
-				v:AddXP( 250 )
+				local vLevel = v:GetPData( "tdm_player_level", 1 )
+				local xpToGive = (vLevel * 100) * 0.75
+				v:AddXP( 450 + xpToGive )
+
+				v:SetPData( "tdm_stats_wins", ( v:GetPData( "tdm_stats_wins", 0 ) + 1 ) )
+				MsgN( v:Nick() .. "s wins: " .. v:GetPData( "tdm_stats_wins", 0 ) )
+				MsgN( v:Nick() .. "s losses: " .. v:GetPData( "tdm_stats_losses", 0 ) )
+				v:SetPData( "tdm_stats_games_played", ( v:GetPData( "tdm_stats_games_played", 0 ) + 1 ) )
+				MsgN( v:Nick() .. "s Games Played: " .. v:GetPData( "tdm_stats_games_played", 0 ) )
+			end
+
+			--Red Players Loss Statistics
+			for k,v in pairs(team.GetPlayers( TEAM_RED )) do
+				v:SetPData( "tdm_stats_losses", ( v:GetPData( "tdm_stats_losses", 0 ) + 1 ) )
+				MsgN( v:Nick() .. "s wins: " .. v:GetPData( "tdm_stats_wins", 0 ) )
+				MsgN( v:Nick() .. "s losses: " .. v:GetPData( "tdm_stats_losses", 0 ) )
+
+				v:SetPData( "tdm_stats_games_played", ( v:GetPData( "tdm_stats_games_played", 0 ) + 1 ) )
+				MsgN( v:Nick() .. "s Games Played: " .. v:GetPData( "tdm_stats_games_played", 0 ) )
 			end
 
 			--Play BLUE MUSIC

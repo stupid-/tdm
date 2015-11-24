@@ -3,11 +3,12 @@ AddCSLuaFile()
 SWEP.HoldType			= "grenade"
 
 if CLIENT then
-   SWEP.PrintName	 = "grenade_fire"
-   SWEP.Slot		 = 3
-
+   SWEP.PrintName	 = "Incendiary Grenade"
    SWEP.Icon = "vgui/ttt/icon_nades"
 end
+
+SWEP.Slot        = 3
+SWEP.SlotPos     = 1
 
 SWEP.Base				= "weapon_tttbasegrenade"
 SWEP.Spawnable = true

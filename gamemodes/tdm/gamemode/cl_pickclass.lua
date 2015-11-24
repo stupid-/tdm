@@ -19,14 +19,14 @@ function pickClass( ply )
 		--draw.RoundedBox( 8, 0, 0, ChooseTeamSheet:GetWide(), ChooseTeamSheet:GetTall(), Color(40,40,40,155))
 	end
 
-	cc = 0
+	cc = -1
 	for _, classes in pairs(PlayerClasses) do
 		cc = cc + 1
 
 		local ClassButton = vgui.Create('DButton')
 		ClassButton:SetParent(ChooseTeamSheet)
-		ClassButton:SetSize(100, 30)
-		ClassButton:SetPos(0, 0 + (cc*30))
+		ClassButton:SetSize(200, 30)
+		ClassButton:SetPos(5, 0 + (cc*30))
 		ClassButton:SetText( classes.displayName )
 		ClassButton:SetDrawBackground(true)
 		ClassButton.DoClick = function() 
@@ -100,7 +100,7 @@ function pickLoadout( ply, tbl )
 
 		end
 		
-		print( value .." was selected! Also known as ".. data )
+		--print( value .." was selected! Also known as ".. data )
 
 	end
 
@@ -143,7 +143,7 @@ function pickLoadout( ply, tbl )
 
 		end
 
-		print( value .." was selected! Also known as ".. data )
+		--print( value .." was selected! Also known as ".. data )
 
 	end
 
@@ -173,17 +173,18 @@ function pickLoadout( ply, tbl )
 
 		GWeapon = data
 
-		print( value .." was selected! Also known as ".. data )
+		--print( value .." was selected! Also known as ".. data )
 
 	end
 
-	local BackButton = vgui.Create('DButton')
-	BackButton:SetParent(ChooseLoadoutSheet)
-	BackButton:SetSize(200, 30)
-	BackButton:SetPos(5, 0)
-	BackButton:SetText(ClassLabel)
-	BackButton:SetDrawBackground(true)
-	BackButton.DoClick = function() 
+	local ClassButton = vgui.Create('DButton')
+	ClassButton:SetParent(ChooseLoadoutSheet)
+	ClassButton:SetSize(200, 30)
+	ClassButton:SetPos(5, 0)
+	ClassButton:SetText(ClassLabel)
+	ClassButton:SetDisabled( true )
+	ClassButton:SetDrawBackground(true)
+	ClassButton.DoClick = function() 
 	end
 
 	local BackButton = vgui.Create('DButton')
@@ -215,9 +216,9 @@ function pickLoadout( ply, tbl )
 		tbl.secondary_ammo_type = SWeaponAmmoType
 		tbl.grenade = GWeapon
 
-		print( SClass .. ", " .. PWeapon .. ", " .. SWeapon .. ", " .. GWeapon )
+		--print( SClass .. ", " .. PWeapon .. ", " .. SWeapon .. ", " .. GWeapon )
 
-		PrintTable( tbl )
+		--PrintTable( tbl )
 
 		net.Start( "PickLoadout" )
 			net.WriteTable( tbl )

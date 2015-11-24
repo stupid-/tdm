@@ -4,7 +4,7 @@ I was looking for a more competetive gamemode for my community, so I decided to 
 
 ## Current Version
 
-Alpha 11-19-15
+Alpha 11-23-15
 
 ## Installation
 
@@ -12,16 +12,15 @@ Drop the /tdm/ folder into the garrysmod/gamemodes folder and you are done. On y
 
 Add any content files in the content folder to your fastdl server.
 
-## To-do List
+## Changelog
 
-* Customizable Team Names & Colors 
-* Possible Ranks to coincide with the leveling system
-* Polish gameplay
+* [Look Here](https://github.com/stupid-/tdm/blob/master/CHANGELOG.md)
 
 ## Known Issues
 
+* Not sprinting/walking correct speed
+* Sprinting while crouched
 * Issues with sound ticking countdown
-* Stamina issues in Single Player
 
 ## Special Thanks / Credits
 

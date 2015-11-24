@@ -7,6 +7,7 @@ include( "sv_classselection.lua" )
 include( "ent_import.lua" )
 include( "config/config.lua" )
 include( "weaponry_shd.lua" )
+include( "resources.lua" )
 
 --Class Config
 include( "config/loadout_config.lua" )
@@ -72,7 +73,6 @@ function GM:ShowSpare1( ply ) -- F3
 
 	-- Coming soon --cl_help.lua
 	-- Help Menu
-	 --ply:ConCommand( "welcomePlayer2" )
 
 end
 
@@ -108,6 +108,18 @@ function GM:PlayerDisconnected( ply )
 
 	PrintMessage( HUD_PRINTTALK, Format( "Player %s has disconnected.", ply:Nick() ) )
 
+	local roundState = GetGlobalInt( "TDM_RoundState" )
+
+	if ( roundState == 2 && ply:Team() != TEAM_SPEC ) then 
+
+		ply:SetPData( "tdm_stats_losses", ( ply:GetPData( "tdm_stats_losses", 0 ) + 1 ) )
+
+
+		ply:SetPData( "tdm_stats_games_played", ( ply:GetPData( "tdm_stats_games_played", 0 ) + 1 ) )
+		MsgN( ply:Nick() .. " left during the round and it counts as a loss." )
+
+	end
+
 end
 
 ------------------------------------------
@@ -119,7 +131,6 @@ function GM:Initialize()
 	SetGlobalInt( "TDM_RoundsLeft", round_limit:GetInt() )
 
 	SetGlobalInt( "TDM_ScoreLimit", round_scorelimit:GetInt() )
-
 
 	if ( TDM_TeamAutoBalance == true ) then 
 		timer.Create( "CheckTeamBalance", TDM_TeamBalanceCheckTime, 0, function() 
@@ -190,7 +201,9 @@ function GM:PlayerSpawn ( ply )
 
 		local color = team.GetColor( ply:Team() )
 
-		ply:SetPlayerColor( Vector( color.r/255, color.g/255, color.b/255 ) )
+		if TDM_PlayerModelColors == true then 
+			ply:SetPlayerColor( Vector( color.r/255, color.g/255, color.b/255 ) )
+		end
 
 		ply:SetupHands()
 
@@ -246,11 +259,33 @@ function GM:PlayerSetModel( ply )
 
 	if currentClass == "noclass" then return end 
 
-	for k, class in pairs( PlayerClasses ) do
-		if class.name == currentClass then
-			ply:SetModel( class.playerModel )
+	if TDM_TeamBasedPlayerModels == true then
+
+		if ply:Team() == TEAM_RED then
+
+			ply:SetModel( table.Random( TDM_PlayerModelsRed ) )
+
+		elseif ply:Team() == TEAM_BLUE then
+
+			ply:SetModel( table.Random( TDM_PlayerModelsBlue ) )
+
 		end
+
+	else
+
+		for k, class in pairs( PlayerClasses ) do
+
+			if class.name == currentClass then
+
+				ply:SetModel( table.Random( class.playerModels ) )
+
+			end
+
+		end
+
 	end
+
+
 
 end
 
@@ -589,7 +624,7 @@ end
 function stTeamSpec( ply )
 	if ( ply:Team() == TEAM_SPEC || ply.NextSwitchTime > CurTime() ) then return end
 
-	ply.NextSwitchTime = CurTime() + (TDM_SwitchTeamCooldown / 2)
+	ply.NextSwitchTime = CurTime() + (TDM_SwitchTeamCooldown)
 
 	ply:KillSilent()
 	classReset( ply )
@@ -613,6 +648,15 @@ function stTeamT( ply )
 	--Protection against swapping and forcing an autobalance
 	if ( ply:Team() == TEAM_BLUE && RedPlayers == BluePlayers) then return end
 
+	--Players will not be screwed over in the last 45 seconds of the game
+	if ( GAMEMODE:GetRoundTime() < 45 and GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS and ply:Team() == TEAM_BLUE ) then return end
+
+	--Players will not be switched if a team is close to winning
+	if ( GAMEMODE:GetRedKills() > ( GetGlobalInt( "TDM_ScoreLimit", 50 ) - 5) and ply:Team() == TEAM_RED ) then return end
+
+	--Players will not be switched if a team is close to winning
+	if ( GAMEMODE:GetBlueKills() > ( GetGlobalInt( "TDM_ScoreLimit", 50 ) - 5) and ply:Team() == TEAM_RED ) then return end
+
 	ply.NextSwitchTime = CurTime() + TDM_SwitchTeamCooldown
 
 	classReset( ply )
@@ -633,6 +677,15 @@ function stTeamCT( ply )
 	--Protection against swapping and forcing an autobalance
 	if ( ply:Team() == TEAM_RED && RedPlayers == BluePlayers) then return end
 
+	--Players will not be screwed over in the last 45 seconds of the game
+	if ( GAMEMODE:GetRoundTime() < 45 and GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS and ply:Team() == TEAM_RED ) then return end
+
+	--Players will not be switched if a team is close to winning
+	if ( GAMEMODE:GetRedKills() > ( GetGlobalInt( "TDM_ScoreLimit", 50 ) - 5) and ply:Team() == TEAM_RED ) then return end
+
+	--Players will not be switched if a team is close to winning
+	if ( GAMEMODE:GetBlueKills() > ( GetGlobalInt( "TDM_ScoreLimit", 50 ) - 5) and ply:Team() == TEAM_RED ) then return end
+
 	ply.NextSwitchTime = CurTime() + TDM_SwitchTeamCooldown
 
 	classReset( ply )
@@ -651,6 +704,12 @@ concommand.Add( "stTeamCT", stTeamCT )
 function GM:CheckTeamBalance()
 	local CurrentRedPlayers = GetGlobalInt( "TDM_RedTeamNum" )
 	local CurrentBluePlayers = GetGlobalInt( "TDM_BlueTeamNum" )
+
+	--Players will not be screwed over in the last minute of the game
+	if ( GAMEMODE:GetRoundTime() < 60 and GetGlobalInt( "TDM_RoundState" ) == ROUND_IN_PROGRESS ) then return end
+
+	--Players will not be switched if a team is close to winning
+	if ( GAMEMODE:GetRedKills() > ( GetGlobalInt( "TDM_ScoreLimit", 50 ) - 5) or GAMEMODE:GetBlueKills() > ( GetGlobalInt( "TDM_ScoreLimit", 50 ) - 5)) then return end
 
 	if ( CurrentRedPlayers > ( CurrentBluePlayers + 1) ) then
 		local ply, reason = GAMEMODE:FindLeastCommittedPlayerOnTeam( TEAM_RED )

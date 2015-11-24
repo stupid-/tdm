@@ -5,9 +5,10 @@ end
 
 if CLIENT then
    SWEP.PrintName = "P90"
-   SWEP.Slot = 6
-   SWEP.Icon = "vgui/ttt/icon_p90"
 end
+
+SWEP.Slot        = 2
+SWEP.SlotPos     = 1
 
 -- Always derive from weapon_tttbase
 SWEP.Base = "weapon_tttbase"
@@ -19,7 +20,7 @@ SWEP.Primary.Ammo = "SMG1"
 SWEP.Primary.Delay = 0.06
 SWEP.Primary.Recoil	= 0.8
 SWEP.Primary.Cone = 0.032
-SWEP.Primary.Damage = 14
+SWEP.Primary.Damage = 12
 SWEP.Primary.Automatic = true
 SWEP.Primary.ClipSize = 50
 SWEP.Primary.ClipMax = 100
@@ -50,10 +51,6 @@ SWEP.AutoSpawnable = false
 
 -- The AmmoEnt is the ammo entity that can be picked up when carrying this gun.
 SWEP.AmmoEnt = "item_ammo_smg1_ttt"
-
--- CanBuy is a table of ROLE_* entries like ROLE_TRAITOR and ROLE_DETECTIVE. If
--- a role is in this table, those players can buy this.
-SWEP.CanBuy = { ROLE_DETECTIVE }
 
 -- InLoadoutFor is a table of ROLE_* entries that specifies which roles should
 -- receive this weapon as soon as the round starts. In this case, none.

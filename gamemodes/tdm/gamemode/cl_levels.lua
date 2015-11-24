@@ -17,4 +17,3 @@ surface.CreateFont( "LevelUpLargeShadow",
     blursize = 2,
     shadow = false
 })
-

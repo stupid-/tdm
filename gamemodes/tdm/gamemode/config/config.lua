@@ -22,8 +22,31 @@ TDM_TeamBalanceCheckTime = 30
 --Should we auto balance the teams? Default is true.
 TDM_TeamAutoBalance = true
 
---How long should the cooldown be on switching teams? Default is 30 Seconds.
-TDM_SwitchTeamCooldown = 30
+--How long should the cooldown be on switching teams? Default is 20 Seconds.
+TDM_SwitchTeamCooldown = 20
+
+--Make this true if you want player models chosen by team rather than by class. Default is false.
+TDM_TeamBasedPlayerModels = false 
+
+--Team based colors on Player Models. Default is true.
+TDM_PlayerModelColors = true 
+
+--Red Team Player Models ( If TDM_TeamBasedPlayerModels = true )
+TDM_PlayerModelsRed = {
+	
+	"models/player/barney.mdl",
+	"models/player/alyx.mdl",
+	"models/player/police.mdl"
+
+}
+
+--Blue Team Player Models ( If TDM_TeamBasedPlayerModels = true )
+TDM_PlayerModelsBlue = {
+	
+	"models/player/leet.mdl",
+	"models/player/odessa.mdl"
+
+}
 
 --For adding spawns on maps, make sure the spawn text file has the map name and ends with the _tdm suffix, e.g. cs_office_tdm.txt
 --See content/maps/cs_office_tdm.txt as an example

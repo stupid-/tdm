@@ -5,7 +5,7 @@ GM.Author = "Stupid"
 GM.Email = "stupid@stupids-servers.com"
 GM.Website = "www.stupids-servers.com"
 GM.TeamBased = true
-GM.Version = "11-19-15"
+GM.Version = "11-23-15"
 
 include( "mapvote/mapvote.lua" )
 include( "weaponry_shd.lua" )
@@ -26,11 +26,6 @@ function GM:CreateTeams()
 	team.SetSpawnPoint( TEAM_RED, {"info_player_terrorist"} )
 	team.SetSpawnPoint( TEAM_BLUE, {"info_player_counterterrorist"} )
 	team.SetSpawnPoint( TEAM_SPEC, {"info_player_terrorist"} )
-
-	--Precaching Playermodels
-	util.PrecacheModel( 'models/player/leet.mdl' )
-	util.PrecacheModel( 'models/player/phoenix.mdl' )
-	util.PrecacheModel( 'models/player/barney.mdl' )
 end
 
 function GetAssists( ply )

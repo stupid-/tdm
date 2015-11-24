@@ -427,3 +427,7 @@ function nobodyWins( ply )
 
 end
 concommand.Add("nobodyWins", nobodyWins)
+
+function endgameMenu( ply )
+
+end

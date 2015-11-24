@@ -183,11 +183,11 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 			MsgN( attacker:Nick() .. "s kills: " .. attacker:GetPData( "tdm_stats_kills", 0 ) )
 
 			if ply.was_headshot then
-				attacker:AddXP( 150 )
+				attacker:AddXP( 500 )
 				attacker:SetPData( "tdm_stats_headshot", ( attacker:GetPData( "tdm_stats_headshot", 0 ) + 1 ) )
 				MsgN( attacker:Nick() .. "s headshots: " .. attacker:GetPData( "tdm_stats_headshot", 0 ) )
 			else
-				attacker:AddXP( 100 )
+				attacker:AddXP( 250 )
 			end
 
 			local deathPos = ply:GetPos()
@@ -339,7 +339,7 @@ hook.Add( "PlayerDeath", "TDMAssistspt2", function( victim, inflictor, attacker 
 
 			MsgN( v:Nick() .. "s assists: " .. v:GetPData( "tdm_stats_assists", 0 ) )
 
-			v:AddXP( 25 )
+			v:AddXP( 50 )
 		end
 
 	end
@@ -391,4 +391,4 @@ hook.Add( "EntityTakeDamage", "TDMEntityDamageTable", function( ply, dmg )
 
 	end
 
-end)
+end )
