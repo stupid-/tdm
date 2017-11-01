@@ -4,7 +4,7 @@ Menu for changing/switching teams mid game.
 
 ]]--
 
-surface.CreateFont( "stupidButton",
+surface.CreateFont( "2stupidButton",
 {
     font    = "Marlett", 
     size    = 13,
@@ -15,14 +15,14 @@ surface.CreateFont( "stupidButton",
     shadow = false
 })
 
-surface.CreateFont( "stupidButton2",
+surface.CreateFont( "2stupidButton2",
 {
     font    = "Marlett", 
     size    = 11,
     weight  = 600,
     antialias = true,
     blursize = 0.2,
-	symbol = true,
+	symbol = false,
     shadow = false
 })
 
@@ -86,6 +86,125 @@ surface.CreateFont( "TeamMSGShadow",
     shadow = false
 })
 
+surface.CreateFont( "egmFont1",
+{
+    font    = "CM Sans Serif 2012",
+    size    = ScreenScale(11),
+    weight  = 600,
+    antialias = true,
+    blursize = 0.5,
+    shadow = false
+})
+
+surface.CreateFont( "egmFont1s",
+{
+    font    = "CM Sans Serif 2012",
+    size    = ScreenScale(11),
+    weight  = 600,
+    antialias = true,
+    blursize = 1.75,
+    shadow = false
+})
+
+surface.CreateFont( "egmFont2",
+{
+    font    = "CM Sans Serif 2012",
+    size    = ScreenScale(20),
+    weight  = 600,
+    antialias = true,
+    blursize = 0.5,
+    shadow = false
+})
+
+surface.CreateFont( "egmFont2s",
+{
+    font    = "CM Sans Serif 2012",
+    size    = ScreenScale(20),
+    weight  = 600,
+    antialias = true,
+    blursize = 1.75,
+    shadow = false
+})
+
+surface.CreateFont( "egmFontName",
+{
+    font    = "CM Sans Serif 2012",
+    size    = ScreenScale(40),
+    weight  = 600,
+    antialias = true,
+    blursize = 0.75,
+    shadow = false
+})
+
+surface.CreateFont( "egmFontNames",
+{
+    font    = "CM Sans Serif 2012",
+    size    = ScreenScale(40),
+    weight  = 600,
+    antialias = true,
+    blursize = 2,
+    shadow = false
+})
+
+surface.CreateFont( "egmFontLevel",
+{
+    font    = "CM Sans Serif 2012",
+    size    = ScreenScale(20),
+    weight  = 600,
+    antialias = true,
+    blursize = 0.5,
+    shadow = false
+})
+
+surface.CreateFont( "egmFontLevels",
+{
+    font    = "CM Sans Serif 2012",
+    size    = ScreenScale(20),
+    weight  = 600,
+    antialias = true,
+    blursize = 2,
+    shadow = false
+})
+
+surface.CreateFont( "egmFontRank",
+{
+    font    = "CM Sans Serif 2012",
+    size    = ScreenScale(30),
+    weight  = 600,
+    antialias = true,
+    blursize = 0.5,
+    shadow = false
+})
+
+surface.CreateFont( "egmFontRanks",
+{
+    font    = "CM Sans Serif 2012",
+    size    = ScreenScale(30),
+    weight  = 600,
+    antialias = true,
+    blursize = 2,
+    shadow = false
+})
+
+local blur = Material("pp/blurscreen")
+
+local function DrawBlur(panel, amount)
+	local x, y = panel:LocalToScreen(0, 0)
+	local scrW, scrH = ScrW(), ScrH()
+
+	surface.SetDrawColor(255, 255, 255)
+	surface.SetMaterial(blur)
+
+	for i = 1, 3 do
+		blur:SetFloat("$blur", (i / 3) * (amount or 6))
+		blur:Recompute()
+
+		render.UpdateScreenEffectTexture()
+		surface.DrawTexturedRect(x * -1, y * -1, scrW, scrH)
+	end
+end
+
+
 function chooseTeam( ply )
 	local SpecPlayers = GetGlobalInt( "TDM_SpecTeamNum" )
 	local RedPlayers = GetGlobalInt( "TDM_RedTeamNum" )
@@ -109,6 +228,7 @@ function chooseTeam( ply )
 	ChooseTeamFrame:ShowCloseButton( false )
 	ChooseTeamFrame:MakePopup()
 	function ChooseTeamFrame:Paint( w, h, ply )
+		DrawBlur( ChooseTeamFrame, 4 )
 		draw.RoundedBox( 0, 0, 0 + h/(1.5), w, h*(1/3), Color(250,250,250,25))
 		draw.RoundedBox( 0, 0, 0, w, h/(1.5), Color(40,40,40,205))
 		draw.DrawText( "Changing teams?", "TeamMSGShadow", 0 + w/2 + 1, 0 + (h/1.5)/3 + 16 + 1, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER )  
@@ -136,7 +256,7 @@ function chooseTeam( ply )
 		else
 			draw.RoundedBox( 0, 0, 0, w, h, Color(120,120,120,210))
 		end
-		draw.SimpleText( "s", "stupidButton2", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
+		draw.SimpleText( "?", "2stupidButton2", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function HelpButton:DoClick()
 		--ChooseTeamFrame:Close()
@@ -162,7 +282,7 @@ function chooseTeam( ply )
 		else
 			draw.RoundedBox( 0, 0, 0, w, h, Color(250,120,120,210))
 		end
-		draw.SimpleText( "r", "stupidButton", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
+		draw.SimpleText( "X", "2stupidButton", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function CloseButton:DoClick()
 		ChooseTeamFrame:Close()
@@ -428,6 +548,244 @@ function nobodyWins( ply )
 end
 concommand.Add("nobodyWins", nobodyWins)
 
+net.Receive( "EndGame", function( len, ply )
+
+	received_tbl = net.ReadTable()
+
+	PrintTable( received_tbl )
+
+	gWinner = received_tbl.winner
+	gTeam = received_tbl.team
+	gKills = received_tbl.kills
+	gAssists = received_tbl.assists
+	gDeaths = received_tbl.deaths
+	gHeadshots = received_tbl.headshots
+	gKillsTotal = received_tbl.killsTotal
+	gAssistsTotal = received_tbl.assistsTotal
+	gDeathsTotal = received_tbl.deathsTotal
+	gWins = received_tbl.wins
+	gLosses = received_tbl.losses
+	gGamesTotal = received_tbl.gamesTotal
+	gLevel = received_tbl.level
+	gSavedXP = received_tbl.savedXP
+	gReqXP = received_tbl.reqXP
+	gEarnedXP = received_tbl.earnedXP
+
+	endgameMenu( ply )
+
+	--timer.Simple( 5, function() endgameMenu( ply ) end )
+
+end )
+
 function endgameMenu( ply )
 
+	gWinner = gWinner or 1
+	gTeam = gTeam or 1
+	gKills = gKills or 15
+	gAssists = gAssists or 2
+	gDeaths = gDeaths or 4
+	gHeadshots = gHeadshots or 0
+	gKillsTotal = gKillsTotal or 50
+	gAssistsTotal = gAssistsTotal or 5
+	gDeathsTotal = gDeathsTotal or 15
+	gGamesTotal = gGamesTotal or 4
+	gSavedXP = gSavedXP or 800
+	gReqXP = gReqXP or 2000
+	gLevel = gLevel or 12
+	gEarnedXP = gEarnedXP or 250
+
+	if gWinner == 1 then 
+		lineText = "Red Team Wins"
+	elseif gWinner == 2 then
+		lineText = "Blue Team Wins"
+	elseif gWinner == 3 then
+		lineText = "Everybody loses"
+	end
+
+	if gWinner == 1 and gTeam == 1 then
+		endText = "VICTORY"
+	elseif gWinner == 2 and gTeam == 2 then
+		endText = "VICTORY"
+	elseif gWinner == 3 then
+		endText = "DRAW"
+	else
+		endText = "DEFEAT"
+	end
+
+	findRank = nil
+	findRankLevel = nil
+
+	for k, v in pairs( PlayerRanks ) do
+		if ( !findRank || ( tonumber(v.level) >= tonumber(findRankLevel)) && (tonumber(v.level) <= tonumber(gLevel)) ) then
+			findRankLevel = v.level
+			findRank = v.rank
+		end
+	end
+
+	local prec = gSavedXP / gReqXP
+	prec = math.Clamp( prec, 0, 1 )
+
+	local prec2 = gEarnedXP / gSavedXP 
+	prec2 = math.Clamp( prec2, 0, 1 )
+
+	local timeLeft = GAMEMODE:GetRoundTime()
+
+	timer.Create( "RoundTimerTimeChecker", 1, 0, function() 
+
+		timeLeft = GAMEMODE:GetRoundTime()
+
+	end )
+
+	gKillsAvg = math.Round((gKillsTotal / gGamesTotal)) or 0
+	gDeathsAvg = math.Round((gDeathsTotal / gGamesTotal)) or 0
+	gAssistsAvg = math.Round((gAssistsTotal / gGamesTotal)) or 0
+
+	if gKills == 1 then
+		killsText = "Kill"
+	else
+		killsText = "Kills"
+	end
+
+	if gDeaths == 1 then
+		deathsText = "Death"
+	else
+		deathsText = "Deaths"
+	end
+
+	if gAssists == 1 then
+		assistsText = "Assist"
+	else
+		assistsText = "Assists"
+	end
+
+	if gTeam == TEAM_RED then
+
+	    myColor = Color(188,0,0,255)
+	    myColor2 = Color(188,188,0,100)
+
+	elseif gTeam == TEAM_BLUE then
+
+	    myColor = Color(0,75,188,255)
+	    myColor2 = Color(188,188,0,100)
+
+	else
+
+	    myColor = Color(188,188,188,255)
+	    myColor2 = Color(188,0,0,100)
+
+	end
+
+	local EndGameBGPanel = vgui.Create( "DPanel" )
+	EndGameBGPanel:SetPos( 0, 0 )
+	EndGameBGPanel:SetSize( ScrW(), ScrH() )
+	EndGameBGPanel:SetDisabled( false )
+	EndGameBGPanel:Hide()
+	function EndGameBGPanel:Paint( w, h )
+
+		if gTeam == TEAM_RED then
+
+			surface.SetMaterial( Material( "vgui/tdm/tdm-mockup-red.png" ) );
+		    surface.SetDrawColor( 255, 255, 255, 255 );
+		    surface.DrawTexturedRect( 0, 0, ScrW(), ScrH() );
+
+		elseif gTeam == TEAM_BLUE then
+
+			surface.SetMaterial( Material( "vgui/tdm/tdm-mockup-blue.png" ) );
+		    surface.SetDrawColor( 255, 255, 255, 255 );
+		    surface.DrawTexturedRect( 0, 0, ScrW(), ScrH() );
+
+		else
+
+			surface.SetMaterial( Material( "vgui/tdm/tdm-mockup.png" ) );
+		    surface.SetDrawColor( 255, 255, 255, 255 );
+		    surface.DrawTexturedRect( 0, 0, ScrW(), ScrH() );
+
+		end
+
+		draw.DrawText( GetHostName(), "egmFont1s", w/6 - 50 + 2, ScreenScale(34) + 2, Color(0, 0, 0, 222), TEXT_ALIGN_LEFT ) 
+		draw.DrawText( GetHostName(), "egmFont1", w/6 - 50, ScreenScale(34), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT )
+
+		draw.DrawText( "NEXT GAME STARTS IN: ", "egmFont1s", w - w/6 + 5 + 2, ScreenScale(34) + 2, Color(0, 0, 0, 222), TEXT_ALIGN_RIGHT ) 
+		draw.DrawText( "NEXT GAME STARTS IN: ", "egmFont1", w - w/6 + 5, ScreenScale(34), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT )
+
+		draw.DrawText( timeLeft, "egmFont2s", w - w/6 + 50 + 2, ScreenScale(27) + 2, Color(0, 0, 0, 222), TEXT_ALIGN_RIGHT ) 
+		draw.DrawText( timeLeft, "egmFont2", w - w/6 + 50, ScreenScale(27), myColor, TEXT_ALIGN_RIGHT )
+
+	end
+
+	local EndGameAnnounce = vgui.Create( "DPanel" )
+	EndGameAnnounce:SetPos( 0, 0 )
+	EndGameAnnounce:SetSize( ScrW(), ScrH() )
+	EndGameAnnounce:SetDisabled( false )
+	function EndGameAnnounce:Paint( w, h )
+
+		draw.DrawText( endText, "egmFontNames", w/2 + 2, h/2 - ScreenScale(40) + 2, Color(0, 0, 0, 222), TEXT_ALIGN_CENTER ) 
+		draw.DrawText( endText, "egmFontName", w/2, h/2 - ScreenScale(40), myColor, TEXT_ALIGN_CENTER ) 
+
+		draw.DrawText( lineText, "egmFont2s", w/2 + 2, h/2 + 2, Color(0, 0, 0, 222), TEXT_ALIGN_CENTER ) 
+		draw.DrawText( lineText, "egmFont2", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+	end	
+
+	local EndGameScoreboard = vgui.Create( "DPanel" )
+	EndGameScoreboard:SetPos( 0, 0 )
+	EndGameScoreboard:SetSize( ScrW(), ScrH() )
+	EndGameScoreboard:SetDisabled( false )
+	EndGameScoreboard:Hide()
+	function EndGameScoreboard:Paint( w, h )
+
+		--draw.DrawText( "Scoreboard", "egmFontRank", w - w/6 + 50, h/2 - ScreenScale(30), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
+
+	end	
+
+	local EndGamePanel = vgui.Create( "DPanel" )
+	EndGamePanel:SetPos( 0, 0 )
+	EndGamePanel:SetSize( ScrW(), ScrH() )
+	EndGamePanel:SetDisabled( false )
+	EndGamePanel:Hide()
+	function EndGamePanel:Paint( w, h )
+
+		--draw.DrawText( "Testing", "egmFont1", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		draw.RoundedBox( 1, w/6, h - h/5 - h/6, w - w/6 - w/6, ScreenScale(10), Color(0,0,0,120))
+		draw.RoundedBox( 1, w/6, h - h/5 - h/6, (w - w/6 - w/6 )*prec, ScreenScale(10), myColor)
+		draw.RoundedBox( 1, (w/6) + ((w - w/6 - w/6 )*prec) - (((w - w/6 - w/6 )*prec)*prec2), h - h/5 - h/6, (((w - w/6 - w/6 )*prec))*prec2, ScreenScale(10), myColor2)
+
+		draw.DrawText( "+"..gEarnedXP.."xp", "egmFont1s", w/6 + 2, h - h/5 - h/6 - ScreenScale(10)-5 + 2, Color(0, 0, 0, 222), TEXT_ALIGN_LEFT ) 
+		draw.DrawText( gSavedXP.."/"..gReqXP, "egmFont1s", w - w/6 + 2, h - h/5 - h/6 - ScreenScale(10)-5 + 2, Color(0, 0, 0, 222), TEXT_ALIGN_RIGHT ) 
+
+		draw.DrawText( "+"..gEarnedXP.."xp", "egmFont1", w/6, h - h/5 - h/6 - ScreenScale(10)-5, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+		draw.DrawText( gSavedXP.."/"..gReqXP, "egmFont1", w - w/6, h - h/5 - h/6 - ScreenScale(10)-5, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
+
+		draw.DrawText( gKills.." "..killsText, "egmFont2s", w/6 + 2, h - h/5 + 2, Color(0, 0, 0, 240), TEXT_ALIGN_LEFT ) 
+		draw.DrawText( gAssists.." "..assistsText, "egmFont2s", w/2 + 2, h - h/5 + 2, Color(0, 0, 0, 240), TEXT_ALIGN_CENTER ) 
+		draw.DrawText( gDeaths.." "..deathsText, "egmFont2s", w - w/6 + 2, h - h/5 + 2, Color(0, 0, 0, 240), TEXT_ALIGN_RIGHT ) 
+
+		draw.DrawText( gKills.." "..killsText, "egmFont2", w/6, h - h/5, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+		draw.DrawText( gAssists.." "..assistsText, "egmFont2", w/2, h - h/5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+		draw.DrawText( gDeaths.." "..deathsText, "egmFont2", w - w/6, h - h/5, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
+
+		draw.DrawText( "OVERALL AVG: "..gKillsAvg, "egmFont1s", w/6 + 2, h - h/5 + ScreenScale(20) + 2, Color(0, 0, 0, 222), TEXT_ALIGN_LEFT ) 
+		draw.DrawText( "OVERALL AVG: "..gAssistsAvg, "egmFont1s", w/2 + 2, h - h/5 + ScreenScale(20) + 2, Color(0, 0, 0, 222), TEXT_ALIGN_CENTER ) 
+		draw.DrawText( "OVERALL AVG: "..gDeathsAvg, "egmFont1s", w - w/6 + 2, h - h/5 + ScreenScale(20) + 2, Color(0, 0, 0, 222), TEXT_ALIGN_RIGHT ) 
+
+		draw.DrawText( "OVERALL AVG: "..gKillsAvg, "egmFont1", w/6, h - h/5 + ScreenScale(20), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+		draw.DrawText( "OVERALL AVG: "..gAssistsAvg, "egmFont1", w/2, h - h/5 + ScreenScale(20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+		draw.DrawText( "OVERALL AVG: "..gDeathsAvg, "egmFont1", w - w/6, h - h/5 + ScreenScale(20), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
+
+		draw.DrawText( string.upper(LocalPlayer():Nick()), "egmFontNames", w/6 - 50 + 2, h/2 - ScreenScale(40) + 2, Color(0, 0, 0, 222), TEXT_ALIGN_LEFT ) 
+		draw.DrawText( string.upper(LocalPlayer():Nick()), "egmFontName", w/6 - 50, h/2 - ScreenScale(40), myColor, TEXT_ALIGN_LEFT ) 
+
+		draw.DrawText( findRank, "egmFontRanks", w - w/6 + 50 + 2, h/2 - ScreenScale(30) + 2, Color(0, 0, 0, 222), TEXT_ALIGN_RIGHT )
+		draw.DrawText( findRank, "egmFontRank", w - w/6 + 50, h/2 - ScreenScale(30), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
+
+		draw.DrawText( "LEVEL "..gLevel, "egmFontLevels", w/6 - 50 + 2, h/2 - ScreenScale(10) + 2, Color(0, 0, 0, 222), TEXT_ALIGN_LEFT ) 
+		draw.DrawText( "LEVEL "..gLevel, "egmFontLevel", w/6 - 50, h/2 - ScreenScale(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+
+	end
+	timer.Simple( 3, function() EndGameAnnounce:Hide() EndGameScoreboard:Show() GAMEMODE:ScoreboardShow() end )
+	timer.Simple( 10, function() GAMEMODE:ScoreboardHide() EndGameScoreboard:Hide() EndGameBGPanel:Show() EndGamePanel:Show() end )
+	timer.Simple( 20, function() EndGameBGPanel:Hide() EndGamePanel:Hide() end )
+
 end
+concommand.Add("endgameMenu", endgameMenu)

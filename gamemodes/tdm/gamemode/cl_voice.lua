@@ -40,7 +40,9 @@ function PANEL:Paint( w, h )
 
 	if ( !IsValid( self.ply ) ) then return end
 
-	draw.RoundedBox( 4, 0, 0, w, h, self.Color )
+	local darknessMultiplyer = 0.7
+
+	draw.RoundedBox( 4, 0, 0, w, h, Color( self.Color.r * darknessMultiplyer, self.Color.g * darknessMultiplyer, self.Color.b * darknessMultiplyer, 190 ) )
 
 end
 
@@ -126,7 +128,7 @@ function GM:PlayerEndVoice( ply )
 		if ( PlayerVoicePanels[ ply ].fadeAnim ) then return end
 
 		PlayerVoicePanels[ ply ].fadeAnim = Derma_Anim( "FadeOut", PlayerVoicePanels[ ply ], PlayerVoicePanels[ ply ].FadeOut )
-		PlayerVoicePanels[ ply ].fadeAnim:Start( 2 )
+		PlayerVoicePanels[ ply ].fadeAnim:Start( 0.3 )
 
 	end
 	
@@ -138,8 +140,8 @@ local function CreateVoiceVGUI()
 
 	g_VoicePanelList:ParentToHUD()
 	--g_VoicePanelList:SetPos( ScrW() - 300, 100 )
-	g_VoicePanelList:SetPos( ScrW() - 300, 100 )
-	g_VoicePanelList:SetSize( 250, ScrH() - 300 )
+	g_VoicePanelList:SetPos( ScrW() - 270, 50 )
+	g_VoicePanelList:SetSize( 240, ScrH() - 400 )
 	g_VoicePanelList:SetDrawBackground( false )
 
 end

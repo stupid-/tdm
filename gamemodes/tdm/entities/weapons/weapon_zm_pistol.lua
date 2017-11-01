@@ -4,11 +4,11 @@ SWEP.HoldType = "pistol"
    
 
 if CLIENT then
-   SWEP.PrintName = "Pistol"
+   SWEP.PrintName = "Five-Seven"
 end
 
 SWEP.Slot        = 1
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Weight     = 4
 SWEP.AutoSwitchTo   = false

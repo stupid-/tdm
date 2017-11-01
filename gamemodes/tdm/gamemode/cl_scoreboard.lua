@@ -1,53 +1,18 @@
 --Based on the base scorebaord, with modifications.
-surface.CreateFont( "ScoreboardDefault", {
-	font		= "Helvetica",
-	size		= 18,
-	weight		= 800,
-    antialias = true,
-    blursize = 0.1
-})
+surface.CreateFont( "ScoreboardDefault", { font	= "Helvetica", size	= 18, weight = 800, antialias = true, blursize = 0.1 })
+surface.CreateFont( "ScoreboardDefaultRank", { font = "Helvetica", size = 14, weight = 800, antialias = true, blursize = 0.1 })
+surface.CreateFont( "ScoreboardHeading", { font = "Helvetica", size = 18, weight = 800, antialias = true, blursize = 0.1, shadow = false })
+surface.CreateFont( "ScoreboardHeadingShadow", { font = "Helvetica", size = 18, weight = 800, antialias = true,blursize = 1.5,shadow = false })
+surface.CreateFont( "ScoreboardDefaultTitleShadow", { font = "Coolvetica", size = 32, weight = 400, antialias = true, blursize = 1.5 })
+surface.CreateFont( "ScoreboardDefaultTitle", { font = "Coolvetica", size = 32, weight = 400, antialias = true, blursize = 0.2 })
 
-surface.CreateFont( "ScoreboardDefaultRank", {
-	font		= "Helvetica",
-	size		= 14,
-	weight		= 800,
-    antialias = true,
-    blursize = 0.1
-})
+surface.CreateFont( "ElementTxt", { font = "Trebuchet MS", size = 24, weight = 900, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "ElementTxtShadow", { font = "Trebuchet MS", size = 24, weight = 900, antialias = true, blursize = 2, shadow = false })
 
-surface.CreateFont( "ScoreboardHeading", {
-	font		= "Helvetica",
-	size		= 18,
-	weight		= 800,
-    antialias = true,
-    blursize = 0.1,
-    shadow = false
-})
-
-surface.CreateFont( "ScoreboardHeadingShadow", {
-	font		= "Helvetica",
-	size		= 18,
-	weight		= 800,
-    antialias = true,
-    blursize = 1.5,
-    shadow = false
-})
-
-surface.CreateFont( "ScoreboardDefaultTitleShadow", {
-	font		= "Coolvetica",
-	size		= 32,
-	weight		= 400,
-    antialias = true,
-    blursize = 1.5
-})
-
-surface.CreateFont( "ScoreboardDefaultTitle", {
-	font		= "Coolvetica",
-	size		= 32,
-	weight		= 400,
-    antialias = true,
-    blursize = 0.2
-})
+surface.CreateFont( "ElementTxt20", { font = "Trebuchet MS", size = 22, weight = 900, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "ElementTxtShadow20", { font = "Trebuchet MS", size = 22, weight = 900, antialias = true, blursize = 2, shadow = false })
+surface.CreateFont( "ElementTxt23", { font = "Trebuchet MS", size = 23, weight = 900, antialias = true, blursize = 0.2, shadow = false })
+surface.CreateFont( "ElementTxtShadow23", { font = "Trebuchet MS", size = 23, weight = 900, antialias = true, blursize = 2, shadow = false })
 
 local PLAYER_LINE = {
 	Init = function( self )
@@ -156,14 +121,22 @@ local PLAYER_LINE = {
 			self.Name:SetText( self.PName )
 		end
 
-		self.findRank = nil
-		self.findRankLevel = nil
+		if PlayerRanksEnabled == true then 
 
-		for k, v in pairs( PlayerRanks ) do
-			if ( !self.findRank || ( tonumber(v.level) >= tonumber(self.findRankLevel)) && (tonumber(v.level) <= tonumber(self.NumLevel)) ) then
-				self.findRankLevel = v.level
-				self.findRank = v.rank
+			self.findRank = nil
+			self.findRankLevel = nil
+
+			for k, v in pairs( PlayerRanks ) do
+				if ( !self.findRank || ( tonumber(v.level) >= tonumber(self.findRankLevel)) && (tonumber(v.level) <= tonumber(self.NumLevel)) ) then
+					self.findRankLevel = v.level
+					self.findRank = v.rank
+				end
 			end
+
+		else 
+
+			self.findRank = ""
+
 		end
 
 		if ( self.PRank == nil || self.PRank != self.findRank ) then
@@ -305,6 +278,7 @@ local SCORE_BOARD = {
 		self.Name:SetExpensiveShadow( 1, Color( 0, 0, 0, 200 ) )
 		function self.Name:Paint( w, h, ply )
 			--draw.RoundedBox( 0, 0, 0, w, h, Color( 0, 0, 0, 200 ) )
+
 			draw.SimpleText( GetHostName(), "ScoreboardDefaultTitleShadow", 351, 21, Color(0, 0, 0, 225), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 			draw.SimpleText( GetHostName(), "ScoreboardDefaultTitle", 350, 20, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 		end
@@ -359,6 +333,8 @@ local SCORE_BOARD = {
 
 	Think = function( self, w, h )
 
+		
+
 		self.Name:SetText( "" )
 
 		self.Other:SetText( "" )
@@ -388,6 +364,8 @@ SCORE_BOARD = vgui.RegisterTable( SCORE_BOARD, "EditablePanel" )
 -----------------------------------------------------------]]
 function GM:ScoreboardShow()
 
+	--[[	
+
 	if ( !IsValid( g_Scoreboard ) ) then
 		g_Scoreboard = vgui.CreateFromTable( SCORE_BOARD )
 	end
@@ -398,6 +376,10 @@ function GM:ScoreboardShow()
 		g_Scoreboard:SetKeyboardInputEnabled( false )
 	end
 
+	]]--	
+
+	drawscoreboard = true
+
 end
 
 --[[---------------------------------------------------------
@@ -406,17 +388,309 @@ end
 -----------------------------------------------------------]]
 function GM:ScoreboardHide()
 
+	--[[	
+
 	if ( IsValid( g_Scoreboard ) ) then
 		g_Scoreboard:Hide()
 	end
 
+	
+	]]--
+
+	if drawscoreboard then
+
+		drawscoreboard = false
+
+	end
+
 end
 
+-- Blur Function for BG Blurs
+local blur = Material("pp/blurscreen")
+local function DrawBlur( amount, x, y, w, h )
+    surface.SetDrawColor(255, 255, 255, 255)
+    surface.SetMaterial(blur)
+
+    for i = 1, 3 do
+        blur:SetFloat("$blur", (i / 3) * (amount or 6))
+        blur:Recompute()
+
+        render.UpdateScreenEffectTexture()
+        render.SetScissorRect( x, y, x + w, y + h, true )
+        surface.DrawTexturedRect( 0, 0, ScrW(), ScrH() )
+        render.SetScissorRect( 0, 0, 0, 0, false )
+    end
+end
+
+local function sbThink()
+	local client = LocalPlayer()
+	local redTeamPlayers = team.GetPlayers( TEAM_RED )
+	local redTeamCount = team.NumPlayers( TEAM_RED )
+	local blueTeamPlayers = team.GetPlayers( TEAM_BLUE )
+	local blueTeamCount = team.NumPlayers( TEAM_BLUE )
+	local specPlayers = team.GetPlayers( TEAM_SPEC )
+	local players = player.GetAll()
+
+	redTable = {}
+	tempTable = {}
+	for k, v in pairs( redTeamPlayers ) do
+
+		tempTable = {
+
+			{ Player = v:UserID(), Name = v:Nick(), Rank = v:GetNWInt( "Level", 1 ), Kills = v:Frags(), Assists = v:GetNWInt( "Assists", 0 ), Deaths = v:Deaths(), Ping = v:Ping(), Alive = v:Alive() }
+
+		}
+
+		table.Add( redTable, tempTable )
+
+	end
+
+	table.SortByMember( redTable, "Kills" )
+
+	blueTable = {}
+	temp2Table = {}
+	for k, v in pairs( blueTeamPlayers ) do
+
+		temp2Table = {
+
+			{ Player = v:UserID(), Name = v:Nick(), Rank = v:GetNWInt( "Level", 1 ), Kills = v:Frags(), Assists = v:GetNWInt( "Assists", 0 ), Deaths = v:Deaths(), Ping = v:Ping(), Alive = v:Alive() }
+
+		}
+
+		table.Add( blueTable, temp2Table )
+
+	end
+
+	table.SortByMember( blueTable, "Kills" )
+
+end
+
+-- Different Gradients
+local gradient = surface.GetTextureID("gui/gradient_up") 
+local gradient2 = surface.GetTextureID("gui/gradient_down")
+local gradient3 = surface.GetTextureID("gui/gradient")
+local gradient4 = surface.GetTextureID("vgui/gradient-r")
+
+function NewScoreboard()
+	local client = LocalPlayer()
+
+	--Entire Scoreboard W/H
+	local w = 800
+	local h = ScrH() - 200
+
+	--Entire Scoreboard Master Position
+	local x = ScrW() / 2 - w/2
+	local y = 125
+
+	local padding = 5
+
+	--Heading Size
+	hh = 20
+
+	--Element Size
+	ew = 800
+	eh = 35
+	ep = 5
+
+	--local winningTeam
+	local redTeamFrags = team.TotalFrags( TEAM_RED )
+	local blueTeamFrags = team.TotalFrags( TEAM_BLUE )
+
+	if ( redTeamFrags >= blueTeamFrags ) then 
+
+		winningTeam = TEAM_RED
+
+	else
+
+		winningTeam = TEAM_RED
+
+	end
+
+	local redTeamPlayers = team.GetPlayers( TEAM_RED )
+	local redTeamCount = team.NumPlayers( TEAM_RED )
+	local blueTeamPlayers = team.GetPlayers( TEAM_BLUE )
+	local blueTeamCount = team.NumPlayers( TEAM_BLUE )
+	local specPlayers = team.GetPlayers( TEAM_SPEC )
+	local players = player.GetAll()
+
+	local redC = team.GetColor( TEAM_RED )
+	local blueC = team.GetColor( TEAM_BLUE )
+	local specC = team.GetColor( TEAM_SPEC )
+
+	if ( winningTeam == TEAM_RED ) then
+
+		-- **Team Logo
+		-- TEAM NAME
+		-- Kills
+		-- Assists
+		-- Deaths
+		-- Ping
+
+		--DrawBlur( 4, x, y + eh - eh, ew, eh )
+
+		surface.SetDrawColor( 40, 40, 40, 100 )
+    	surface.DrawRect( x, y, ew, eh )
+
+		surface.SetDrawColor( 40, 40, 40, 120 )
+    	surface.DrawRect( x, y + 5, ew, eh - 5 )
+
+        draw.DrawText( TDM_TeamRedName, "ElementTxtShadow", x + ep*3 + 1, y + ep + 4, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
+        draw.DrawText( TDM_TeamRedName, "ElementTxt", x + ep*3, y + ep + 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+
+        draw.DrawText( "Kills", "ElementTxtShadow", x + (w/9)*5 + ep*3 + 1, y + ep + 4, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+        draw.DrawText( "Kills", "ElementTxt", x + (w/9)*5 + ep*3, y + ep + 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+        draw.DrawText( "Assists", "ElementTxtShadow", x + (w/9)*6 + ep*3 + 1, y + ep + 4, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+        draw.DrawText( "Assists", "ElementTxt", x + (w/9)*6 + ep*3, y + ep + 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+        draw.DrawText( "Deaths", "ElementTxtShadow", x + (w/9)*7 + ep*3 + 1, y + ep + 4, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+        draw.DrawText( "Deaths", "ElementTxt", x + (w/9)*7 + ep*3, y + ep + 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+        draw.DrawText( "Ping", "ElementTxtShadow", x + (w/9)*8 + ep*3 + 1, y + ep + 4, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+        draw.DrawText( "Ping", "ElementTxt", x + (w/9)*8 + ep*3, y + ep + 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		for k, v in pairs( redTable ) do
+
+			--DrawBlur( 4, x + 25, y + eh*k + padding*k, ew, eh )
+
+			surface.SetDrawColor( redC.r*0.7, redC.g*0.7, redC.b*0.7, 255 )
+    		surface.DrawRect( x, y + eh*k + padding*k, 4, eh )
+
+    		if ( v.Alive ) then
+
+				surface.SetDrawColor( redC.r, redC.g, redC.b, 180 )
+	    		surface.DrawRect( x + 4, y + eh*k + padding*k, ew - 4, eh )
+
+    		else
+
+				surface.SetDrawColor( redC.r*0.5, redC.g*0.5, redC.b*0.5, 180 )
+				surface.DrawRect( x + 4, y + eh*k + padding*k, ew - 4, eh )
+
+    		end
+
+    		if (v.Player == client:UserID() ) then
+
+				surface.SetDrawColor( redC.r*0.5, redC.g*0.5, redC.b*0.5, 220 );
+				surface.SetTexture( gradient3 );
+				surface.DrawTexturedRect( x, y + eh*k + padding*k + 2, ew, eh - 4 );
+
+    		end
+
+	        draw.DrawText( v.Rank, "ElementTxtShadow20", x + ep*7 + 1, y + eh*k + padding*k + ep + 2, Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
+	        draw.DrawText( v.Rank, "ElementTxt20", x + ep*7, y + eh*k + padding*k + ep + 1, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
+			
+			surface.SetMaterial( Material( PlayerRanks[tonumber(v.Rank)]["rankMaterialSm"] ) );
+		    surface.SetDrawColor( 255, 255, 255, 255 );
+		    surface.DrawTexturedRect( x + ep*7 - 1 + ep*3, y + eh*k + padding*k + 1, 32, 32 );  
+
+	        draw.DrawText( v.Name, "ElementTxtShadow", x + ep*16 + ep*3 + 1, y + eh*k + padding*k + ep + 1, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
+	        draw.DrawText( v.Name, "ElementTxt", x + ep*16 + ep*3, y + eh*k + padding*k + ep, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+
+		    draw.DrawText( v.Kills, "ElementTxtShadow23", x + (w/9)*5 + ep*3 + 1, y + eh*k + padding*k + ep + 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+		    draw.DrawText( v.Kills, "ElementTxt23", x + (w/9)*5 + ep*3, y + eh*k + padding*k + ep + 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		    draw.DrawText( v.Assists, "ElementTxtShadow23", x + (w/9)*6 + ep*3 + 1, y + eh*k + padding*k + ep + 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+		    draw.DrawText( v.Assists, "ElementTxt23", x + (w/9)*6 + ep*3, y + eh*k + padding*k + ep + 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		    draw.DrawText( v.Deaths, "ElementTxtShadow23", x + (w/9)*7 + ep*3 + 1, y + eh*k + padding*k + ep + 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+		    draw.DrawText( v.Deaths, "ElementTxt23", x + (w/9)*7 + ep*3, y + eh*k + padding*k + ep + 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		    draw.DrawText( v.Ping, "ElementTxtShadow23", x + (w/9)*8 + ep*3 + 1, y + eh*k + padding*k + ep + 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+		    draw.DrawText( v.Ping, "ElementTxt23", x + (w/9)*8 + ep*3, y + eh*k + padding*k + ep + 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		end
+
+		local offset = redTeamCount*eh + redTeamCount*padding + eh + padding
+
+		--DrawBlur( 4, x, y + offset, ew, eh )
+
+		surface.SetDrawColor( 40, 40, 40, 100 )
+    	surface.DrawRect( x, y + offset, ew, eh )
+
+		surface.SetDrawColor( 40, 40, 40, 120 )
+    	surface.DrawRect( x, y + offset + 5, ew, eh - 5 )
+
+        draw.DrawText( TDM_TeamBlueName, "ElementTxtShadow", x + ep*3 + 1, y + offset + ep + 4, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
+        draw.DrawText( TDM_TeamBlueName, "ElementTxt", x + ep*3, y + offset + ep + 3, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+
+        draw.DrawText( "Kills", "ElementTxtShadow", x + (w/9)*5 + ep*3 + 1, y + offset + ep + 4, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+        draw.DrawText( "Kills", "ElementTxt", x + (w/9)*5 + ep*3, y + offset + ep + 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+        draw.DrawText( "Assists", "ElementTxtShadow", x + (w/9)*6 + ep*3 + 1, y + offset + ep + 4, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+        draw.DrawText( "Assists", "ElementTxt", x + (w/9)*6 + ep*3, y + offset + ep + 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+        draw.DrawText( "Deaths", "ElementTxtShadow", x + (w/9)*7 + ep*3 + 1, y + offset + ep + 4, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+        draw.DrawText( "Deaths", "ElementTxt", x + (w/9)*7 + ep*3, y + offset + ep + 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+        draw.DrawText( "Ping", "ElementTxtShadow", x + (w/9)*8 + ep*3 + 1, y + offset + ep + 4, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+        draw.DrawText( "Ping", "ElementTxt", x + (w/9)*8 + ep*3, y + offset + ep + 3, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		for k, v in pairs( blueTable ) do
+
+			--DrawBlur( 4, x, y + eh*k + padding*k + offset, ew, eh )
+
+			surface.SetDrawColor( blueC.r*0.7, blueC.g*0.7, blueC.b*0.7, 255 )
+    		surface.DrawRect( x, y + eh*k + padding*k + offset, 4, eh )
+
+    		if ( v.Alive ) then
+
+				surface.SetDrawColor( blueC.r, blueC.g, blueC.b, 180 )
+	    		surface.DrawRect( x + 4, y + eh*k + padding*k + offset, ew - 4, eh )
+
+    		else
+
+				surface.SetDrawColor( blueC.r*0.5, blueC.g*0.5, blueC.b*0.5, 180 )
+				surface.DrawRect( x + 4, y + eh*k + padding*k + offset, ew - 4, eh )
+
+    		end
+
+    		if (v.Player == client:UserID() ) then
+
+				surface.SetDrawColor( blueC.r*0.5, blueC.g*0.5, blueC.b*0.5, 220 );
+				surface.SetTexture( gradient3 );
+				surface.DrawTexturedRect( x, y + eh*k + padding*k + offset + 2, ew, eh - 4 );
+
+    		end
+
+	        draw.DrawText( v.Rank, "ElementTxtShadow20", x + ep*7 + 1, y + eh*k + padding*k + offset + ep + 2, Color(0, 0, 0, 255), TEXT_ALIGN_RIGHT ) 
+	        draw.DrawText( v.Rank, "ElementTxt20", x + ep*7, y + eh*k + padding*k + offset + ep + 1, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT ) 
+			
+			surface.SetMaterial( Material( PlayerRanks[tonumber(v.Rank)]["rankMaterialSm"] ) );
+		    surface.SetDrawColor( 255, 255, 255, 255 );
+		    surface.DrawTexturedRect( x + ep*7 - 1 + ep*3, y + eh*k + padding*k + offset + 2, 32, 32 );  
+
+	        draw.DrawText( v.Name, "ElementTxtShadow", x + ep*16 + ep*3 + 1, y + eh*k + padding*k + offset + ep + 1, Color(0, 0, 0, 255), TEXT_ALIGN_LEFT ) 
+	        draw.DrawText( v.Name, "ElementTxt", x + ep*16 + ep*3, y + eh*k + padding*k + offset + ep, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT ) 
+
+		    draw.DrawText( v.Kills, "ElementTxtShadow23", x + (w/9)*5 + ep*3 + 1, y + eh*k + padding*k + offset + ep + 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+		    draw.DrawText( v.Kills, "ElementTxt23", x + (w/9)*5 + ep*3, y + eh*k + padding*k + offset + ep + 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		    draw.DrawText( v.Assists, "ElementTxtShadow23", x + (w/9)*6 + ep*3 + 1, y + eh*k + padding*k + offset + ep + 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+		    draw.DrawText( v.Assists, "ElementTxt23", x + (w/9)*6 + ep*3, y + eh*k + padding*k + offset + ep + 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		    draw.DrawText( v.Deaths, "ElementTxtShadow23", x + (w/9)*7 + ep*3 + 1, y + eh*k + padding*k + offset + ep + 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+		    draw.DrawText( v.Deaths, "ElementTxt23", x + (w/9)*7 + ep*3, y + eh*k + padding*k + offset + ep + 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		    draw.DrawText( v.Ping, "ElementTxtShadow23", x + (w/9)*8 + ep*3 + 1, y + eh*k + padding*k + offset + ep + 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER ) 
+		    draw.DrawText( v.Ping, "ElementTxt23", x + (w/9)*8 + ep*3, y + eh*k + padding*k + offset + ep + 1, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER ) 
+
+		end
+
+	end
+
+end
 
 --[[---------------------------------------------------------
 	Name: gamemode:HUDDrawScoreBoard( )
 	Desc: If you prefer to draw your scoreboard the stupid way (without vgui)
+	Heres the stupid way
 -----------------------------------------------------------]]
 function GM:HUDDrawScoreBoard()
+
+	if not drawscoreboard then return end
+
+	sbThink()
+
+	NewScoreboard()
 
 end

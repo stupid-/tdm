@@ -7,7 +7,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 2
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Weight     = 5
 SWEP.AutoSwitchTo   = false

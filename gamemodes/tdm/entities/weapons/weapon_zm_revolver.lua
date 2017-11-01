@@ -9,7 +9,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 1
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 
 SWEP.Base				= "weapon_tttbase"

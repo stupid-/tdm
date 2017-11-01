@@ -108,7 +108,7 @@ function RadiusDamage(dmginfo, pos, radius, inflictor)
    local tr = nil
    for k, vic in pairs(victims) do
       if IsValid(vic) and inflictor:Visible(vic) then
-         if vic:IsPlayer() and vic:Alive() and vic:Team() == TEAM_TERROR then
+         if vic:IsPlayer() and vic:Alive() then
             vic:TakeDamageInfo(dmginfo)
          end
       end

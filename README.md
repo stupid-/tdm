@@ -4,7 +4,7 @@ I was looking for a more competetive gamemode for my community, so I decided to 
 
 ## Current Version
 
-Alpha 11-23-15
+11-01-17
 
 ## Installation
 
@@ -15,12 +15,6 @@ Add any content files in the content folder to your fastdl server.
 ## Changelog
 
 * [Look Here](https://github.com/stupid-/tdm/blob/master/CHANGELOG.md)
-
-## Known Issues
-
-* Not sprinting/walking correct speed
-* Sprinting while crouched
-* Issues with sound ticking countdown
 
 ## Special Thanks / Credits
 

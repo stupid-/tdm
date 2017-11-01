@@ -23,7 +23,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 
 		ply.was_headshot = false
 
-		dmginfo:ScaleDamage( 1.5 )
+		dmginfo:ScaleDamage( 1.75 )
 
 	end
 
@@ -36,7 +36,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	 
 		ply.was_headshot = false
 
-		dmginfo:ScaleDamage( 1 )
+		dmginfo:ScaleDamage( 1.25 )
 	 
 	end
 
@@ -156,7 +156,7 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 		--Issue of players suiciding with grenades to force team loss
 		ply.SuicideCount = ply.SuicideCount + 1
 
-		if (ply.SuicideCount >= 3) then
+		if (ply.SuicideCount >= 4) then
 
 			ply:Ban( 10, false)
 			ply:Kick( "Banned for 10 minutes. Reason: Forcing team loss." )
@@ -183,16 +183,17 @@ function GM:PlayerDeath( ply, inflictor, attacker )
 			MsgN( attacker:Nick() .. "s kills: " .. attacker:GetPData( "tdm_stats_kills", 0 ) )
 
 			if ply.was_headshot then
-				attacker:AddXP( 500 )
+				attacker:AddXP( 150 )
 				attacker:SetPData( "tdm_stats_headshot", ( attacker:GetPData( "tdm_stats_headshot", 0 ) + 1 ) )
 				MsgN( attacker:Nick() .. "s headshots: " .. attacker:GetPData( "tdm_stats_headshot", 0 ) )
 			else
-				attacker:AddXP( 250 )
+				attacker:AddXP( 100 )
 			end
 
 			local deathPos = ply:GetPos()
 			local deathAng = ply:GetAngles()
 			CreateAmmoOnDeath( deathPos, deathAng )
+			CreateOtherEntsOnDeath( deathPos, deathAng )
 			
 		end
 
@@ -220,12 +221,16 @@ function CreateAmmoOnDeath( pos, ang )
 	local ammo_types = {
 		"item_ammo_357_ttt",
 		"item_ammo_pistol_ttt",
+		"item_ammo_pistol_ttt",
+		"item_ammo_pistol_ttt",
+		"item_ammo_smg1_ttt",
+		"item_ammo_smg1_ttt",
 		"item_ammo_smg1_ttt",
 		"item_box_buckshot_ttt",
 		"item_ammo_revolver_ttt"
 	}
 
-	pos = pos + Vector( 0, 0, 20 )
+	pos = pos + Vector( 0, 0, 30 )
 
 	local ent = ents.Create( table.Random( ammo_types ) )
 	if not IsValid( ent ) then return end
@@ -235,7 +240,39 @@ function CreateAmmoOnDeath( pos, ang )
 	ent:Spawn()
 	ent:PhysWake()
 
-	timer.Simple( 45, function()
+	timer.Simple( 55, function()
+
+		if ent:IsValid() then ent:Remove() end
+
+	end )
+
+end
+
+function CreateOtherEntsOnDeath( pos, ang )
+
+	local checkRandom = math.random( 0, 10 )
+
+	if ( checkRandom < 7 ) then return end
+
+	local randomEnts = {
+		"item_armor_25",
+		"item_armor_33",
+		"item_health_25"
+	}
+
+	local randomPos = math.random( 0, 10 )
+
+	pos = pos + Vector( 0 + randomPos, 0 + randomPos, 32 )
+
+	local ent = ents.Create( table.Random( randomEnts ) )
+	if not IsValid( ent ) then return end
+	ent:SetPos( pos )
+	ent:SetAngles( ang )
+
+	ent:Spawn()
+	ent:PhysWake()
+
+	timer.Simple( 55, function()
 
 		if ent:IsValid() then ent:Remove() end
 
@@ -252,24 +289,35 @@ end
 
 hook.Add( "PlayerDisconnected", "HealthRegenDestruction", function( ply ) 
 
-	timer.Destroy( ply.RegenDelay )
-	timer.Destroy( ply.RegenActive )
-	timer.Destroy( ply.ResetValues )
+	timer.Remove( ply.RegenDelay )
+	timer.Remove( ply.RegenActive )
+	timer.Remove( ply.ResetValues )
 
 end )
 
 --Health Regen
 hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply, attacker ) 
 
-	--Create unique id's for players who are hurt
-	ply.RegenDelay = "Delay_" .. ply:SteamID64()
-	ply.RegenActive = "Active_" .. ply:SteamID64()
-	ply.ResetValues = "Values_" .. ply:SteamID64()
+	if ( ply:SteamID64() == nil ) then
+
+		--Create unique id's for players who are hurt
+		ply.RegenDelay = "Delay_" .. ply:Nick()
+		ply.RegenActive = "Active_" .. ply:Nick()
+		ply.ResetValues = "Values_" .. ply:Nick()
+
+	else
+
+		--Create unique id's for players who are hurt
+		ply.RegenDelay = "Delay_" .. ply:SteamID64()
+		ply.RegenActive = "Active_" .. ply:SteamID64()
+		ply.ResetValues = "Values_" .. ply:SteamID64()
+
+	end
 
 	--Stop Healing if Hurt
-	timer.Destroy( ply.RegenDelay )
-	timer.Destroy( ply.RegenActive )
-	timer.Destroy( ply.ResetValues )
+	timer.Remove( ply.RegenDelay )
+	timer.Remove( ply.RegenActive )
+	timer.Remove( ply.ResetValues )
 
 	timer.Create( ply.ResetValues, 6, 1, function() 
 
@@ -290,8 +338,8 @@ hook.Add( "PlayerHurt", "WhenHurtHealthRegen", function( ply, attacker )
 			end
 
 			if ( !ply:Alive() or ply:Health() == 100 ) then
-				timer.Destroy( ply.RegenDelay )
-				timer.Destroy( ply.RegenActive )
+				timer.Remove( ply.RegenDelay )
+				timer.Remove( ply.RegenActive )
 			end
 
 		end )
@@ -339,7 +387,7 @@ hook.Add( "PlayerDeath", "TDMAssistspt2", function( victim, inflictor, attacker 
 
 			MsgN( v:Nick() .. "s assists: " .. v:GetPData( "tdm_stats_assists", 0 ) )
 
-			v:AddXP( 50 )
+			v:AddXP( 25 )
 		end
 
 	end
@@ -392,3 +440,27 @@ hook.Add( "EntityTakeDamage", "TDMEntityDamageTable", function( ply, dmg )
 	end
 
 end )
+
+---- Weapon switching
+local function ForceWeaponSwitch(ply, cmd, args)
+   if not ply:IsPlayer() or not args[1] then return end
+   -- Turns out even SelectWeapon refuses to switch to empty guns, gah.
+   -- Worked around it by giving every weapon a single Clip2 round.
+   -- Works because no weapon uses those.
+   local wepname = args[1]
+   local wep = ply:GetWeapon(wepname)
+   if IsValid(wep) then
+      -- Weapons apparently not guaranteed to have this
+      if wep.SetClip2 then
+         wep:SetClip2(1)
+      end
+      ply:SelectWeapon(wepname)
+   end
+end
+concommand.Add("wepswitch", ForceWeaponSwitch)
+
+--Add Minimap Detection
+
+--Hook Key Press SHOOT
+
+--Hook Key Press Talk

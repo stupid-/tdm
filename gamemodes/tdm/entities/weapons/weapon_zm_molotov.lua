@@ -8,7 +8,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 3
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Base				= "weapon_tttbasegrenade"
 SWEP.Spawnable = true

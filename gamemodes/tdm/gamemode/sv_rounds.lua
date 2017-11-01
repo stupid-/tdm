@@ -13,7 +13,7 @@ SetGlobalInt( "TDM_BlueKills", 0 )
 --[[  Map Vote Code is by https://github.com/wiox/gmod-mapvote  ]]--
 
 mapSettings = {
-	Length = 15, -- How long does the vote last?
+	Length = 10, -- How long does the vote last?
 	AllowCurrent = true, -- Allow voting for map that was just played
 	Limit = 18, -- Limit of maps able to vote between
 }
@@ -95,6 +95,8 @@ GM.RoundFunctions = {
 
 		for k,v in pairs(player.GetAll()) do
 
+			v:SetPData( "Level_xp_round", 0 )
+
 			if (v:Team() != TEAM_SPEC) then
 				v:KillSilent()
 				v:Spawn()
@@ -121,17 +123,11 @@ GM.RoundFunctions = {
 
 		if winner == TEAM_RED then
 
-			--Display RED WINS
-			for k,v in pairs(player.GetAll()) do
-				v:ConCommand("redWins")
-				v:ChatPrint( team.GetName(winner).." Team wins." )
-			end
-
 			--Award Red Players
 			for k,v in pairs(team.GetPlayers( TEAM_RED )) do
 				local vLevel = v:GetPData( "tdm_player_level", 1 )
-				local xpToGive = (vLevel * 100) * 0.75
-				v:AddXP( 450 + xpToGive )
+				local xpToGive = ( 100 + ((vLevel/2)*10) - vLevel )
+				v:AddXP( xpToGive )
 
 				v:SetPData( "tdm_stats_wins", ( v:GetPData( "tdm_stats_wins", 0 ) + 1 ) )
 				MsgN( v:Nick() .. "s wins: " .. v:GetPData( "tdm_stats_wins", 0 ) )
@@ -161,19 +157,43 @@ GM.RoundFunctions = {
 
 			BroadcastLua( song )
 
-		elseif winner == TEAM_BLUE then
-
-			--Display BLUE WINS
+			--Display RED WINS
 			for k,v in pairs(player.GetAll()) do
-				v:ConCommand("blueWins")
+
+				local tbl = {}
+				tbl.winner = TEAM_RED
+				tbl.team = v:Team()
+				tbl.kills = v:Frags()
+				tbl.assists = v:GetNWInt( "Assists", 0)
+				tbl.deaths = v:Deaths()
+				tbl.headshots = v:GetPData( "tdm_stats_headshot", 0 )
+				tbl.killsTotal = v:GetPData( "tdm_stats_kills", 0 )
+				tbl.assistsTotal = v:GetPData( "tdm_stats_assists", 0 )
+				tbl.deathsTotal = v:GetPData( "tdm_stats_deaths", 0 )
+				tbl.wins = v:GetPData( "tdm_stats_wins", 0 )
+				tbl.losses = v:GetPData( "tdm_stats_losses", 0 )
+				tbl.gamesTotal = v:GetPData( "tdm_stats_games_played", 0 )
+				tbl.level = v:GetPData( "tdm_player_level", 1 )
+				tbl.savedXP = v:GetPData( "tdm_player_xp", 1 )
+				tbl.reqXP = v:GetPData( "tdm_player_xp_req", 1 )
+				tbl.earnedXP = v:GetPData( "Level_xp_round", 0 )
+
+				net.Start( "EndGame" )
+					net.WriteTable( tbl )
+				net.Send( v )
+
+				--v:ConCommand("redWins")
 				v:ChatPrint( team.GetName(winner).." Team wins." )
+
 			end
+
+		elseif winner == TEAM_BLUE then
 
 			--Award Blue Players
 			for k,v in pairs(team.GetPlayers( TEAM_BLUE )) do
 				local vLevel = v:GetPData( "tdm_player_level", 1 )
-				local xpToGive = (vLevel * 100) * 0.75
-				v:AddXP( 450 + xpToGive )
+				local xpToGive = ( 100 + ((vLevel/2)*10) - vLevel )
+				v:AddXP( xpToGive )
 
 				v:SetPData( "tdm_stats_wins", ( v:GetPData( "tdm_stats_wins", 0 ) + 1 ) )
 				MsgN( v:Nick() .. "s wins: " .. v:GetPData( "tdm_stats_wins", 0 ) )
@@ -198,6 +218,35 @@ GM.RoundFunctions = {
 
 			BroadcastLua( song )
 
+			--Display BLUE WINS
+			for k,v in pairs(player.GetAll()) do
+
+				local tbl = {}
+				tbl.winner = TEAM_BLUE
+				tbl.team = v:Team()
+				tbl.kills = v:Frags()
+				tbl.assists = v:GetNWInt( "Assists", 0)
+				tbl.deaths = v:Deaths()
+				tbl.headshots = v:GetPData( "tdm_stats_headshot", 0 )
+				tbl.killsTotal = v:GetPData( "tdm_stats_kills", 0 )
+				tbl.assistsTotal = v:GetPData( "tdm_stats_assists", 0 )
+				tbl.deathsTotal = v:GetPData( "tdm_stats_deaths", 0 )
+				tbl.wins = v:GetPData( "tdm_stats_wins", 0 )
+				tbl.losses = v:GetPData( "tdm_stats_losses", 0 )
+				tbl.gamesTotal = v:GetPData( "tdm_stats_games_played", 0 )
+				tbl.level = v:GetPData( "tdm_player_level", 1 )
+				tbl.savedXP = v:GetPData( "tdm_player_xp", 1 )
+				tbl.reqXP = v:GetPData( "tdm_player_xp_req", 1 )
+				tbl.earnedXP = v:GetPData( "Level_xp_round", 0 )
+
+				net.Start( "EndGame" )
+					net.WriteTable( tbl )
+				net.Send( v )
+
+				--v:ConCommand("blueWins")
+				v:ChatPrint( team.GetName(winner).." Team wins." )
+			end
+
 		elseif winner == TEAM_SPEC then
 
 			--Display DRAW
@@ -218,7 +267,7 @@ GM.RoundFunctions = {
 
 		if rounds_left < 1 then
 
-			timer.Simple( 5, function()
+			timer.Simple( 20, function()
 
 				MapVote.Start( mapSettings.Length, mapSettings.AllowCurrent, mapSettings.Limit, TDM_PlayableMaps )  
 

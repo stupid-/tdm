@@ -18,12 +18,12 @@ function ENT:Initialize()
 end
 
 function ENT:Explode(tr)
+   local roundState = GetGlobalInt( "TDM_RoundState" )
+   if (roundState == 0 or roundState == 1 or roundState == 3) then return end
+
    if SERVER then
       self:SetNoDraw(true)
       self:SetSolid(SOLID_NONE)
-
-      local roundState = GetGlobalInt( "TDM_RoundState" )
-      if (roundState == 0 or roundState == 1 or roundState == 3) then return end
 
       -- pull out of the surface
       if tr.Fraction != 1.0 then

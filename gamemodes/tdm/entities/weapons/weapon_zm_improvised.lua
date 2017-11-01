@@ -8,7 +8,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 0
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Weight     = 3
 SWEP.AutoSwitchTo   = false
@@ -21,7 +21,7 @@ SWEP.WorldModel			= "models/weapons/w_crowbar.mdl"
 SWEP.Weight			= 5
 SWEP.DrawCrosshair		= false
 SWEP.ViewModelFlip		= false
-SWEP.Primary.Damage = 24
+SWEP.Primary.Damage = 38
 SWEP.Primary.ClipSize		= -1
 SWEP.Primary.DefaultClip	= -1
 SWEP.Primary.Automatic		= true
@@ -49,7 +49,7 @@ local sound_open = Sound("DoorHandles.Unlocked3")
 
 if SERVER then
    CreateConVar("ttt_crowbar_unlocks", "1", FCVAR_ARCHIVE)
-   CreateConVar("ttt_crowbar_pushforce", "395", FCVAR_NOTIFY)
+   CreateConVar("ttt_crowbar_pushforce", "495", FCVAR_NOTIFY)
 end
 
 -- only open things that have a name (and are therefore likely to be meant to

@@ -7,7 +7,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 2
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Weight     = 5
 SWEP.AutoSwitchTo   = false
@@ -20,7 +20,7 @@ SWEP.Kind = WEAPON_HEAVY
 SWEP.WeaponID = AMMO_M16
 
 SWEP.Primary.Delay			= 0.135
-SWEP.Primary.Recoil			= 1.5
+SWEP.Primary.Recoil			= 1.4
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "Pistol"
 SWEP.Primary.Damage = 21

@@ -1,17 +1,34 @@
 ## Current Version
 
-Alpha 11-23-15
+Alpha 10-12-16
+
+## Maps to Add
+* 
 
 ## To-Do List
 
+* In game admin menu for admins only, featuring force team switching and round restarting
+* Redo Hud (Vgui)
+* Redo Character Selection Menus (Vgui)
+* Redo Join Screen (Vgui)
+* Redo End Game Graphic (Vgui)
+* Redo Scoreboard (Vgui)
+* Start own weapon base
+* Grenade Throwing System
+* Notification System and Messages
+
+## Changes 10-15-17
+
 * Customizable Team Names
 * Customizable Team Colours
-* Sprinting While Crouched
-* Fix broken flashlight
-* Fix Run/Walk Speed w/ Classes
-* Overwatch style defeat screen / End game stats
-* In game admin menu for admins only, featuring force team switching and round restarting
-* Save players' custom class decisions
+* Team Config
+* Low Health Effects
+* Fixed Sprinting While Crouched
+* Fixed Crouchwalk Speed
+* Fixed broken flashlight
+* Fixed Run/Walk Speed w/ Classes
+* Save player's custom class decisions
+* Win/Defeat screen with end game stats
 
 ## Alpha Changes 11-23-15
 

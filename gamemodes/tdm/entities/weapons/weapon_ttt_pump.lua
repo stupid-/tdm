@@ -5,7 +5,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 2
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 -- Always derive from weapon_tttbase
 SWEP.Base = "weapon_tttbase"
@@ -14,10 +14,10 @@ SWEP.Base = "weapon_tttbase"
 SWEP.HoldType = "shotgun"
 
 SWEP.Primary.Ammo = "Buckshot"
-SWEP.Primary.Delay = 1.4
+SWEP.Primary.Delay = 1.2
 SWEP.Primary.Recoil = 7
 SWEP.Primary.Cone = 0.14
-SWEP.Primary.Damage = 11
+SWEP.Primary.Damage = 12
 SWEP.Primary.Automatic = true
 SWEP.Primary.ClipSize = 8
 SWEP.Primary.ClipMax = 24

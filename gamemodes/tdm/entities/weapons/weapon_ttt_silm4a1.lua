@@ -5,7 +5,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 2
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 -- Always derive from weapon_tttbase
 SWEP.Base = "weapon_tttbase"

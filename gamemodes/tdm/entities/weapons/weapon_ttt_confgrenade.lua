@@ -6,7 +6,7 @@ SWEP.HoldType = "grenade"
 if CLIENT then
    SWEP.PrintName = "Discombobulator"
    SWEP.Slot = 3
-   SWEP.SlotPos	= 0
+   --SWEP.SlotPos	= 1
 
    SWEP.Icon = "vgui/ttt/icon_nades"
 end

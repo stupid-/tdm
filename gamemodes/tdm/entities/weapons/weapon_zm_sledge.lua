@@ -8,7 +8,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 2
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Weight     = 5
 SWEP.AutoSwitchTo   = false
@@ -22,15 +22,16 @@ SWEP.Kind = WEAPON_HEAVY
 SWEP.WeaponID = AMMO_M249
 
 
-SWEP.Primary.Damage = 7
+SWEP.Primary.Damage = 8
 SWEP.Primary.Delay = 0.06
-SWEP.Primary.Cone = 0.09
+SWEP.Primary.Cone = 0.06
 SWEP.Primary.ClipSize = 150
-SWEP.Primary.ClipMax = 150
+SWEP.Primary.ClipMax = 450
 SWEP.Primary.DefaultClip	= 150
 SWEP.Primary.Automatic		= true
-SWEP.Primary.Ammo			= "AirboatGun"
-SWEP.AutoSpawnable      = true
+SWEP.Primary.Ammo = "Pistol"
+SWEP.AutoSpawnable = true
+SWEP.AmmoEnt = "item_ammo_pistol_ttt"
 SWEP.Primary.Recoil			= 1.9
 SWEP.Primary.Sound			= Sound("Weapon_m249.Single")
 

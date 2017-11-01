@@ -5,7 +5,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 2
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Weight     = 5
 SWEP.AutoSwitchTo   = false
@@ -18,7 +18,7 @@ SWEP.Base = "weapon_tttbase"
 SWEP.HoldType = "ar2"
 
 SWEP.Primary.Ammo = "357"
-SWEP.Primary.Delay = 0.3
+SWEP.Primary.Delay = 0.4
 SWEP.Primary.Recoil = 2
 SWEP.Primary.Cone = 0.005
 SWEP.Primary.Damage = 37

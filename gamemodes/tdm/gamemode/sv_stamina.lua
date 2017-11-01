@@ -9,6 +9,8 @@ hook.Add( "KeyPress", "StaminaBarStuff", function( ply, key )
 		ply.moving = false
 	end
 
+	if key == IN_DUCK then ply.ducking = true end
+
 	if key == IN_FORWARD then ply.moveFoward = true
 	elseif key == IN_BACK then ply.moveBack = true
 	elseif key == IN_MOVELEFT then ply.moveLeft = true
@@ -17,7 +19,7 @@ hook.Add( "KeyPress", "StaminaBarStuff", function( ply, key )
 	if ( key == IN_SPEED && ply:Alive() ) then 
 
 		ply.RunSpeed = ply:GetRunSpeed()
-		ply.LocalWalkSpeed = ply:GetWalkSpeed()
+		ply.LocalWalkSpeed = ply.ClassWalkSpeed
 
 		if ( ply:SteamID64() == nil ) then
 
@@ -44,15 +46,22 @@ hook.Add( "KeyPress", "StaminaBarStuff", function( ply, key )
 				ply.moving = false
 			end
 
-			if ( ply.Stamina > 0 && ply.moving == true ) then
+			if ( ply.ducking == true ) then 
 
-				timer.Destroy( ply.StaminaDelay )
-				timer.Destroy( ply.StaminaRegen )
+				ply:SetRunSpeed( ply.LocalWalkSpeed )
+				timer.Remove( ply.StaminaActive )
+
+			end
+
+			if ( ply.Stamina > 0 && ply.moving == true && ply.ducking == false ) then
+
+				timer.Remove( ply.StaminaDelay )
+				timer.Remove( ply.StaminaRegen )
 				ply.Stamina = ply.Stamina - 1
 				ply:SetNWInt( "Stamina", ply.Stamina )
 
 				if ( ply.RunSpeed == ply.LocalWalkSpeed ) then
-					ply:SetRunSpeed( 290 )
+					ply:SetRunSpeed( ply.ClassRunSpeed )
 				end
 
 			end
@@ -83,6 +92,8 @@ end )
 
 hook.Add( "KeyRelease", "StaminaBarOtherStuff", function( ply, key ) 
 
+	if key == IN_DUCK then ply.ducking = false end
+
 	if key == IN_FORWARD then ply.moveFoward = false
 	elseif key == IN_BACK then ply.moveBack = false
 	elseif key == IN_MOVELEFT then ply.moveLeft = false
@@ -99,9 +110,9 @@ hook.Add( "KeyRelease", "StaminaBarOtherStuff", function( ply, key )
 
 	if ( key == IN_SPEED && ply:Alive() ) then 
 
-		timer.Destroy( ply.StaminaActive )
+		timer.Remove( ply.StaminaActive )
 
-		timer.Create( ply.StaminaDelay, 2, 1, function()
+		timer.Create( ply.StaminaDelay, 1, 1, function()
 
 			timer.Create( ply.StaminaRegen, 0.065, 0, function() 
 
@@ -122,15 +133,42 @@ end )
 
 hook.Add( "PlayerSpawn", "StaminaSetOnSpawn", function( ply ) 
 
+	ply.ducking = false
+
+	currentPlayerClass = ply:GetPData( "Player_Class" )
+
+	for k, class in pairs( PlayerClasses ) do
+
+		if class.name == currentPlayerClass then
+
+			ply.ClassWalkSpeed = class.walkSpeed
+			ply.ClassRunSpeed = class.runSpeed
+
+			break
+
+		else 
+
+			ply.ClassWalkSpeed = 200
+			ply.ClassRunSpeed = 290
+
+		end
+
+	end
+
+
 	ply.Stamina = 100
 	ply:SetNWInt( "Stamina", ply.Stamina )
+
+	ply:SetRunSpeed( ply.ClassRunSpeed )
+	ply:SetWalkSpeed( ply.ClassWalkSpeed )
+
 
 end )
 
 hook.Add( "PlayerDisconnected", "StaminaDisconnectDestroy", function( ply ) 
 
-	timer.Destroy( ply.StaminaActive )
-	timer.Destroy( ply.StaminaDelay )
-	timer.Destroy( ply.StaminaRegen )
+	timer.Remove( ply.StaminaActive )
+	timer.Remove( ply.StaminaDelay )
+	timer.Remove( ply.StaminaRegen )
 
 end )

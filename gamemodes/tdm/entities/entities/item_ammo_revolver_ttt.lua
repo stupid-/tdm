@@ -4,7 +4,7 @@ AddCSLuaFile()
 
 ENT.Type = "anim"
 ENT.Base = "base_ammo_ttt"
-ENT.AmmoType = "AlyxGun"
+ENT.AmmoType = "Deagle Ammo"
 ENT.AmmoAmount = 12
 ENT.AmmoMax = 72
 ENT.Model = Model("models/items/357ammo.mdl")

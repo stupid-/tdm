@@ -11,6 +11,7 @@ include( "resources.lua" )
 
 --Class Config
 include( "config/loadout_config.lua" )
+include( "config/team_config.lua" )
 
 --Map Voting (Not My Code), By https://github.com/wiox/gmod-mapvote
 include( "mapvote/mapvote.lua" )
@@ -19,6 +20,7 @@ include( "mapvote/sv_mapvote.lua" )
 --Includes for Client
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "cl_admin.lua" )
 AddCSLuaFile( "cl_menus.lua" )
 AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile( "cl_welcome.lua" )
@@ -30,15 +32,20 @@ AddCSLuaFile( "cl_targetid.lua" )
 AddCSLuaFile( "cl_deathnotice.lua" )
 AddCSLuaFile( "cl_deathscreen.lua" )
 AddCSLuaFile( "cl_levels.lua" )
+AddCSLuaFile( "cl_notify.lua" )
+AddCSLuaFile( "cl_wpnswitch.lua" )
 AddCSLuaFile( "mapvote/cl_mapvote.lua" )
 AddCSLuaFile( "weaponry_shd.lua" )
 
 AddCSLuaFile( "config/loadout_config.lua" )
+AddCSLuaFile( "config/team_config.lua" )
 
 --Network Strings
 util.AddNetworkString( "PlayerDeathMessage" )
 util.AddNetworkString( "PlayerLevelUp" )
 util.AddNetworkString( "PickLoadout" )
+util.AddNetworkString( "NotifyMsg" )
+util.AddNetworkString( "EndGame" )
 
 ------------------------------------------
 --				ConVars					--
@@ -80,6 +87,9 @@ function GM:ShowSpare2( ply ) -- F4
 
 	-- Coming soon --cl_stats.lua
 	-- Statistics / Leaderboards
+	--ply:ConCommand( "adminMenu" )
+
+	ply:ConCommand( "notifyMsgCmd" )
 
 end
 
@@ -186,6 +196,8 @@ end
 
 function GM:PlayerSpawn ( ply )
 
+	ply:AllowFlashlight( false )
+
 	if ( ply:GetPData( "Player_Class", "noclass" ) != ply:GetPData( "Player_PickedClass", "noclass" ) ) then
 
 		ply:SetPData( "Player_Class", ply:GetPData( "Player_PickedClass", "noclass" ) )
@@ -198,6 +210,8 @@ function GM:PlayerSpawn ( ply )
 
 	--Make sure the player has a class before spawned
 	elseif ( ply:Team() == TEAM_RED && ply:GetPData( "Player_Class", "noclass" ) != "noclass" || ply:Team() == TEAM_BLUE && ply:GetPData( "Player_Class", "noclass" ) != "noclass" ) then
+
+		ply:AllowFlashlight( true )
 
 		local color = team.GetColor( ply:Team() )
 
@@ -250,12 +264,14 @@ function GM:PlayerSpawn ( ply )
 	local ang = ply:GetAngles()
 	ang.r = 0
 	ply:SetEyeAngles( ang )
+
+	ply:SetCrouchedWalkSpeed( 0.5 )
 	
 end
 
 function GM:PlayerSetModel( ply )
 
-	currentClass = ply:GetPData( "Player_Class" )
+	local currentClass = ply:GetPData( "Player_Class" )
 
 	if currentClass == "noclass" then return end 
 
@@ -319,9 +335,9 @@ function PlayerAdvancedSpawnSelection( ply, spawnpointent, enemy_team )
 	local Pos = spawnpointent:GetPos()
 
 	--This is within the size of 48 players between you and an enemy
-	local EnemyEnts = ents.FindInBox( Pos + Vector( -1536, -1536, -144 ), Pos + Vector( 1536, 1536, 216 ) )
+	local EnemyEnts = ents.FindInBox( Pos + Vector( -1600, -1600, -144 ), Pos + Vector( 1600, 1600, 216 ) )
 
-	local FriendlyEnts = ents.FindInBox( Pos + Vector( -16, -16, 0 ), Pos + Vector( 16, 16, 72 ) )
+	local FriendlyEnts = ents.FindInBox( Pos + Vector( -68, -68, 0 ), Pos + Vector( 68, 68, 72 ) )
 
 	local Blockers = 0
 
@@ -411,6 +427,9 @@ function GM:PlayerSelectSpawn( ply )
 		table.Add( Spawnpoints[ TEAM_BLUE ], ents.FindByClass( "info_player_counterterrorist" ) )
 		table.Add( Spawnpoints[ TEAM_RED ], ents.FindByClass( "info_mobile_spawn" ) )
 		table.Add( Spawnpoints[ TEAM_BLUE ], ents.FindByClass( "info_mobile_spawn" ) )
+		--Testing this out
+		table.Add( Spawnpoints[ TEAM_BLUE ], ents.FindByClass( "info_player_terrorist" ) )
+		table.Add( Spawnpoints[ TEAM_RED ], ents.FindByClass( "info_player_counterterrorist" ) )
 
 		local SpawnPointCount = table.Count( Spawnpoints[ playerTeam ] )
 
@@ -664,9 +683,9 @@ function stTeamT( ply )
 	ply:StripWeapons()
 	ply:SetTeam( TEAM_RED )
 	ply:KillSilent()
-	ply:ConCommand("pickClass")
+	timer.Simple( 1, function() ply:ConCommand("pickClass") end )
 	for k,v in pairs(player.GetAll()) do
-		v:ChatPrint( "Player "..ply:GetName().." has joined the " .. team.GetName( ply:Team() ) .. " Team.")
+		v:ChatPrint( "Player "..ply:GetName().." has joined the " .. team.GetName( ply:Team() ) .. ".")
 	end
 end
 concommand.Add( "stTeamT", stTeamT )
@@ -693,9 +712,9 @@ function stTeamCT( ply )
 	ply:StripWeapons()
 	ply:SetTeam( TEAM_BLUE )
 	ply:KillSilent()
-	ply:ConCommand("pickClass")
+	timer.Simple( 1, function() ply:ConCommand("pickClass") end )
 	for k,v in pairs(player.GetAll()) do
-		v:ChatPrint( "Player "..ply:GetName().." has joined the " .. team.GetName( ply:Team() ) .. " Team." )
+		v:ChatPrint( "Player "..ply:GetName().." has joined the " .. team.GetName( ply:Team() ) .. "." )
 	end
 end
 concommand.Add( "stTeamCT", stTeamCT )
@@ -728,7 +747,7 @@ function GM:CheckTeamBalance()
 	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
 	    else
-			ply:ConCommand("pickClass")
+			timer.Simple( 1, function() ply:ConCommand("pickClass") end )
 		end
 
 		for k,v in pairs(player.GetAll()) do
@@ -752,7 +771,7 @@ function GM:CheckTeamBalance()
 	        hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
 	    else
-			ply:ConCommand("pickClass")
+			timer.Simple( 1, function() ply:ConCommand("pickClass") end )
 		end
 
 		for k,v in pairs(player.GetAll()) do

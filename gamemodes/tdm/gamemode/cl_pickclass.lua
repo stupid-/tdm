@@ -1,6 +1,6 @@
 function pickClass( ply )
 	local ChooseClassFrame = vgui.Create( "DFrame" )
-	ChooseClassFrame:SetSize(ScrW()*0.6, ScrH()*0.6)
+	ChooseClassFrame:SetSize(520, ScrH()*0.5)
 	ChooseClassFrame:SetTitle("Please Choose a Class.")
 	ChooseClassFrame:Center()
 	ChooseClassFrame:SetVisible( true )
@@ -14,27 +14,54 @@ function pickClass( ply )
 
 	local ChooseTeamSheet = vgui.Create( "DPropertySheet", ChooseClassFrame)
 	ChooseTeamSheet:SetPos( 0, 25)
-	ChooseTeamSheet:SetSize(ScrW()*0.6, ScrH()*0.6)
+	ChooseTeamSheet:SetSize(520, ScrH()*0.5)
 	ChooseTeamSheet.Paint = function()
 		--draw.RoundedBox( 8, 0, 0, ChooseTeamSheet:GetWide(), ChooseTeamSheet:GetTall(), Color(40,40,40,155))
 	end
 
 	cc = -1
 	for _, classes in pairs(PlayerClasses) do
-		cc = cc + 1
 
-		local ClassButton = vgui.Create('DButton')
-		ClassButton:SetParent(ChooseTeamSheet)
-		ClassButton:SetSize(200, 30)
-		ClassButton:SetPos(5, 0 + (cc*30))
-		ClassButton:SetText( classes.displayName )
-		ClassButton:SetDrawBackground(true)
-		ClassButton.DoClick = function() 
-			ClassLabel = classes.displayName
-			SClass = classes.name
-			ChooseClassFrame:Close()
-			pickLoadout( ply, classes.name )
+		if TDM_TeamBasedClasses == false then
+			cc = cc + 1
+
+			local ClassButton = vgui.Create('DButton')
+			ClassButton:SetParent(ChooseTeamSheet)
+			ClassButton:SetSize(200, 30)
+			ClassButton:SetPos(5, 0 + (cc*30))
+			ClassButton:SetText( classes.displayName )
+			ClassButton:SetDrawBackground(true)
+			ClassButton.DoClick = function() 
+				ClassLabel = classes.displayName
+				SClass = classes.name
+				ChooseClassFrame:Close()
+				pickLoadout( ply, classes.name )
+			end
+		elseif (TDM_TeamBasedClasses == true) then
+			if classes.team == nil or (classes.team != nil and classes.team == ply:Team() ) then
+				print( ply:Team() )
+				if (classes.team != nil) then
+					print( classes.team )
+				end
+
+				cc = cc + 1
+
+				local ClassButton = vgui.Create('DButton')
+				ClassButton:SetParent(ChooseTeamSheet)
+				ClassButton:SetSize(200, 30)
+				ClassButton:SetPos(5, 0 + (cc*30))
+				ClassButton:SetText( classes.displayName )
+				ClassButton:SetDrawBackground(true)
+				ClassButton.DoClick = function() 
+					ClassLabel = classes.displayName
+					SClass = classes.name
+					ChooseClassFrame:Close()
+					pickLoadout( ply, classes.name )
+				end
+
+			end
 		end
+
 
 	end
 
@@ -48,7 +75,7 @@ function pickLoadout( ply, tbl )
 	local material_dir = "vgui/ttt/"
 
 	local ChooseLoadoutFrame = vgui.Create( "DFrame" )
-	ChooseLoadoutFrame:SetSize(ScrW()*0.6, ScrH()*0.6)
+	ChooseLoadoutFrame:SetSize( 520, ScrH()*0.5)
 	ChooseLoadoutFrame:SetTitle("Choose a Loadout")
 	ChooseLoadoutFrame:Center()
 	ChooseLoadoutFrame:SetVisible( true )
@@ -63,6 +90,46 @@ function pickLoadout( ply, tbl )
 		
 	end
 
+	if file.Exists( "tdm/"..tbl..".txt", "DATA" ) == true then
+
+		local data = file.Read( "tdm/"..tbl..".txt", "DATA" )
+		savedData = string.Explode( "\n", data )
+		--PrintTable( savedData )
+
+	end
+
+	local pWPanel = vgui.Create( "DPanel", ChooseLoadoutSheet )
+	pWPanel:SetPos( 210, 0 )
+	pWPanel:SetSize( 150, 150 )
+
+	local primaryWpnPanel = vgui.Create( "DModelPanel", pWPanel )
+	--primaryWpnPanel:SetParent(ChooseLoadoutFrame)
+	primaryWpnPanel:SetPos( -80, -190 )
+	primaryWpnPanel:SetSize( 300, 300 )
+	function primaryWpnPanel:LayoutEntity( Entity ) return end
+
+
+	local sWPanel = vgui.Create( "DPanel", ChooseLoadoutSheet )
+	sWPanel:SetPos( 365, 0 )
+	sWPanel:SetSize( 150, 150 )
+
+	local secondaryWpnPanel = vgui.Create( "DModelPanel", sWPanel )
+	--primaryWpnPanel:SetParent(ChooseLoadoutFrame)
+	secondaryWpnPanel:SetPos( -80, -190 )
+	secondaryWpnPanel:SetSize( 300, 300 )
+	function secondaryWpnPanel:LayoutEntity( Entity ) return end
+	--primaryWpnPanel:SetFOV(90)
+
+	--function primaryWpnPanel:LayoutEntity( Entity ) return end
+
+	--primaryWpnPanel:SetCamPos( Vector( 20, 20, 60 ) )
+	--primaryWpnPanel:SetLookAt( Vector( 0, 0, 60 ) )
+
+
+	--primaryWpnPanel:SetCamAng( Vector( 40, 40, 40 ) )
+	--primaryWpnPanel:SetAnimated(false)
+
+
 	local combobox = vgui.Create( "DComboBox" )
 	combobox:SetParent(ChooseLoadoutSheet)
 	combobox:SetPos(5, 30)
@@ -76,31 +143,103 @@ function pickLoadout( ply, tbl )
 
 		end
 
-		if ( tonumber(equip.required_level) == 0 ) then
+		if ( (tonumber(equip.required_level) > tonumber(PlayerLevelCheck)) ) then
 
-			combobox:ChooseOption( equip.name )
+			combobox:AddChoice( equip.name .. " (Lvl " .. equip.required_level .. ")", -1 )
+
+		end
+
+		if ( tonumber(equip.required_level) == 0 and file.Exists( "tdm/"..tbl..".txt", "DATA" ) == true ) then
+
+			for k, v in pairs(ClassLoadouts[tbl]["PrimaryWeapons_tbl"]) do
+
+				if savedData[2] == v.weapon_tag and tonumber(v.required_level) <= tonumber(ply:GetNWInt( "Level", 1 )) then
+
+					foundName = v.name
+
+					combobox:ChooseOption( foundName )
+
+					PWeapon = savedData[2]
+					PWeaponAmmo = v.starting_ammo
+					PWeaponAmmoType = v.starting_ammo_type
+
+					break
+				else 
+
+					combobox:ChooseOption( equip.name )
+
+					PWeapon = equip.weapon_tag
+					PWeaponAmmo = equip.starting_ammo
+					PWeaponAmmoType = equip.starting_ammo_type
+
+				end
+
+			end
+
+		elseif ( tonumber(equip.required_level) == 0 and file.Exists( "tdm/"..tbl..".txt", "DATA" ) == false ) then
+
+			foundName = equip.name
+
+			combobox:ChooseOption( foundName )
 
 			PWeapon = equip.weapon_tag
 			PWeaponAmmo = equip.starting_ammo
 			PWeaponAmmoType = equip.starting_ammo_type
 
 		end
+
+		primaryWpnPanel:SetModel( weapons.GetStored( PWeapon )['WorldModel'] )
+
 	end
 	combobox.OnSelect = function( panel, index, value, data)
 
-		PWeapon = data
-		for k, equip in pairs(ClassLoadouts[tbl]["PrimaryWeapons_tbl"]) do
+		if ( data == -1 ) then
 
-			if equip.weapon_tag == PWeapon then 
+			combobox:ChooseOption( foundName )
 
-				PWeaponAmmo = equip.starting_ammo
-				PWeaponAmmoType = equip.starting_ammo_type
+			for k, equip in pairs(ClassLoadouts[tbl]["PrimaryWeapons_tbl"]) do
+
+				if equip.name == foundName then 
+
+					PWeapon = equip.weapon_tag
+					PWeaponAmmo = equip.starting_ammo
+					PWeaponAmmoType = equip.starting_ammo_type
+
+
+
+				end
+
+			end			
+
+		else
+
+			PWeapon = data
+			for k, equip in pairs(ClassLoadouts[tbl]["PrimaryWeapons_tbl"]) do
+
+				if equip.weapon_tag == PWeapon then 
+
+					foundName = equip.name
+
+					PWeaponAmmo = equip.starting_ammo
+					PWeaponAmmoType = equip.starting_ammo_type
+
+				end
+
+			end	
+
+			for k, equip in pairs(ClassLoadouts[tbl]["PrimaryWeapons_tbl"]) do
+
+				if (equip.weapon_tag == PWeapon) and (tonumber(equip.required_level) <= tonumber(PlayerLevelCheck)) then
+
+					primaryWpnPanel:SetModel( weapons.GetStored( PWeapon )['WorldModel'] )	
+
+				end
 
 			end
 
+				
+
 		end
-		
-		--print( value .." was selected! Also known as ".. data )
 
 	end
 
@@ -117,9 +256,47 @@ function pickLoadout( ply, tbl )
 
 		end
 
-		if ( tonumber(equip.required_level) == 0 ) then
+		if ( (tonumber(equip.required_level) > tonumber(PlayerLevelCheck)) ) then
+
+			combobox2:AddChoice( equip.name .. " (Lvl " .. equip.required_level .. ")", -1 )
+
+		end
+
+		if ( tonumber(equip.required_level) == 0 and file.Exists( "tdm/"..tbl..".txt", "DATA" ) == true ) then
+
+			for k, v in pairs(ClassLoadouts[tbl]["SecondaryWeapons_tbl"]) do
+
+				if savedData[5] == v.weapon_tag and tonumber(v.required_level) <= tonumber(ply:GetNWInt( "Level", 1 )) then
+
+					foundSName = v.name
+
+					combobox2:ChooseOption( foundSName )
+
+					SWeapon = savedData[5]
+					SWeaponAmmo = v.starting_ammo
+					SWeaponAmmoType = v.starting_ammo_type
+
+					break
+
+				else 
+
+					foundSName = equip.name
+
+					combobox2:ChooseOption( equip.name )
+
+					SWeapon = equip.weapon_tag
+					SWeaponAmmo = equip.starting_ammo
+					SWeaponAmmoType = equip.starting_ammo_type
+
+				end
+
+			end
+
+		elseif ( tonumber(equip.required_level) == 0 and file.Exists( "tdm/"..tbl..".txt", "DATA" ) == false ) then
 
 			combobox2:ChooseOption( equip.name )
+
+			foundSName = equip.name
 
 			SWeapon = equip.weapon_tag
 			SWeaponAmmo = equip.starting_ammo
@@ -127,23 +304,54 @@ function pickLoadout( ply, tbl )
 
 		end
 
+		secondaryWpnPanel:SetModel( weapons.GetStored( SWeapon )['WorldModel'] )
+
 	end
 	combobox2.OnSelect = function( panel, index, value, data )
 
-		SWeapon = data
+		if ( data == -1 ) then
 
-		for k, equip in pairs(ClassLoadouts[tbl]["SecondaryWeapons_tbl"]) do
+			combobox2:ChooseOption( foundSName )
 
-			if equip.weapon_tag == SWeapon then 
+			for k, equip in pairs(ClassLoadouts[tbl]["SecondaryWeapons_tbl"]) do
 
-				SWeaponAmmo = equip.starting_ammo
-				SWeaponAmmoType = equip.starting_ammo_type
+				if equip.name == foundSName then 
+
+					SWeapon = equip.weapon_tag
+					SWeaponAmmo = equip.starting_ammo
+					SWeaponAmmoType = equip.starting_ammo_type
+
+				end
 
 			end
 
-		end
+		else
 
-		--print( value .." was selected! Also known as ".. data )
+			SWeapon = data
+
+			for k, equip in pairs(ClassLoadouts[tbl]["SecondaryWeapons_tbl"]) do
+
+				if equip.weapon_tag == SWeapon then 
+
+					SWeaponAmmo = equip.starting_ammo
+					SWeaponAmmoType = equip.starting_ammo_type
+
+				end
+
+			end
+
+			for k, equip in pairs(ClassLoadouts[tbl]["SecondaryWeapons_tbl"]) do
+
+				if (equip.weapon_tag == SWeapon) and (tonumber(equip.required_level) <= tonumber(PlayerLevelCheck)) then
+
+					secondaryWpnPanel:SetModel( weapons.GetStored( SWeapon )['WorldModel'] )	
+
+				end
+
+			end
+
+
+		end
 
 	end
 
@@ -160,9 +368,42 @@ function pickLoadout( ply, tbl )
 
 		end
 
-		if ( tonumber(equip.required_level) == 0 ) then
+		if ( (tonumber(equip.required_level) > tonumber(PlayerLevelCheck)) ) then
+
+			combobox3:AddChoice( equip.name .. " (Lvl " .. equip.required_level .. ")", -1 )
+
+		end
+
+		if ( tonumber(equip.required_level) == 0 and file.Exists( "tdm/"..tbl..".txt", "DATA" ) == true ) then
+
+			for k, v in pairs(ClassLoadouts[tbl]["TertiaryWeapons_tbl"]) do
+
+				if savedData[8] == v.weapon_tag and tonumber(v.required_level) <= tonumber(ply:GetNWInt( "Level", 1 )) then
+
+					foundGName = v.name
+
+					combobox3:ChooseOption( foundGName )
+
+					GWeapon = savedData[8]
+
+					break
+				else
+
+					foundGName = equip.name
+
+					combobox3:ChooseOption( equip.name )
+
+					GWeapon = equip.weapon_tag
+
+				end
+
+			end
+
+		elseif ( tonumber(equip.required_level) == 0 and file.Exists( "tdm/"..tbl..".txt", "DATA" ) == false ) then
 
 			combobox3:ChooseOption( equip.name )
+
+			foundGName = equip.name
 
 			GWeapon = equip.weapon_tag
 
@@ -171,11 +412,29 @@ function pickLoadout( ply, tbl )
 	end
 	combobox3.OnSelect = function( panel, index, value, data )
 
-		GWeapon = data
+		if ( data == -1 ) then
 
-		--print( value .." was selected! Also known as ".. data )
+			combobox3:ChooseOption( foundGName )
+
+			for k, equip in pairs(ClassLoadouts[tbl]["TertiaryWeapons_tbl"]) do
+
+				if equip.name == foundGName then 
+
+					GWeapon = equip.weapon_tag
+
+				end
+
+			end
+
+		else
+
+			GWeapon = data
+
+		end
 
 	end
+
+	--PrintTable(weapons.GetStored( PWeapon ))
 
 	local ClassButton = vgui.Create('DButton')
 	ClassButton:SetParent(ChooseLoadoutSheet)
@@ -216,7 +475,12 @@ function pickLoadout( ply, tbl )
 		tbl.secondary_ammo_type = SWeaponAmmoType
 		tbl.grenade = GWeapon
 
-		--print( SClass .. ", " .. PWeapon .. ", " .. SWeapon .. ", " .. GWeapon )
+		if file.Exists( "tdm", "DATA" ) == true then 
+			file.Write( "tdm/"..SClass..".txt", tbl.class.."\n"..tbl.primary.."\n"..tbl.primary_ammo.."\n"..tbl.primary_ammo_type.."\n"..tbl.secondary.."\n"..tbl.secondary_ammo.."\n"..tbl.secondary_ammo_type.."\n"..tbl.grenade )
+		else
+			file.CreateDir( "tdm" )
+			file.Write( "tdm/"..SClass..".txt", tbl.class.."\n"..tbl.primary.."\n"..tbl.primary_ammo.."\n"..tbl.primary_ammo_type.."\n"..tbl.secondary.."\n"..tbl.secondary_ammo.."\n"..tbl.secondary_ammo_type.."\n"..tbl.grenade )
+		end
 
 		--PrintTable( tbl )
 

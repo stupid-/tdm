@@ -8,7 +8,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 1
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Weight     = 4
 SWEP.AutoSwitchTo   = false
@@ -19,7 +19,7 @@ SWEP.WeaponID = AMMO_GLOCK
 
 SWEP.Base = "weapon_tttbase"
 SWEP.Primary.Recoil	= 0.9
-SWEP.Primary.Damage = 12
+SWEP.Primary.Damage = 13
 SWEP.Primary.Delay = 0.135
 SWEP.Primary.Cone = 0.028
 SWEP.Primary.ClipSize = 20

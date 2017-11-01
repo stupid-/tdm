@@ -5,7 +5,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 2
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Weight     = 5
 SWEP.AutoSwitchTo   = false
@@ -21,7 +21,7 @@ SWEP.Primary.Ammo = "SMG1"
 SWEP.Primary.Delay = 0.095
 SWEP.Primary.Recoil = 0.8
 SWEP.Primary.Cone = 0.025
-SWEP.Primary.Damage = 16
+SWEP.Primary.Damage = 17
 SWEP.Primary.Automatic = true
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.ClipMax = 60

@@ -37,7 +37,7 @@ if CLIENT then
             p:SetVelocity(VectorRand() * math.Rand(900, 1300))
             p:SetLifeTime(0)
             
-            p:SetDieTime(math.Rand(50, 70))
+            p:SetDieTime(math.Rand(40, 60))
 
             p:SetStartSize(math.random(140, 150))
             p:SetEndSize(math.random(1, 40))

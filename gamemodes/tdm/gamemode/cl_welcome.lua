@@ -12,7 +12,7 @@ surface.CreateFont( "stupidButton",
     weight  = 600,
     antialias = true,
     blursize = 0.2,
-	symbol = true,
+	symbol = false,
     shadow = false
 })
 
@@ -23,7 +23,7 @@ surface.CreateFont( "stupidButton2",
     weight  = 600,
     antialias = true,
     blursize = 0.2,
-	symbol = true,
+	symbol = false,
     shadow = false
 })
 
@@ -160,7 +160,7 @@ function welcomePlayer( ply )
 		else
 			draw.RoundedBox( 0, 0, 0, w, h, Color(120,120,120,210))
 		end
-		draw.SimpleText( "s", "stupidButton2", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
+		draw.SimpleText( "?", "stupidButton2", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function HelpButton:DoClick()
 		--ChooseTeamFrame:Close()
@@ -186,7 +186,7 @@ function welcomePlayer( ply )
 		else
 			draw.RoundedBox( 0, 0, 0, w, h, Color(250,120,120,210))
 		end
-		draw.SimpleText( "r", "stupidButton", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
+		draw.SimpleText( "X", "stupidButton", w/2, h/2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) 
 	end
 	function CloseButton:DoClick()
 		ChooseTeamFrame:Close()

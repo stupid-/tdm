@@ -33,6 +33,7 @@ PlayerClasses = {
 			"models/player/barney.mdl"
 
 		},
+		team = TEAM_RED, --If TDM_TeamBasedClasses = true
 		defaultPrimary = "weapon_ttt_ak47",
 		defaultSecondary = "weapon_ttt_sipistol",
 		defaultTertiary = "weapon_ttt_smokegrenade",
@@ -48,6 +49,7 @@ PlayerClasses = {
 			"models/player/alyx.mdl"
 
 		},
+		team = TEAM_BLUE, --If TDM_TeamBasedClasses = true
 		defaultPrimary = "weapon_ttt_ak47",
 		defaultSecondary = "weapon_ttt_sipistol",
 		defaultTertiary = "weapon_ttt_smokegrenade",
@@ -63,6 +65,7 @@ PlayerClasses = {
 			"models/player/police.mdl"
 
 		},
+		team = nil,
 		defaultPrimary = "weapon_ttt_ak47",
 		defaultSecondary = "weapon_ttt_sipistol",
 		defaultTertiary = "weapon_ttt_smokegrenade",
@@ -78,6 +81,7 @@ PlayerClasses = {
 			"models/player/leet.mdl"
 
 		},
+		team = nil,
 		defaultPrimary = "weapon_ttt_ak47",
 		defaultSecondary = "weapon_ttt_sipistol",
 		defaultTertiary = "weapon_ttt_smokegrenade",
@@ -93,6 +97,7 @@ PlayerClasses = {
 			"models/player/odessa.mdl"
 
 		},
+		team = nil,
 		defaultPrimary = "weapon_ttt_ak47",
 		defaultSecondary = "weapon_ttt_sipistol",
 		defaultTertiary = "weapon_ttt_smokegrenade",
@@ -102,159 +107,339 @@ PlayerClasses = {
 
 };
 
---If you want to disable ranks.
+--If you want to disable ranks. Default is true.
 PlayerRanksEnabled = true
 
 PlayerRanks = {
 	
 	{
-		level = 0,
+		level = 1,
+		rankMaterialSm = "vgui/tdm/ranks/1_small.png",
 		rank = "Private First Class"
 	},
 
 	{
 		level = 2,
+		rankMaterialSm = "vgui/tdm/ranks/1_small.png",
 		rank = "Private First Class II"
 	},
 
 	{
 		level = 3,
+		rankMaterialSm = "vgui/tdm/ranks/1_small.png",
 		rank = "Private First Class III"
 	},
 
 	{
 		level = 4,
+		rankMaterialSm = "vgui/tdm/ranks/4_small.png",
 		rank = "Lance Corporal"
 	},
 
 	{
 		level = 5,
+		rankMaterialSm = "vgui/tdm/ranks/4_small.png",
 		rank = "Lance Corporal II"
 	},
 
 	{
 		level = 6,
+		rankMaterialSm = "vgui/tdm/ranks/4_small.png",
 		rank = "Lance Corporal III"
 	},
 
 	{
 		level = 7,
+		rankMaterialSm = "vgui/tdm/ranks/7_small.png",
 		rank = "Corporal"
 	},
 
 	{
 		level = 8,
+		rankMaterialSm = "vgui/tdm/ranks/7_small.png",
 		rank = "Corporal II"
 	},
 
 	{
 		level = 9,
+		rankMaterialSm = "vgui/tdm/ranks/7_small.png",
 		rank = "Corporal III"
 	},
 
 	{
 		level = 10,
+		rankMaterialSm = "vgui/tdm/ranks/10_small.png",
 		rank = "Sergeant"
 	},
 
 	{
 		level = 11,
+		rankMaterialSm = "vgui/tdm/ranks/10_small.png",
 		rank = "Sergeant II"
 	},
 
 	{
 		level = 12,
+		rankMaterialSm = "vgui/tdm/ranks/10_small.png",
 		rank = "Sergeant III"
 	},
 
 	{
 		level = 13,
+		rankMaterialSm = "vgui/tdm/ranks/13_small.png",
 		rank = "Staff Sergeant"
 	},
 
 	{
 		level = 14,
+		rankMaterialSm = "vgui/tdm/ranks/13_small.png",
 		rank = "Staff Sergeant II"
 	},
 
 	{
 		level = 15,
+		rankMaterialSm = "vgui/tdm/ranks/13_small.png",
 		rank = "Staff Sergeant III"
 	},
 
 	{
 		level = 16,
+		rankMaterialSm = "vgui/tdm/ranks/16_small.png",
 		rank = "Gunnery Sergeant"
 	},
 
 	{
 		level = 17,
+		rankMaterialSm = "vgui/tdm/ranks/16_small.png",
 		rank = "Gunnery Sergeant II"
 	},
 
 	{
 		level = 18,
+		rankMaterialSm = "vgui/tdm/ranks/16_small.png",
 		rank = "Gunnery Sergeant III"
 	},
 
 	{
 		level = 19,
+		rankMaterialSm = "vgui/tdm/ranks/19_small.png",
 		rank = "Master Sergeant"
 	},
 
 	{
 		level = 20,
+		rankMaterialSm = "vgui/tdm/ranks/19_small.png",
 		rank = "Master Sergeant II"
 	},
 
 	{
 		level = 21,
+		rankMaterialSm = "vgui/tdm/ranks/19_small.png",
 		rank = "Master Sergeant III"
 	},
 
 	{
 		level = 22,
+		rankMaterialSm = "vgui/tdm/ranks/22_small.png",
 		rank = "Master Gunnery Sergeant"
 	},
 
 	{
 		level = 23,
+		rankMaterialSm = "vgui/tdm/ranks/22_small.png",
 		rank = "Master Gunnery Sergeant II"
 	},
 
 	{
 		level = 24,
+		rankMaterialSm = "vgui/tdm/ranks/22_small.png",
 		rank = "Master Gunnery Sergeant III"
 	},
 
 	{
 		level = 25,
+		rankMaterialSm = "vgui/tdm/ranks/25_small.png",
 		rank = "Second Lieutenant"
 	},
 
 	{
 		level = 26,
+		rankMaterialSm = "vgui/tdm/ranks/25_small.png",
 		rank = "Second Lieutenant II"
 	},
 
 	{
 		level = 27,
+		rankMaterialSm = "vgui/tdm/ranks/25_small.png",
 		rank = "Second Lieutenant III"
 	},
 
 	{
 		level = 28,
+		rankMaterialSm = "vgui/tdm/ranks/28_small.png",
 		rank = "Lieutenant"
 	},
 
 	{
 		level = 29,
+		rankMaterialSm = "vgui/tdm/ranks/28_small.png",
 		rank = "Lieutenant II"
 	},
 
 	{
 		level = 30,
+		rankMaterialSm = "vgui/tdm/ranks/28_small.png",
 		rank = "Lieutenant III"
+	},
+
+	{
+		level = 31,
+		rankMaterialSm = "vgui/tdm/ranks/31_small.png",
+		rank = "Captain"
+	},
+
+	{
+		level = 32,
+		rankMaterialSm = "vgui/tdm/ranks/31_small.png",
+		rank = "Captain II"
+	},
+
+	{
+		level = 33,
+		rankMaterialSm = "vgui/tdm/ranks/31_small.png",
+		rank = "Captain III"
+	},
+
+	{
+		level = 34,
+		rankMaterialSm = "vgui/tdm/ranks/34_small.png",
+		rank = "Major"
+	},
+
+	{
+		level = 35,
+		rankMaterialSm = "vgui/tdm/ranks/34_small.png",
+		rank = "Major II"
+	},
+
+	{
+		level = 36,
+		rankMaterialSm = "vgui/tdm/ranks/34_small.png",
+		rank = "Major III"
+	},
+
+	{
+		level = 37,
+		rankMaterialSm = "vgui/tdm/ranks/37_small.png",
+		rank = "Lieutenant Colonel"
+	},
+
+	{
+		level = 38,
+		rankMaterialSm = "vgui/tdm/ranks/37_small.png",
+		rank = "Lieutenant Colonel II"
+	},
+
+	{
+		level = 39,
+		rankMaterialSm = "vgui/tdm/ranks/37_small.png",
+		rank = "Lieutenant Colonel III"
+	},
+
+	{
+		level = 40,
+		rankMaterialSm = "vgui/tdm/ranks/40_small.png",
+		rank = "Colonel"
+	},
+
+	{
+		level = 41,
+		rankMaterialSm = "vgui/tdm/ranks/40_small.png",
+		rank = "Colonel I"
+	},
+
+	{
+		level = 42,
+		rankMaterialSm = "vgui/tdm/ranks/40_small.png",
+		rank = "Colonel II"
+	},
+
+	{
+		level = 43,
+		rankMaterialSm = "vgui/tdm/ranks/43_small.png",
+		rank = "Brigadier General"
+	},
+
+	{
+		level = 44,
+		rankMaterialSm = "vgui/tdm/ranks/43_small.png",
+		rank = "Brigadier General I"
+	},
+
+	{
+		level = 45,
+		rankMaterialSm = "vgui/tdm/ranks/43_small.png",
+		rank = "Brigadier General II"
+	},
+
+	{
+		level = 46,
+		rankMaterialSm = "vgui/tdm/ranks/46_small.png",
+		rank = "Major General"
+	},
+
+	{
+		level = 47,
+		rankMaterialSm = "vgui/tdm/ranks/46_small.png",
+		rank = "Major General I"
+	},
+
+	{
+		level = 48,
+		rankMaterialSm = "vgui/tdm/ranks/46_small.png",
+		rank = "Major General II"
+	},
+
+	{
+		level = 49,
+		rankMaterialSm = "vgui/tdm/ranks/49_small.png",
+		rank = "Lieutenant General"
+	},
+
+	{
+		level = 50,
+		rankMaterialSm = "vgui/tdm/ranks/49_small.png",
+		rank = "Lieutenant General I"
+	},
+
+	{
+		level = 51,
+		rankMaterialSm = "vgui/tdm/ranks/49_small.png",
+		rank = "Lieutenant General II"
+	},
+
+	{
+		level = 52,
+		rankMaterialSm = "vgui/tdm/ranks/52_small.png",
+		rank = "General"
+	},
+
+	{
+		level = 53,
+		rankMaterialSm = "vgui/tdm/ranks/52_small.png",
+		rank = "General I"
+	},
+
+	{
+		level = 54,
+		rankMaterialSm = "vgui/tdm/ranks/52_small.png",
+		rank = "General II"
+	},
+
+	{
+		level = 55,
+		rankMaterialSm = "vgui/tdm/ranks/55_small.png",
+		rank = "Commander"
 	}
 
 };
@@ -321,7 +506,7 @@ ClassLoadouts = {
 				starting_ammo = 130,
 				starting_ammo_type = "SMG1",
 				material = "Soon",
-				required_level = 9,
+				required_level = 55,
 				desc = "Soon"
 			}
 
@@ -359,30 +544,40 @@ ClassLoadouts = {
 			},
 
 			{
+				name = "Dual Elites",
+				weapon_tag = "weapon_ttt_dual_elites",
+				starting_ammo = 60,
+				starting_ammo_type = "Pistol",
+				material = "Soon",
+				required_level = 8,
+				desc = "Soon"
+			},
+
+			{
 				name = "Desert Eagle",
 				weapon_tag = "weapon_zm_revolver",
 				starting_ammo = 24,
 				starting_ammo_type = "AlyxGun",
 				material = "Soon",
-				required_level = 8,
+				required_level = 10,
 				desc = "Soon"
 			}
 		};
 
 		TertiaryWeapons_tbl = {
 			{
-				name = "Smoke Grenade",
-				weapon_tag = "weapon_ttt_smokegrenade",
+				name = "Discombobulator",
+				weapon_tag = "weapon_ttt_confgrenade",
 				material = "Soon",
 				required_level = 0,
 				desc = "Soon"
 			},
 
 			{
-				name = "Flashbang Grenade",
-				weapon_tag = "weapon_ttt_flashbang",
+				name = "Smoke Grenade",
+				weapon_tag = "weapon_ttt_smokegrenade",
 				material = "Soon",
-				required_level = 55,
+				required_level = 2,
 				desc = "Soon"
 			},
 
@@ -392,7 +587,24 @@ ClassLoadouts = {
 				material = "Soon",
 				required_level = 5,
 				desc = "Soon"
+			},
+
+			{
+				name = "Incendiary Grenade",
+				weapon_tag = "weapon_zm_molotov",
+				material = "Soon",
+				required_level = 8,
+				desc = "Soon"
+			},
+
+			{
+				name = "Flashbang Grenade",
+				weapon_tag = "weapon_ttt_flashbang",
+				material = "Soon",
+				required_level = 55,
+				desc = "Soon"
 			}
+
 		};
 
 	};
@@ -490,30 +702,40 @@ ClassLoadouts = {
 			},
 
 			{
+				name = "Dual Elites",
+				weapon_tag = "weapon_ttt_dual_elites",
+				starting_ammo = 60,
+				starting_ammo_type = "Pistol",
+				material = "Soon",
+				required_level = 8,
+				desc = "Soon"
+			},
+
+			{
 				name = "Desert Eagle",
 				weapon_tag = "weapon_zm_revolver",
 				starting_ammo = 24,
 				starting_ammo_type = "AlyxGun",
 				material = "Soon",
-				required_level = 8,
+				required_level = 10,
 				desc = "Soon"
 			}
 		};
 
 		TertiaryWeapons_tbl = {
 			{
-				name = "Smoke Grenade",
-				weapon_tag = "weapon_ttt_smokegrenade",
+				name = "Discombobulator",
+				weapon_tag = "weapon_ttt_confgrenade",
 				material = "Soon",
 				required_level = 0,
 				desc = "Soon"
 			},
 
 			{
-				name = "Flashbang Grenade",
-				weapon_tag = "weapon_ttt_flashbang",
+				name = "Smoke Grenade",
+				weapon_tag = "weapon_ttt_smokegrenade",
 				material = "Soon",
-				required_level = 55,
+				required_level = 2,
 				desc = "Soon"
 			},
 
@@ -522,6 +744,22 @@ ClassLoadouts = {
 				weapon_tag = "weapon_ttt_frag",
 				material = "Soon",
 				required_level = 5,
+				desc = "Soon"
+			},
+
+			{
+				name = "Incendiary Grenade",
+				weapon_tag = "weapon_zm_molotov",
+				material = "Soon",
+				required_level = 8,
+				desc = "Soon"
+			},
+
+			{
+				name = "Flashbang Grenade",
+				weapon_tag = "weapon_ttt_flashbang",
+				material = "Soon",
+				required_level = 55,
 				desc = "Soon"
 			}
 		};
@@ -553,7 +791,18 @@ ClassLoadouts = {
 				material = "Soon",
 				required_level = 3,
 				desc = "Soon"
+			},
+
+			{
+				name = "H.U.G.E-249",
+				weapon_tag = "weapon_zm_sledge",
+				starting_ammo = 450,
+				starting_ammo_type = "Pistol",
+				material = "Soon",
+				required_level = 7,
+				desc = "Soon"
 			}
+
 
 		};
 		SecondaryWeapons_tbl = {
@@ -588,30 +837,40 @@ ClassLoadouts = {
 			},
 
 			{
+				name = "Dual Elites",
+				weapon_tag = "weapon_ttt_dual_elites",
+				starting_ammo = 60,
+				starting_ammo_type = "Pistol",
+				material = "Soon",
+				required_level = 8,
+				desc = "Soon"
+			},
+
+			{
 				name = "Desert Eagle",
 				weapon_tag = "weapon_zm_revolver",
 				starting_ammo = 24,
 				starting_ammo_type = "AlyxGun",
 				material = "Soon",
-				required_level = 8,
+				required_level = 10,
 				desc = "Soon"
 			}
 		};
 
 		TertiaryWeapons_tbl = {
 			{
-				name = "Smoke Grenade",
-				weapon_tag = "weapon_ttt_smokegrenade",
+				name = "Discombobulator",
+				weapon_tag = "weapon_ttt_confgrenade",
 				material = "Soon",
 				required_level = 0,
 				desc = "Soon"
 			},
 
 			{
-				name = "Flashbang Grenade",
-				weapon_tag = "weapon_ttt_flashbang",
+				name = "Smoke Grenade",
+				weapon_tag = "weapon_ttt_smokegrenade",
 				material = "Soon",
-				required_level = 55,
+				required_level = 2,
 				desc = "Soon"
 			},
 
@@ -620,6 +879,22 @@ ClassLoadouts = {
 				weapon_tag = "weapon_ttt_frag",
 				material = "Soon",
 				required_level = 5,
+				desc = "Soon"
+			},
+
+			{
+				name = "Incendiary Grenade",
+				weapon_tag = "weapon_zm_molotov",
+				material = "Soon",
+				required_level = 8,
+				desc = "Soon"
+			},
+
+			{
+				name = "Flashbang Grenade",
+				weapon_tag = "weapon_ttt_flashbang",
+				material = "Soon",
+				required_level = 55,
 				desc = "Soon"
 			}
 		};
@@ -688,30 +963,40 @@ ClassLoadouts = {
 			},
 
 			{
+				name = "Dual Elites",
+				weapon_tag = "weapon_ttt_dual_elites",
+				starting_ammo = 60,
+				starting_ammo_type = "Pistol",
+				material = "Soon",
+				required_level = 8,
+				desc = "Soon"
+			},
+
+			{
 				name = "Desert Eagle",
 				weapon_tag = "weapon_zm_revolver",
 				starting_ammo = 24,
 				starting_ammo_type = "AlyxGun",
 				material = "Soon",
-				required_level = 8,
+				required_level = 10,
 				desc = "Soon"
 			}
 		};
 
 		TertiaryWeapons_tbl = {
 			{
-				name = "Smoke Grenade",
-				weapon_tag = "weapon_ttt_smokegrenade",
+				name = "Discombobulator",
+				weapon_tag = "weapon_ttt_confgrenade",
 				material = "Soon",
 				required_level = 0,
 				desc = "Soon"
 			},
 
 			{
-				name = "Flashbang Grenade",
-				weapon_tag = "weapon_ttt_flashbang",
+				name = "Smoke Grenade",
+				weapon_tag = "weapon_ttt_smokegrenade",
 				material = "Soon",
-				required_level = 55,
+				required_level = 2,
 				desc = "Soon"
 			},
 
@@ -720,6 +1005,22 @@ ClassLoadouts = {
 				weapon_tag = "weapon_ttt_frag",
 				material = "Soon",
 				required_level = 5,
+				desc = "Soon"
+			},
+
+			{
+				name = "Incendiary Grenade",
+				weapon_tag = "weapon_zm_molotov",
+				material = "Soon",
+				required_level = 8,
+				desc = "Soon"
+			},
+
+			{
+				name = "Flashbang Grenade",
+				weapon_tag = "weapon_ttt_flashbang",
+				material = "Soon",
+				required_level = 55,
 				desc = "Soon"
 			}
 		};
@@ -809,30 +1110,40 @@ ClassLoadouts = {
 			},
 
 			{
+				name = "Dual Elites",
+				weapon_tag = "weapon_ttt_dual_elites",
+				starting_ammo = 60,
+				starting_ammo_type = "Pistol",
+				material = "Soon",
+				required_level = 8,
+				desc = "Soon"
+			},
+
+			{
 				name = "Desert Eagle",
 				weapon_tag = "weapon_zm_revolver",
 				starting_ammo = 24,
 				starting_ammo_type = "AlyxGun",
 				material = "Soon",
-				required_level = 8,
+				required_level = 10,
 				desc = "Soon"
 			}
 		};
 
 		TertiaryWeapons_tbl = {
 			{
-				name = "Smoke Grenade",
-				weapon_tag = "weapon_ttt_smokegrenade",
+				name = "Discombobulator",
+				weapon_tag = "weapon_ttt_confgrenade",
 				material = "Soon",
 				required_level = 0,
 				desc = "Soon"
 			},
 
 			{
-				name = "Flashbang Grenade",
-				weapon_tag = "weapon_ttt_flashbang",
+				name = "Smoke Grenade",
+				weapon_tag = "weapon_ttt_smokegrenade",
 				material = "Soon",
-				required_level = 55,
+				required_level = 2,
 				desc = "Soon"
 			},
 
@@ -841,6 +1152,22 @@ ClassLoadouts = {
 				weapon_tag = "weapon_ttt_frag",
 				material = "Soon",
 				required_level = 5,
+				desc = "Soon"
+			},
+
+			{
+				name = "Incendiary Grenade",
+				weapon_tag = "weapon_zm_molotov",
+				material = "Soon",
+				required_level = 8,
+				desc = "Soon"
+			},
+
+			{
+				name = "Flashbang Grenade",
+				weapon_tag = "weapon_ttt_flashbang",
+				material = "Soon",
+				required_level = 55,
 				desc = "Soon"
 			}
 		};

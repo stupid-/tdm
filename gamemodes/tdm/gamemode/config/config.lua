@@ -1,5 +1,12 @@
 --Configuation
 
+--CVars not in this config file. Set these in your server.cfg file.
+-- tdm_preparetime (Default 60, time in seconds before match starts)
+-- tdm_roundtime (Default 600, time in seconds, how long the match is)
+-- tdm_endtime (Default 30, time in seconds at the end of the round)
+-- tdm_roundlimit (Default 1, you can play more than 1 round per map)
+-- tdm_scorelimit (Default 50, kills required for a team to win)
+
 --Enable Friendly Fire.
 TDM_FriendlyFire = false
 
@@ -23,30 +30,7 @@ TDM_TeamBalanceCheckTime = 30
 TDM_TeamAutoBalance = true
 
 --How long should the cooldown be on switching teams? Default is 20 Seconds.
-TDM_SwitchTeamCooldown = 20
-
---Make this true if you want player models chosen by team rather than by class. Default is false.
-TDM_TeamBasedPlayerModels = false 
-
---Team based colors on Player Models. Default is true.
-TDM_PlayerModelColors = true 
-
---Red Team Player Models ( If TDM_TeamBasedPlayerModels = true )
-TDM_PlayerModelsRed = {
-	
-	"models/player/barney.mdl",
-	"models/player/alyx.mdl",
-	"models/player/police.mdl"
-
-}
-
---Blue Team Player Models ( If TDM_TeamBasedPlayerModels = true )
-TDM_PlayerModelsBlue = {
-	
-	"models/player/leet.mdl",
-	"models/player/odessa.mdl"
-
-}
+TDM_SwitchTeamCooldown = 15
 
 --For adding spawns on maps, make sure the spawn text file has the map name and ends with the _tdm suffix, e.g. cs_office_tdm.txt
 --See content/maps/cs_office_tdm.txt as an example
@@ -59,7 +43,9 @@ TDM_PlayableMaps = {
 	"stdm_dust",
 	"stdm_dust2",
 	"stdm_inferno",
-	"stdm_nuke"
+	"stdm_nuke",
+	"tdm_cod4_vacant",
+	"tdm_nuketown_b0"
 
 }
 

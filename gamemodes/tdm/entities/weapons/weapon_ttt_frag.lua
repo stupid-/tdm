@@ -12,7 +12,7 @@ SWEP.HoldType = "grenade"
 
 
 SWEP.Slot        = 3
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Weight     = 6
 SWEP.AutoSwitchTo   = false

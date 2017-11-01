@@ -7,7 +7,7 @@ if CLIENT then
 end
 
 SWEP.Slot        = 2
-SWEP.SlotPos     = 1
+--SWEP.SlotPos     = 1
 
 SWEP.Weight     = 5
 SWEP.AutoSwitchTo   = false
@@ -20,9 +20,9 @@ SWEP.Kind = WEAPON_HEAVY
 SWEP.WeaponID = AMMO_SHOTGUN
 
 SWEP.Primary.Ammo = "Buckshot"
-SWEP.Primary.Damage = 10
+SWEP.Primary.Damage = 12
 SWEP.Primary.Cone = 0.095
-SWEP.Primary.Delay = 0.95
+SWEP.Primary.Delay = 0.90
 SWEP.Primary.ClipSize = 8
 SWEP.Primary.ClipMax = 24
 SWEP.Primary.DefaultClip = 8
