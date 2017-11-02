@@ -132,7 +132,14 @@ function WSWITCH:DrawWeapon(x, y, c, wep)
    if not IsValid(wep) then return false end
 
    local name = wep:GetPrintName()
-   local cl1, am1 = wep:Clip1(), wep:Ammo1()
+   local cl1 = wep:Clip1()
+
+	if not IsValid( wep:Ammo1() ) then 
+		local am1 = false
+	else
+   		local am1 = wep:Ammo1()
+   	end
+
    local ammo = false
 
    -- Clip1 will be -1 if a melee weapon
